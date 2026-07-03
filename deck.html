@@ -1,0 +1,2975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ready to Raise? — Fundraising &amp; STO Readiness in Malaysia · pitchIN</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:ital,wght@0,300..700;1,300..700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ===========================================
+   THEME — Boardroom Editorial (Option A, approved)
+   Warm-white stage, Fraunces navy headlines with one
+   italic red word, Inter body, hairline rules, ghost folios.
+   =========================================== */
+:root{
+  --red:        #BF2026;
+  --red-dark:   #7D1F23;
+  --red-tint:   #FEE2E3;
+  --red-faint:  #fff2f2;
+  --navy:       #1A1847;
+  --green:      #006927;
+  --green-2:    #0A994A;
+  --orange:     #E18437;
+  --teal:       #2D898B;
+  --paper:      #FCFBF9;
+  --ink:        #333333;
+  --body:       #6a6a6a;
+  --hairline:   #e7e7e7;
+  --serif: "Fraunces", Georgia, serif;
+  --sans:  "Inter", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono:  "IBM Plex Mono", ui-monospace, monospace;
+
+  --stage-bg: #14122e;           /* letterbox colour around the stage */
+  --slide-bg: var(--paper);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-normal: 0.6s;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+/* ===========================================
+   FIXED 16:9 STAGE: MANDATORY BASE STYLES
+   Include this ENTIRE file in every presentation.
+   Slides are authored at 1920×1080 and scaled as a whole.
+   =========================================== */
+
+/* 1. Lock the browser viewport */
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+
+/* 2. Full-window deck viewport */
+.deck-viewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+
+/* 3. Fixed 16:9 design canvas.
+   JavaScript sets transform: translate(...) scale(...). */
+.deck-stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: 0 0;
+    background: var(--slide-bg, #fff);
+}
+
+/* 4. Slides stack inside the fixed stage.
+   Content must be laid out at 1920×1080, not reflowed per device. */
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--slide-bg, #fff);
+}
+
+.slide.active,
+.slide.visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+}
+
+/* 5. Keep media inside authored slide bounds */
+img,
+video,
+canvas,
+svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* 6. Presentation chrome stays outside the slide design system */
+.deck-controls {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+/* 7. Print one fixed-size slide per page */
+@media print {
+    html,
+    body {
+        width: 1920px;
+        height: auto;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .deck-viewport {
+        position: static;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .deck-stage {
+        position: static;
+        width: auto;
+        height: auto;
+        transform: none !important;
+        background: none;
+    }
+
+    .slide {
+        position: relative;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 1920px;
+        height: 1080px;
+        break-after: page;
+        page-break-after: always;
+    }
+
+    .slide:last-child {
+        break-after: auto;
+        page-break-after: auto;
+    }
+
+    .deck-controls {
+        display: none !important;
+    }
+}
+
+/* 8. Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+    }
+}
+/* =========================================== end viewport-base.css */
+
+body{ font-family:var(--sans); color:var(--ink);
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+
+.slide{ transition:opacity .35s ease; }
+
+/* ---------- shared slide chrome ---------- */
+.ghost{
+  position:absolute; right:56px; bottom:-158px;
+  font-family:var(--serif); font-optical-sizing:auto;
+  font-size:660px; font-weight:400; line-height:1;
+  letter-spacing:-0.04em;
+  color:rgba(26,24,71,0.045);
+  user-select:none; pointer-events:none;
+}
+.masthead{ position:absolute; top:0; left:0; right:0; padding:52px 96px 0; }
+.masthead .line{ height:1px; background:var(--hairline); margin-top:24px; }
+.masthead .row{ display:flex; justify-content:space-between; align-items:center; }
+/* Official pitchIN wordmark (inlined SVG — "pitch" red / "IN" green; never recolor) */
+.wm{ width:99px; height:31px;
+  background:url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAxIiBoZWlnaHQ9IjYzIiB2aWV3Qm94PSIwIDAgMjAxIDYzIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZyBjbGlwLXBhdGg9InVybCgjY2xpcDBfMzFfMzg5KSI+CjxwYXRoIGQ9Ik0xOTUuMDE2IDQ4LjQ0ODdDMTkyLjk1MiA0OC40NDg3IDE5MC4zOTggNDguMTA2NSAxODguOTQ5IDQ1LjQ1MDRMMTc4LjcxNyAyNi44Nzk0VjQ0LjcwMzlDMTc4LjcxNyA0Ny4yNzc0IDE3NS44MDkgNDguNDQ4NyAxNzMuMTA2IDQ4LjQ0ODdDMTcwLjQwNCA0OC40NDg3IDE2Ny40OTUgNDcuMjc3NCAxNjcuNDk1IDQ0LjcwMzlWNS42NDgwM0MxNjcuNDk1IDMuMDYyNjkgMTcwLjMxNSAxLjkwMzg5IDE3My4xMDYgMS45MDM4OUMxNzYuNzg4IDEuOTAzODkgMTc4LjQxNSAyLjM1NDA3IDE4MC45MDggNy4xMjkxNEwxODkuNDA5IDIzLjI4MjFWNS41ODUyMUMxODkuNDA5IDMuMzUwNjEgMTkxLjYxIDEuOTAzODkgMTk1LjAxNiAxLjkwMzg5QzE5OC40MjYgMS45MDM4OSAyMDAuNjI5IDMuMzUwNjEgMjAwLjYyOSA1LjU4NTIxVjQ0LjcwMzlDMjAwLjYyOSA0Ny4yNzc0IDE5Ny43MiA0OC40NDg3IDE5NS4wMTYgNDguNDQ4N1oiIGZpbGw9IiMwMDY5MzciLz4KPHBhdGggZD0iTTQzLjUyMTMgMTMuNTE0MUM0MC4zNDYzIDEzLjUxNDEgMzcuNjY0OSAxMS4xMjE4IDM3LjY2NDkgOC4yOTMyOEMzNy42NjQ5IDUuNDQ4NDQgNDAuMjkxNyAzLjEzMiA0My41MjEzIDMuMTMyQzQ2LjcxNzggMy4xMzIgNDkuMzE4MyA1LjQ0ODQ0IDQ5LjMxODMgOC4yOTMyOEM0OS4zMTgzIDExLjEyMTggNDYuNjYzMSAxMy41MTQxIDQzLjUyMTMgMTMuNTE0MVpNNDMuNTIxMyA0OC40NDg3QzQwLjQ2MjkgNDguNDQ4NyAzNy45NzI4IDQ2Ljc2ODIgMzcuOTcyOCA0NC43MDNWMjEuMjcwMkMzNy45NzI4IDE5LjEwMTkgNDAuMjU0OCAxNy41ODU5IDQzLjUyMTMgMTcuNTg1OUM0Ni43NzEzIDE3LjU4NTkgNDkuMTMxOSAxOS4xMzQ4IDQ5LjEzMTkgMjEuMjcwMlY0NC43MDNDNDkuMTMxOSA0Ni43MzM2IDQ2LjU2MiA0OC40NDg3IDQzLjUyMTMgNDguNDQ4N1oiIGZpbGw9IiNCRjIwMjYiLz4KPHBhdGggZD0iTTE2LjkxNTQgMjcuMTA2OUMxNS4wODg5IDI3LjEwNjkgMTMuMjAyOSAyOC41MzQgMTMuMjAyOSAzMC45MjYzVjM2LjAzMDdDMTMuMjAyOSAzNi42ODgzIDE0LjgzMzIgMzkuMTc0NyAxNy4wMzU0IDM5LjE3NDdDMTguOTQxNyAzOS4xNzQ3IDIwLjgwOTggMzcuMjIyNCAyMC44MDk4IDM1LjIzMThWMzAuOTI2M0MyMC44MDk4IDI5LjEyNDEgMTkuMTQ1IDI3LjEwNjkgMTYuOTE1NCAyNy4xMDY5Wk03LjUzMDY0IDYxLjc5NjJDNC41MDU0NyA2MS43OTYyIDIuMDQzOTUgNjAuMTE0IDIuMDQzOTUgNTguMDQ5NlYyMS4yNjkzQzIuMDQzOTUgMTkuMTMzOSA0LjMwMDk3IDE3LjU4NTkgNy40MDgxOSAxNy41ODU5QzEwLjA3NjYgMTcuNTg1OSAxMi4wMzk5IDE4Ljc0NTYgMTIuNDg4MiAyMC40ODgyQzE0LjE3NjggMTguNzQ0NyAxNi43OTg4IDE3LjIxOCAyMC4xMjQ4IDE3LjIxOEMyNi43NjYyIDE3LjIxOCAzMS45Njg3IDIzLjIzOTUgMzEuOTY4NyAzMC45MjYzVjM1LjIzMThDMzEuOTY4NyA0Mi41OTk2IDI2LjU3NzEgNDkuMDYzNiAyMC40MzQgNDkuMDYzNkMxNy40ODAyIDQ5LjA2MzYgMTQuODg1NSA0Ny42NTc4IDEzLjIwMjkgNDUuODcwN1Y1OC4wNDk2QzEzLjIwMjkgNjAuMDc5MyAxMC42MDQ2IDYxLjc5NjIgNy41MzA2NCA2MS43OTYyWiIgZmlsbD0iI0JGMjAyNiIvPgo8cGF0aCBkPSJNNjguODkyOCA0OC40NDg3QzYwLjMzODEgNDguNDQ4NyA1NS45OTkyIDQ0LjY4NDMgNTUuOTk5MiAzNy4yNjIzVjguNTM3OTJDNTUuOTk5MiA2LjMzNjQ3IDU4Ljg3MDEgNC44NTUzNiA2MS41NTAxIDQuODU1MzZDNjQuMzA3OCA0Ljg1NTM2IDY3LjE2MDggNi4yMzMzOCA2Ny4xNjA4IDguNTM3OTJWMTcuNTg1OUg3My4zMzY5Qzc1LjM5OTggMTcuNTg1OSA3Ni40Nzg5IDE5LjY4NjYgNzYuNDc4OSAyMS43NjA4Qzc2LjQ3ODkgMjQuMjIwNSA3NS4xODU3IDI1LjkzOTIgNzMuMzM2OSAyNS45MzkySDY3LjE2MDhWMzcuMjYyM0M2Ny4xNjA4IDM4LjU0NDcgNjcuMzY0MiAzOC44NjgxIDY4Ljg5MjggMzguODY4MUg3MS41NDdDNzQuODkzMiAzOC44NjgxIDc2LjQxNjUgNDEuMzUyOCA3Ni40MTY1IDQzLjY1OTdDNzYuNDE2NSA0NS45NjY3IDc0Ljg5MzIgNDguNDQ4NyA3MS41NDcgNDguNDQ4N0g2OC44OTI4WiIgZmlsbD0iI0JGMjAyNiIvPgo8cGF0aCBkPSJNOTUuMTMyMSA0OS4wNjM2Qzg1LjcyMyA0OS4wNjM2IDgwLjMyNTUgNDQuMDIzMiA4MC4zMjU1IDM1LjIzMjdWMzEuMDUwN0M4MC4zMjU1IDIyLjM4OSA4NS44MTU4IDE3LjIxOCA5NS4wMDk5IDE3LjIxOEMxMDEuMzA2IDE3LjIxOCAxMDYuMjM3IDE5LjgwOTMgMTA2LjIzNyAyMy4xMTY4QzEwNi4yMzcgMjUuMjkyMiAxMDQuNDQxIDI4LjU4MiAxMDEuNzM4IDI4LjU4MkMxMDAuOTc2IDI4LjU4MiAxMDAuMzMyIDI4LjI5NjggOTkuNjQ3NiAyNy45OTQ2Qzk4LjcwNjcgMjcuNTc3OCA5Ny42NDE4IDI3LjEwNjkgOTUuODExNyAyNy4xMDY5QzkyLjc3NzYgMjcuMTA2OSA5MS40ODQ0IDI4LjI4NyA5MS40ODQ0IDMxLjA1MDdWMzUuMjMyN0M5MS40ODQ0IDM4LjAzMzcgOTIuNzU1MyAzOS4xNzQ3IDk1Ljg3MzIgMzkuMTc0N0M5Ny42MzIgMzkuMTc0NyA5OC42MTM5IDM4LjY3IDk5LjQ3OTkgMzguMjIzOUMxMDAuMTg2IDM3Ljg1ODYgMTAwLjg1MyAzNy41MTM4IDEwMS43MzggMzcuNTEzOEMxMDQuODczIDM3LjUxMzggMTA2LjYwOCA0MC42NzM5IDEwNi42MDggNDIuODU5MUMxMDYuNjA4IDQ2LjIyMTcgMTAxLjM1MiA0OS4wNjM2IDk1LjEzMjEgNDkuMDYzNloiIGZpbGw9IiNCRjIwMjYiLz4KPHBhdGggZD0iTTEzNS41MDYgNDguNDQ4N0MxMzIuNzQ4IDQ4LjQ0ODcgMTI5Ljk1NiA0Ny4xNjEgMTI5Ljk1NiA0NC43MDM5VjMwLjkyNjNDMTI5Ljk1NiAyOC45NjQxIDEyOC4xODMgMjcuMTA2OSAxMjYuMzA2IDI3LjEwNjlDMTI0LjY2NSAyNy4xMDY5IDEyMi45NjcgMjguNTM1OCAxMjIuOTY3IDMwLjkyNjNWNDQuNzAzOUMxMjIuOTY3IDQ2LjY5ODkgMTIwLjM0NSA0OC40NDg3IDExNy4zNTYgNDguNDQ4N0MxMTQuMjk4IDQ4LjQ0ODcgMTExLjgwOCA0Ni43NjkxIDExMS44MDggNDQuNzAzOVY0LjUzOUMxMTEuODA4IDIuMzcxODYgMTE0LjA5IDAuODU2NDQ1IDExNy4zNTYgMC44NTY0NDVDMTIwLjU1NCAwLjg1NjQ0NSAxMjIuOTY3IDIuNDM5MzkgMTIyLjk2NyA0LjUzOVYyMC4xMzQ1QzEyNC40NjEgMTguNTM2NyAxMjYuNzY2IDE3LjIxOCAxMjkuODI0IDE3LjIxOEMxMzUuOTQ0IDE3LjIxOCAxNDEuMTE1IDIzLjQ5NzIgMTQxLjExNSAzMC45MjYzVjQ0LjcwMzlDMTQxLjExNSA0Ny4yNzc0IDEzOC4yMDcgNDguNDQ4NyAxMzUuNTA2IDQ4LjQ0ODdaIiBmaWxsPSIjQkYyMDI2Ii8+CjxwYXRoIGQ9Ik0xNTMuNzIgNDguNDQ4N0MxNTEuMDE5IDQ4LjQ0ODcgMTQ4LjEwOSA0Ny4yNzc0IDE0OC4xMDkgNDQuNzAzOVY1LjU4NTIxQzE0OC4xMDkgMy4zNTA2MSAxNTAuMzEyIDEuOTAzODkgMTUzLjcyIDEuOTAzODlDMTU3LjEyOCAxLjkwMzg5IDE1OS4zMzEgMy4zNTA2MSAxNTkuMzMxIDUuNTg1MjFWNDQuNzAzOUMxNTkuMzMxIDQ3LjI3NzQgMTU2LjQyMSA0OC40NDg3IDE1My43MiA0OC40NDg3WiIgZmlsbD0iIzAwNjkzNyIvPgo8L2c+CjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzMxXzM4OSI+CjxyZWN0IHdpZHRoPSIyMDAuNzg3IiBoZWlnaHQ9IjYxLjYwNSIgZmlsbD0id2hpdGUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMTA3NDIyIDAuNjM0NzY2KSIvPgo8L2NsaXBQYXRoPgo8L2RlZnM+Cjwvc3ZnPgo=") left center/contain no-repeat; }
+/* Official full pitchIN logo (book mark + wordmark) — title & closing slides */
+.logo-full{ width:194px; height:120px;
+  background:url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzA3IiBoZWlnaHQ9IjE5MCIgdmlld0JveD0iMCAwIDMwNyAxOTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8xXzE4NCkiPgo8cGF0aCBkPSJNMjY0LjU5NCAxNDMuNjdDMjYyLjI3OSAxNDMuNjcgMjU5LjQxNSAxNDMuMjg1IDI1Ny43OTEgMTQwLjI5NkwyNDYuMzE4IDExOS4zOThWMTM5LjQ1NkMyNDYuMzE4IDE0Mi4zNTIgMjQzLjA1NyAxNDMuNjcgMjQwLjAyNyAxNDMuNjdDMjM2Ljk5NyAxNDMuNjcgMjMzLjczNSAxNDIuMzUyIDIzMy43MzUgMTM5LjQ1NlY5NS41MDYzQzIzMy43MzUgOTIuNTk3IDIzNi44OTcgOTEuMjkzIDI0MC4wMjcgOTEuMjkzQzI0NC4xNTUgOTEuMjkzIDI0NS45NzkgOTEuNzk5NiAyNDguNzc1IDk3LjE3M0wyNTguMzA2IDExNS4zNVY5NS40MzU2QzI1OC4zMDYgOTIuOTIxIDI2MC43NzUgOTEuMjkzIDI2NC41OTQgOTEuMjkzQzI2OC40MTcgOTEuMjkzIDI3MC44ODcgOTIuOTIxIDI3MC44ODcgOTUuNDM1NlYxMzkuNDU2QzI3MC44ODcgMTQyLjM1MiAyNjcuNjI1IDE0My42NyAyNjQuNTk0IDE0My42N1oiIGZpbGw9IiMyMDY2MzMiLz4KPHBhdGggZD0iTTI5Ny40NzkgNDEuMjE3M0gzNS40MzhDMzEuOTc1NCA0MS4yMTczIDI5LjE2ODcgMzguNDA5MyAyOS4xNjg3IDM0Ljk0OEMyOS4xNjg3IDMxLjQ4NTMgMzEuOTc1NCAyOC42Nzg2IDM1LjQzOCAyOC42Nzg2SDI5Ny40NzlDMzAwLjk0MSAyOC42Nzg2IDMwMy43NDkgMzEuNDg1MyAzMDMuNzQ5IDM0Ljk0OEMzMDMuNzQ5IDM4LjQwOTMgMzAwLjk0MSA0MS4yMTczIDI5Ny40NzkgNDEuMjE3M1oiIGZpbGw9IiMyMDY2MzMiLz4KPHBhdGggZD0iTTk0LjcyOTEgMTA0LjM1OEM5MS4xNjkxIDEwNC4zNTggODguMTYyNSAxMDEuNjY2IDg4LjE2MjUgOTguNDgzQzg4LjE2MjUgOTUuMjgxNyA5MS4xMDc4IDkyLjY3NSA5NC43MjkxIDkyLjY3NUM5OC4zMTMxIDkyLjY3NSAxMDEuMjI5IDk1LjI4MTcgMTAxLjIyOSA5OC40ODNDMTAxLjIyOSAxMDEuNjY2IDk4LjI1MTggMTA0LjM1OCA5NC43MjkxIDEwNC4zNThaTTk0LjcyOTEgMTQzLjY3QzkxLjI5OTggMTQzLjY3IDg4LjUwNzggMTQxLjc3OSA4OC41MDc4IDEzOS40NTVWMTEzLjA4NkM4OC41MDc4IDExMC42NDYgOTEuMDY2NSAxMDguOTQgOTQuNzI5MSAxMDguOTRDOTguMzczMSAxMDguOTQgMTAxLjAyIDExMC42ODMgMTAxLjAyIDExMy4wODZWMTM5LjQ1NUMxMDEuMDIgMTQxLjc0IDk4LjEzODUgMTQzLjY3IDk0LjcyOTEgMTQzLjY3WiIgZmlsbD0iI0MwMUUyNCIvPgo8cGF0aCBkPSJNNjQuODk3IDExOS42NTRDNjIuODQ5IDExOS42NTQgNjAuNzM0MyAxMjEuMjYgNjAuNzM0MyAxMjMuOTUyVjEyOS42OTZDNjAuNzM0MyAxMzAuNDM2IDYyLjU2MjMgMTMzLjIzNCA2NS4wMzE2IDEzMy4yMzRDNjcuMTY5IDEzMy4yMzQgNjkuMjYzNiAxMzEuMDM3IDY5LjI2MzYgMTI4Ljc5N1YxMjMuOTUyQzY5LjI2MzYgMTIxLjkyNCA2Ny4zOTcgMTE5LjY1NCA2NC44OTcgMTE5LjY1NFpNNTQuMzc0MyAxNTguNjlDNTAuOTgyMyAxNTguNjkgNDguMjIyMyAxNTYuNzk3IDQ4LjIyMjMgMTU0LjQ3NFYxMTMuMDg1QzQ4LjIyMjMgMTEwLjY4MiA1MC43NTMgMTA4Ljk0IDU0LjIzNyAxMDguOTRDNTcuMjI5IDEwOC45NCA1OS40MzAzIDExMC4yNDUgNTkuOTMzIDExMi4yMDZDNjEuODI2MyAxMTAuMjQ0IDY0Ljc2NjMgMTA4LjUyNiA2OC40OTU2IDEwOC41MjZDNzUuOTQyMyAxMDguNTI2IDgxLjc3NTYgMTE1LjMwMiA4MS43NzU2IDEyMy45NTJWMTI4Ljc5N0M4MS43NzU2IDEzNy4wODggNzUuNzMwMyAxNDQuMzYyIDY4Ljg0MjMgMTQ0LjM2MkM2NS41MzAzIDE0NC4zNjIgNjIuNjIxIDE0Mi43OCA2MC43MzQzIDE0MC43NjlWMTU0LjQ3NEM2MC43MzQzIDE1Ni43NTggNTcuODIxIDE1OC42OSA1NC4zNzQzIDE1OC42OSIgZmlsbD0iI0MwMUUyNCIvPgo8cGF0aCBkPSJNMTIzLjE3NyAxNDMuNjdDMTEzLjU4NSAxNDMuNjcgMTA4LjcyIDEzOS40MzQgMTA4LjcyIDEzMS4wODJWOTguNzU4M0MxMDguNzIgOTYuMjgxIDExMS45MzkgOTQuNjE0MyAxMTQuOTQ0IDk0LjYxNDNDMTE4LjAzNiA5NC42MTQzIDEyMS4yMzUgOTYuMTY1IDEyMS4yMzUgOTguNzU4M1YxMDguOTRIMTI4LjE2QzEzMC40NzMgMTA4Ljk0IDEzMS42ODMgMTExLjMwNCAxMzEuNjgzIDExMy42MzhDMTMxLjY4MyAxMTYuNDA2IDEzMC4yMzMgMTE4LjM0IDEyOC4xNiAxMTguMzRIMTIxLjIzNVYxMzEuMDgyQzEyMS4yMzUgMTMyLjUyNSAxMjEuNDYzIDEzMi44ODkgMTIzLjE3NyAxMzIuODg5SDEyNi4xNTNDMTI5LjkwNSAxMzIuODg5IDEzMS42MTMgMTM1LjY4NSAxMzEuNjEzIDEzOC4yODFDMTMxLjYxMyAxNDAuODc3IDEyOS45MDUgMTQzLjY3IDEyNi4xNTMgMTQzLjY3SDEyMy4xNzdaIiBmaWxsPSIjQzAxRTI0Ii8+CjxwYXRoIGQ9Ik0xNTIuNTk4IDE0NC4zNjJDMTQyLjA0OCAxNDQuMzYyIDEzNS45OTYgMTM4LjY5IDEzNS45OTYgMTI4Ljc5OFYxMjQuMDkyQzEzNS45OTYgMTE0LjM0NSAxNDIuMTUyIDEwOC41MjYgMTUyLjQ2MSAxMDguNTI2QzE1OS41MiAxMDguNTI2IDE2NS4wNDkgMTExLjQ0MiAxNjUuMDQ5IDExNS4xNjRDMTY1LjA0OSAxMTcuNjEyIDE2My4wMzYgMTIxLjMxNCAxNjAuMDA1IDEyMS4zMTRDMTU5LjE1IDEyMS4zMTQgMTU4LjQyOCAxMjAuOTkzIDE1Ny42NjEgMTIwLjY1M0MxNTYuNjA2IDEyMC4xODQgMTU1LjQxMiAxMTkuNjU0IDE1My4zNiAxMTkuNjU0QzE0OS45NTggMTE5LjY1NCAxNDguNTA4IDEyMC45ODIgMTQ4LjUwOCAxMjQuMDkyVjEyOC43OThDMTQ4LjUwOCAxMzEuOTUgMTQ5LjkzMyAxMzMuMjM0IDE1My40MjkgMTMzLjIzNEMxNTUuNDAxIDEzMy4yMzQgMTU2LjUwMiAxMzIuNjY2IDE1Ny40NzMgMTMyLjE2NEMxNTguMjY1IDEzMS43NTMgMTU5LjAxMyAxMzEuMzY1IDE2MC4wMDUgMTMxLjM2NUMxNjMuNTIgMTMxLjM2NSAxNjUuNDY1IDEzNC45MjEgMTY1LjQ2NSAxMzcuMzhDMTY1LjQ2NSAxNDEuMTY0IDE1OS41NzIgMTQ0LjM2MiAxNTIuNTk4IDE0NC4zNjJaIiBmaWxsPSIjQzAxRTI0Ii8+CjxwYXRoIGQ9Ik0xOTcuODY3IDE0My42N0MxOTQuNzc1IDE0My42NyAxOTEuNjQ0IDE0Mi4yMjEgMTkxLjY0NCAxMzkuNDU2VjEyMy45NTJDMTkxLjY0NCAxMjEuNzQ0IDE4OS42NTcgMTE5LjY1NCAxODcuNTUyIDExOS42NTRDMTg1LjcxMiAxMTkuNjU0IDE4My44MDggMTIxLjI2MiAxODMuODA4IDEyMy45NTJWMTM5LjQ1NkMxODMuODA4IDE0MS43MDEgMTgwLjg2OCAxNDMuNjcgMTc3LjUxNyAxNDMuNjdDMTc0LjA4OCAxNDMuNjcgMTcxLjI5NiAxNDEuNzggMTcxLjI5NiAxMzkuNDU2Vjk0LjI1ODNDMTcxLjI5NiA5MS44MTk2IDE3My44NTUgOTAuMTE0MyAxNzcuNTE3IDkwLjExNDNDMTgxLjEwMyA5MC4xMTQzIDE4My44MDggOTEuODk1NiAxODMuODA4IDk0LjI1ODNWMTExLjgwOEMxODUuNDgzIDExMC4wMSAxODguMDY4IDEwOC41MjYgMTkxLjQ5NyAxMDguNTI2QzE5OC4zNTkgMTA4LjUyNiAyMDQuMTU3IDExNS41OTIgMjA0LjE1NyAxMjMuOTUyVjEzOS40NTZDMjA0LjE1NyAxNDIuMzUyIDIwMC44OTYgMTQzLjY3IDE5Ny44NjcgMTQzLjY3WiIgZmlsbD0iI0MwMUUyNCIvPgo8cGF0aCBkPSJNMjE4LjI5IDE0My42N0MyMTUuMjYxIDE0My42NyAyMTEuOTk5IDE0Mi4zNTIgMjExLjk5OSAxMzkuNDU2Vjk1LjQzNTZDMjExLjk5OSA5Mi45MjEgMjE0LjQ2OSA5MS4yOTMgMjE4LjI5IDkxLjI5M0MyMjIuMTExIDkxLjI5MyAyMjQuNTgxIDkyLjkyMSAyMjQuNTgxIDk1LjQzNTZWMTM5LjQ1NkMyMjQuNTgxIDE0Mi4zNTIgMjIxLjMxOSAxNDMuNjcgMjE4LjI5IDE0My42N1oiIGZpbGw9IiMyMDY2MzMiLz4KPHBhdGggZD0iTTM4LjQ1MTcgNzAuNzI0QzMzLjAyMjQgNzAuNzI0IDE5LjcwNTEgNjkuNzUyIDEwLjE5NDQgNjAuOTczM0MzLjUxNzA4IDU0LjgwOCAwLjEwNTA3NiA0Ni4yOCAwLjA1MDQwOTMgMzUuNjJDLTAuMTEyMjU3IDMzLjE4MjcgLTAuMzc4OTI0IDIxLjY1MzMgOC4wODc3NCAxMi4yMzMzQzE1LjM4NTEgNC4xMTQ2NiAyNi43MzcxIC0yLjEwNzc0ZS0wNiA0MS44MjkxIC0yLjEwNzc0ZS0wNkgzMDAuNjE0QzMwNC4zMDYgLTIuMTA3NzRlLTA2IDMwNy4yOTggMi45OTIgMzA3LjI5OCA2LjY4NEMzMDcuMjk4IDEwLjM3NDcgMzA0LjMwNiAxMy4zNjggMzAwLjYxNCAxMy4zNjhINDEuODI5MUMzMC43Nzg0IDEzLjM2OCAyMi44MTA0IDE1Ljk1MzMgMTguMTM5NyAyMS4wNDkzQzEyLjc3MTcgMjYuOTEwNyAxMy4zNzk3IDM0LjYzMiAxMy4zODY0IDM0LjcwOTNDMTMuNDAzNyAzNC45MDQgMTMuNDE4NCAzNS4xNjUzIDEzLjQxODQgMzUuMzZDMTMuNDE4NCA0Mi4zNTMzIDE1LjMzMTcgNDcuNTE4NyAxOS4yNjM3IDUxLjE1MDdDMjYuODQ1MSA1OC4xNDY3IDM5LjY4NzcgNTcuMzMyIDM5LjgwOTEgNTcuMzIxM0MzOS45ODY0IDU3LjMwNjcgNDAuMTY1MSA1Ny4zIDQwLjM0MjQgNTcuM0gzMDAuNjE0QzMwNC4zMDYgNTcuMyAzMDcuMjk4IDYwLjI5MzMgMzA3LjI5OCA2My45ODRDMzA3LjI5OCA2Ny42NzYgMzA0LjMwNiA3MC42NjggMzAwLjYxNCA3MC42NjhINDAuNTU5N0M0MC4xNjM3IDcwLjY5MiAzOS40MzcxIDcwLjcyNCAzOC40NTE3IDcwLjcyNFoiIGZpbGw9IiNDMDFFMjQiLz4KPHBhdGggZD0iTTMwMC42MTUgMTkwLjAzMkg3OS42MjRDNTAuMTg5MyAxOTAuMDMyIDI4LjMyNCAxODIuMzM4IDE0LjYzNzMgMTY3LjE2MkMtMS4wMjI2NiAxNDkuODAyIC0wLjA5OTk5NSAxMjguODQgMC4xNTIwMDUgMTI1LjU3OVYzNi4yODk4QzAuMTUyMDA1IDMyLjU5NzggMy4xNDQwMSAyOS42MDU4IDYuODM2MDEgMjkuNjA1OEMxMC41MjY3IDI5LjYwNTggMTMuNTIgMzIuNTk3OCAxMy41MiAzNi4yODk4VjEyNS44NjJDMTMuNTIgMTI2LjA5MSAxMy41MDggMTI2LjMyIDEzLjQ4NTMgMTI2LjU0OEMxMy40NzA3IDEyNi42OTYgMTEuOTczMyAxNDQuMzggMjQuNjk2IDE1OC4zNTRDMzUuNzU4NyAxNzAuNTA0IDU0LjIzODcgMTc2LjY2NCA3OS42MjQgMTc2LjY2NEgyOTMuOTMxVjY2Ljc0MDVDMjkzLjkzMSA2My4wNDk4IDI5Ni45MjMgNjAuMDU2NSAzMDAuNjE1IDYwLjA1NjVDMzA0LjMwNyA2MC4wNTY1IDMwNy4yOTkgNjMuMDQ5OCAzMDcuMjk5IDY2Ljc0MDVWMTgzLjM0OEMzMDcuMjk5IDE4Ny4wNCAzMDQuMzA3IDE5MC4wMzIgMzAwLjYxNSAxOTAuMDMyWiIgZmlsbD0iI0MwMUUyNCIvPgo8L2c+CjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzFfMTg0Ij4KPHJlY3Qgd2lkdGg9IjMwNyIgaGVpZ2h0PSIxOTAiIGZpbGw9IndoaXRlIi8+CjwvY2xpcFBhdGg+CjwvZGVmcz4KPC9zdmc+Cg==") left center/contain no-repeat; }
+.masthead .section{ font-size:14.5px; font-weight:600; letter-spacing:0.26em; text-transform:uppercase; color:var(--body); }
+
+.colophon{ position:absolute; left:96px; right:96px; bottom:48px; }
+.colophon .line{ height:1px; background:var(--hairline); margin-bottom:20px; }
+.colophon .row{ display:flex; justify-content:space-between; align-items:baseline;
+  font-size:15.5px; color:var(--body); letter-spacing:0.02em; }
+.colophon .folio{ font-family:var(--serif); font-optical-sizing:auto;
+  font-size:19px; font-weight:500; color:var(--navy); letter-spacing:0.14em; }
+.colophon .folio span{ color:#b6b3ac; }
+
+.kicker{ display:flex; align-items:center; gap:20px;
+  font-size:17px; font-weight:600; letter-spacing:0.28em; text-transform:uppercase; color:var(--navy); }
+.kicker::before{ content:""; display:block; width:50px; height:3px; background:var(--red); }
+.kicker .soft{ color:var(--body); }
+
+/* default content stage area */
+.stage{ position:absolute; left:96px; right:96px; top:196px; bottom:172px; }
+
+/* ---------- headline system ---------- */
+h2.head{
+  font-family:var(--serif); font-optical-sizing:auto;
+  font-size:84px; font-weight:540; letter-spacing:-0.02em; line-height:1.05;
+  color:var(--navy); margin:30px 0 0 -3px;
+}
+h2.head em, .divider h2 em, .statement h2 em, .checkpoint h2 em, .title-h em{
+  font-style:italic; font-weight:440; color:var(--red);
+}
+p.lede{ margin-top:20px; font-size:28px; color:var(--body); letter-spacing:0.01em; max-width:1400px; }
+p.lede em{ font-family:var(--serif); font-style:italic; color:var(--ink); }
+p.lede b{ font-weight:600; color:var(--navy); }
+
+/* ---------- points list ---------- */
+.points{ margin-top:44px; list-style:none; border-top:1px solid var(--hairline); max-width:1620px; }
+.points li{
+  font-size:31px; color:var(--ink); line-height:1.42;
+  padding:22px 4px; border-bottom:1px solid var(--hairline);
+  display:block; position:relative;
+}
+.points li::before{ content:"—"; color:#c5c1b9; font-size:25px; margin-right:18px; }
+.points li b{ font-weight:600; color:var(--navy); }
+.points li:has(.tail){ padding-right:250px; }
+.points li .tail{ position:absolute; right:4px; top:50%; transform:translateY(-50%); white-space:nowrap;
+  font-size:16px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--body); }
+.points li .tail.red{ color:var(--red); }
+.points li .tail.orange{ color:var(--orange); }
+.points li .tail.green{ color:var(--green); }
+.points.tight li{ padding:15px 4px; font-size:27px; }
+
+/* serif italic footnote strap */
+.footnote{
+  position:absolute; left:0; right:0; bottom:0;
+  padding-top:22px; border-top:1px solid var(--hairline);
+  font-family:var(--serif); font-optical-sizing:auto;
+  font-style:italic; font-size:28px; font-weight:440; color:var(--ink);
+}
+.footnote b{ font-style:normal; font-weight:560; color:var(--red); }
+.footnote .nb{ font-style:normal; font-weight:560; color:var(--navy); }
+
+/* ---------- grids & cards ---------- */
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:36px; margin-top:44px; }
+.grid3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:32px; margin-top:44px; }
+.card{ border:1px solid var(--hairline); background:#fff; padding:34px 38px 30px; }
+.card.acc-red{ border-top:3px solid var(--red); }
+.card.acc-navy{ border-top:3px solid var(--navy); }
+.card.acc-green{ border-top:3px solid var(--green); }
+.card.acc-orange{ border-top:3px solid var(--orange); }
+.card.acc-teal{ border-top:3px solid var(--teal); }
+.card .card-kicker{ font-size:13.5px; font-weight:600; letter-spacing:0.24em;
+  text-transform:uppercase; color:var(--body); margin-bottom:8px; }
+.card h3{ font-family:var(--serif); font-optical-sizing:auto;
+  font-size:34px; font-weight:560; letter-spacing:-0.01em; color:var(--navy); margin-bottom:18px; }
+.card h3 em{ font-style:italic; font-weight:440; color:var(--red); }
+.card ul{ list-style:none; }
+.card li{ font-size:24px; color:var(--ink); line-height:1.4; padding:14px 0;
+  border-top:1px solid var(--hairline); display:block; }
+.card li::before{ content:"—"; color:#c5c1b9; font-size:19px; margin-right:14px; }
+.card li b{ font-weight:600; color:var(--navy); }
+.card p.plain{ font-size:24px; color:var(--body); line-height:1.5; }
+
+/* ---------- big stat blocks ---------- */
+.stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:36px; margin-top:64px; }
+.stat{ border-top:3px solid var(--red); padding-top:26px; }
+.stat.navy{ border-top-color:var(--navy); }
+.stat.green{ border-top-color:var(--green); }
+.stat .num{ font-family:var(--serif); font-optical-sizing:auto;
+  font-size:112px; font-weight:540; letter-spacing:-0.03em; line-height:1; color:var(--navy); }
+.stat .num em{ font-style:italic; font-weight:440; color:var(--red); font-size:60%; }
+.stat .lbl{ margin-top:16px; font-size:16px; font-weight:600; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--red-dark); }
+.stat .sub{ margin-top:10px; font-size:24px; color:var(--body); line-height:1.5; }
+
+/* ---------- dense reference rows ---------- */
+.ref{ margin-top:40px; border-top:1px solid var(--hairline); }
+.ref .rrow{ display:grid; grid-template-columns:430px 1fr; column-gap:44px;
+  padding:17px 4px; border-bottom:1px solid var(--hairline); align-items:baseline; }
+.ref .rlab{ font-size:16px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--navy); }
+.ref .rval{ font-size:26px; color:var(--ink); line-height:1.42; }
+.ref .rval b{ font-weight:600; color:var(--navy); }
+.ref .rval .warn{ color:var(--red-dark); font-weight:600; }
+.ref.compact .rrow{ padding:13px 4px; }
+.ref.compact .rval{ font-size:24px; }
+
+/* mono data tag */
+.mono-tag{ font-family:var(--mono); font-size:14px; letter-spacing:.04em;
+  color:var(--teal); text-transform:none; }
+
+/* ---------- divider slides ---------- */
+.divider .stage{ display:flex; flex-direction:column; justify-content:center; }
+.divider .seg-no{
+  font-family:var(--serif); font-optical-sizing:auto; font-style:italic;
+  font-size:30px; font-weight:460; color:var(--red); letter-spacing:0.08em;
+}
+.divider h2{
+  font-family:var(--serif); font-optical-sizing:auto;
+  font-size:150px; font-weight:540; letter-spacing:-0.025em; line-height:1.0;
+  color:var(--navy); margin:26px 0 0 -6px; max-width:1600px;
+}
+.divider .sub{ margin-top:38px; display:flex; align-items:center; gap:20px; }
+.divider .sub .dash{ width:56px; height:1px; background:var(--navy); opacity:.35; }
+.divider .sub p{ font-size:29px; color:var(--body); letter-spacing:0.01em; max-width:1320px; }
+.divider .sub p b{ color:var(--navy); font-weight:600; }
+.divider .sub p em{ font-family:var(--serif); font-style:italic; color:var(--red); }
+.divider .ghost{ color:rgba(191,32,38,0.06); }
+
+/* ---------- statement slides ---------- */
+.statement .stage{ display:flex; flex-direction:column; justify-content:center; }
+.statement h2{
+  font-family:var(--serif); font-optical-sizing:auto;
+  font-size:110px; font-weight:540; letter-spacing:-0.02em; line-height:1.08;
+  color:var(--navy); margin:34px 0 0 -4px; max-width:1660px;
+}
+.statement .after{ margin-top:44px; font-size:29px; color:var(--body); max-width:1420px; line-height:1.55; }
+.statement .after b{ color:var(--navy); font-weight:600; }
+
+/* ---------- checkpoint family ---------- */
+.checkpoint-band{ display:flex; align-items:center; gap:20px; }
+.checkpoint-band .dot{ width:13px; height:13px; border-radius:50%; background:var(--red); flex:none;
+  box-shadow:0 0 0 6px var(--red-tint); animation:cp-pulse 2s infinite; }
+@keyframes cp-pulse{
+  0%,100%{ box-shadow:0 0 0 6px var(--red-tint); }
+  50%{ box-shadow:0 0 0 12px rgba(254,226,227,.55); }
+}
+.checkpoint-band .label{ font-size:17px; font-weight:600; letter-spacing:0.28em;
+  text-transform:uppercase; color:var(--red-dark); }
+.checkpoint-band .label span{ color:var(--body); }
+
+.checkpoint .stage{ display:grid; grid-template-columns:1fr 470px; column-gap:100px;
+  grid-template-rows:1fr auto; }
+.checkpoint h2{
+  font-family:var(--serif); font-optical-sizing:auto;
+  font-size:88px; font-weight:540; letter-spacing:-0.02em; line-height:1.06;
+  color:var(--navy); margin:32px 0 0 -3px;
+}
+.options{ margin-top:52px; border-top:1px solid var(--hairline); }
+.opt{ display:flex; align-items:center; gap:30px; padding:24px 6px; border-bottom:1px solid var(--hairline); }
+.opt .letter{ font-family:var(--serif); font-optical-sizing:auto;
+  font-size:27px; font-weight:500; font-style:italic; color:var(--red); width:36px; flex:none; }
+.opt .name{ font-size:28px; font-weight:500; color:var(--navy); letter-spacing:0.005em; }
+.opt .name small{ font-size:22px; font-weight:400; color:var(--body); }
+.opt .abbr{ margin-left:auto; font-size:15px; font-weight:600; letter-spacing:0.2em;
+  text-transform:uppercase; color:var(--body); white-space:nowrap; padding-left:24px; }
+.opt .abbr.soon{ color:var(--orange); }
+.opt .abbr.red{ color:var(--red); }
+.options.slim .opt{ padding:18px 6px; }
+.options.slim .opt .name{ font-size:26px; }
+
+/* QR panel (framed, corner ticks) */
+.qr-panel{ align-self:center; display:flex; flex-direction:column; align-items:center;
+  text-align:center; padding:52px 44px 44px; border:1px solid var(--hairline); background:#fff; }
+.qr-frame{ position:relative; width:290px; height:290px;
+  display:flex; align-items:center; justify-content:center; }
+.qr-frame .corner{ position:absolute; width:38px; height:38px; }
+.qr-frame .corner.tl{ top:0; left:0;   border-top:3px solid var(--navy); border-left:3px solid var(--navy); }
+.qr-frame .corner.tr{ top:0; right:0;  border-top:3px solid var(--navy); border-right:3px solid var(--navy); }
+.qr-frame .corner.bl{ bottom:0; left:0;  border-bottom:3px solid var(--navy); border-left:3px solid var(--navy); }
+.qr-frame .corner.br{ bottom:0; right:0; border-bottom:3px solid var(--navy); border-right:3px solid var(--navy); }
+.qr-img{ width:225px; height:225px; image-rendering:pixelated; }
+.qr-panel .scan{ margin-top:28px; font-size:14.5px; font-weight:600;
+  letter-spacing:0.26em; text-transform:uppercase; color:var(--red); }
+.qr-panel .hint{ margin-top:12px; font-size:17px; color:var(--body); line-height:1.5; }
+.qr-panel .url{ margin-top:14px; font-family:var(--mono); font-size:14px; color:var(--teal); }
+
+/* small QR reminder chip (checkpoint slides) */
+.qr-chip{ align-self:center; justify-self:end; display:flex; align-items:center; gap:26px;
+  border:1px solid var(--hairline); background:#fff; padding:26px 30px; }
+.qr-chip .qr-img{ width:150px; height:150px; }
+.qr-chip .txt .scan{ font-size:13px; font-weight:600; letter-spacing:0.24em;
+  text-transform:uppercase; color:var(--red); }
+.qr-chip .txt .hint{ margin-top:8px; font-size:16px; color:var(--body); line-height:1.5; }
+
+.checkpoint .payoff{ grid-column:1 / -1; align-self:end;
+  font-family:var(--serif); font-optical-sizing:auto; font-style:italic;
+  font-size:26px; font-weight:440; color:var(--body);
+  padding-top:20px; border-top:1px solid var(--hairline); }
+.checkpoint .payoff b{ font-style:normal; font-weight:560; color:var(--navy); }
+
+/* ---------- title slide ---------- */
+.title-slide .stage{ display:flex; flex-direction:column; justify-content:center; }
+.title-h{
+  font-family:var(--serif); font-optical-sizing:auto;
+  font-size:212px; font-weight:540; letter-spacing:-0.025em; line-height:0.98;
+  color:var(--navy); margin:44px 0 0 -8px;
+}
+.title-slide .subtitle{ margin-top:44px; display:flex; align-items:center; gap:26px; }
+.title-slide .subtitle .dash{ width:80px; height:1px; background:var(--navy); opacity:.35; }
+.title-slide .subtitle p{ font-size:30px; font-weight:400; letter-spacing:0.01em; color:var(--body); }
+.title-slide .presenter{ margin-top:88px; font-size:20px; letter-spacing:0.02em; color:var(--ink); }
+.title-slide .presenter b{ font-weight:600; color:var(--navy); }
+.title-slide .presenter .sep{ color:#c5c1b9; margin:0 14px; }
+.title-slide .presenter .cred{ font-family:var(--serif); font-style:italic; color:var(--body); }
+
+/* ---------- escalator (slide 7) ---------- */
+.escalator{ display:grid; grid-template-columns:repeat(6,1fr); gap:22px;
+  align-items:end; margin-top:56px; height:430px; }
+.esc{ display:flex; flex-direction:column; justify-content:flex-end; height:100%; }
+.esc .bar{ background:#f2f0ec; border-top:3px solid var(--navy); padding:22px 22px 18px; }
+.esc:nth-child(5) .bar{ border-top-color:var(--red); background:var(--red-faint); }
+.esc .step-no{ font-family:var(--serif); font-style:italic; font-size:19px; color:var(--red); }
+.esc h4{ font-family:var(--serif); font-size:25px; font-weight:560; color:var(--navy);
+  letter-spacing:-0.01em; margin-top:6px; line-height:1.15; }
+.esc .band{ margin-top:10px; font-size:18px; color:var(--body); line-height:1.42; }
+.esc .band b{ color:var(--red-dark); font-weight:600; }
+
+/* ---------- fork list (slide 4) ---------- */
+.forks{ margin-top:48px; border-top:1px solid var(--hairline); }
+.fork{ display:flex; align-items:baseline; gap:34px; padding:24px 4px;
+  border-bottom:1px solid var(--hairline); }
+.fork .no{ font-family:var(--serif); font-optical-sizing:auto; font-style:italic;
+  font-size:34px; font-weight:460; color:var(--red); width:56px; flex:none; }
+.fork .q{ font-size:30px; font-weight:500; color:var(--navy); }
+.fork .q small{ display:block; margin-top:4px; font-size:23px; font-weight:400; color:var(--body); }
+.fork .seg{ margin-left:auto; padding-left:28px; font-size:15px; font-weight:600;
+  letter-spacing:0.2em; text-transform:uppercase; color:var(--body); white-space:nowrap; }
+
+/* ---------- mirror (digital twin, slide 12) ---------- */
+.mirror{ margin-top:52px; display:grid; grid-template-columns:1fr 150px 1fr; align-items:stretch; }
+.mirror .card li.wrapper{ color:var(--red-dark); font-weight:500; }
+.mirror .card li.wrapper::before{ content:"+"; color:var(--red); font-weight:600; }
+.mirror .card li.wrapper .tag{ font-size:12.5px; font-weight:600; letter-spacing:0.14em;
+  text-transform:uppercase; background:var(--red-faint); color:var(--red);
+  border:1px solid var(--red-tint); padding:3px 12px 2px; float:right; margin-left:12px; white-space:nowrap; }
+.equals{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; }
+.equals .glyph{ font-family:var(--serif); font-optical-sizing:auto;
+  font-size:84px; font-weight:440; line-height:1; color:var(--red); }
+.equals .word{ font-size:13px; font-weight:600; letter-spacing:0.24em;
+  text-transform:uppercase; color:var(--body); text-align:center; line-height:1.7; }
+
+/* ---------- vs duel (slide 48) ---------- */
+.duel{ display:grid; grid-template-columns:1fr 130px 1fr; margin-top:52px; align-items:stretch; }
+.duel .side{ border:1px solid var(--hairline); background:#fff; padding:38px 42px; }
+.duel .side.win{ border-top:3px solid var(--green); }
+.duel .side.lose{ border-top:3px solid var(--orange); }
+.duel .vs{ display:flex; align-items:center; justify-content:center;
+  font-family:var(--serif); font-style:italic; font-size:40px; color:var(--red); }
+.duel h3{ font-family:var(--serif); font-size:38px; font-weight:560; color:var(--navy); }
+.duel .big{ font-family:var(--serif); font-size:88px; font-weight:540; letter-spacing:-0.03em;
+  line-height:1; color:var(--navy); margin-top:20px; }
+.duel .big em{ font-style:italic; color:var(--red); font-size:56%; font-weight:440; }
+.duel .fact{ margin-top:16px; font-size:24px; color:var(--body); line-height:1.5; }
+.duel .fact b{ color:var(--navy); font-weight:600; }
+
+/* ---------- layer bands (slide 39) ---------- */
+.layers{ margin-top:50px; display:flex; flex-direction:column; gap:18px; }
+.layer{ display:grid; grid-template-columns:340px 1fr; align-items:center;
+  border:1px solid var(--hairline); background:#fff; padding:26px 36px; border-left:4px solid var(--navy); }
+.layer.l1{ border-left-color:var(--navy); }
+.layer.l2{ border-left-color:var(--red); }
+.layer.l3{ border-left-color:var(--orange); }
+.layer.l4{ border-left-color:var(--teal); }
+.layer h4{ font-family:var(--serif); font-size:30px; font-weight:560; color:var(--navy); }
+.layer h4 small{ display:block; font-family:var(--sans); font-size:13.5px; font-weight:600;
+  letter-spacing:0.22em; text-transform:uppercase; color:var(--body); margin-top:6px; }
+.layer p{ font-size:25px; color:var(--ink); line-height:1.45; }
+.layer p b{ font-weight:600; color:var(--navy); }
+
+/* ---------- checklist (slide 54) ---------- */
+.checklist{ margin-top:44px; display:grid; grid-template-columns:1fr 1fr; column-gap:64px; }
+.checklist .chk{ display:flex; align-items:baseline; gap:22px; padding:19px 4px;
+  border-bottom:1px solid var(--hairline); }
+.checklist .chk .box{ flex:none; width:22px; height:22px; border:2px solid var(--navy);
+  transform:translateY(3px); }
+.checklist .chk p{ font-size:25px; color:var(--ink); line-height:1.4; }
+.checklist .chk p b{ font-weight:600; color:var(--navy); }
+
+/* ---------- montage tiles (slide 55) ---------- */
+.tiles{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:48px; }
+.tile{ border:1px solid var(--hairline); background:#fff; padding:28px 30px 24px;
+  border-top:3px solid var(--red); }
+.tile:nth-child(2n){ border-top-color:var(--navy); }
+.tile .t-num{ font-family:var(--serif); font-size:40px; font-weight:560;
+  letter-spacing:-0.02em; color:var(--navy); line-height:1.1; }
+.tile .t-lbl{ margin-top:10px; font-size:21px; color:var(--body); line-height:1.45; }
+.tile .t-lbl b{ color:var(--red-dark); font-weight:600; }
+
+/* ---------- token-launch options map ---------- */
+.omap{ margin-top:34px; display:grid; grid-template-columns:360px 70px 1fr; column-gap:0; align-items:center; }
+.omap .root{ border:1px solid var(--hairline); border-left:4px solid var(--navy); background:#fff;
+  padding:34px 30px; }
+.omap .root h3{ font-family:var(--serif); font-size:33px; font-weight:560; color:var(--navy); line-height:1.2; }
+.omap .root p{ margin-top:12px; font-size:20px; color:var(--body); line-height:1.45; }
+.omap .stem{ display:flex; align-items:center; justify-content:center;
+  font-family:var(--serif); font-size:44px; color:#c5c1b9; }
+.omap .branches{ display:flex; flex-direction:column; gap:20px; }
+.obr{ display:grid; grid-template-columns:420px 1fr; align-items:center;
+  border:1px solid var(--hairline); background:#fff; }
+.obr .cond{ padding:19px 28px; border-right:1px solid var(--hairline); }
+.obr .cond h4{ font-size:24px; font-weight:600; color:var(--navy); line-height:1.3; }
+.obr .cond p{ margin-top:6px; font-size:18px; color:var(--body); line-height:1.4; }
+.obr .out{ padding:19px 28px; font-size:22px; color:var(--ink); line-height:1.45; }
+.obr .out b{ font-weight:600; color:var(--navy); }
+.obr .out .verdict{ display:inline-block; font-size:14px; font-weight:600; letter-spacing:0.18em;
+  text-transform:uppercase; padding:5px 14px 4px; margin-bottom:10px; }
+.obr.b-red{ border-left:4px solid var(--red); }    .obr.b-red .verdict{ background:var(--red-faint); color:var(--red); }
+.obr.b-orange{ border-left:4px solid var(--orange); } .obr.b-orange .verdict{ background:#fdf1e6; color:var(--orange); }
+.obr.b-green{ border-left:4px solid var(--green); }  .obr.b-green .verdict{ background:#eaf6ee; color:var(--green); }
+
+/* ---------- parallel timelines ---------- */
+.tl{ margin-top:48px; display:flex; flex-direction:column; gap:30px; }
+.tl-lane{ border:1px solid var(--hairline); background:#fff; padding:30px 36px 34px; }
+.tl-lane.t-navy{ border-top:3px solid var(--navy); }
+.tl-lane.t-red{ border-top:3px solid var(--red); }
+.tl-lane .tl-head{ display:flex; align-items:baseline; gap:22px; margin-bottom:24px; }
+.tl-lane .tl-head h3{ font-family:var(--serif); font-size:32px; font-weight:560; color:var(--navy); }
+.tl-lane .tl-head .tag{ font-size:14.5px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--body); }
+.tl-lane .tl-head .tag.hot{ color:var(--red); }
+.tl-steps{ display:flex; align-items:stretch; gap:0; }
+.tl-step{ flex:1; position:relative; padding:0 26px 0 0; margin-right:26px; }
+.tl-step::after{ content:"→"; position:absolute; right:-2px; top:2px;
+  font-family:var(--serif); font-size:26px; color:#c5c1b9; }
+.tl-step:last-child{ margin-right:0; padding-right:0; }
+.tl-step:last-child::after{ content:""; }
+.tl-step h5{ font-size:21.5px; font-weight:600; color:var(--navy); line-height:1.25; }
+.tl-step h5 em{ font-family:var(--serif); font-style:italic; color:var(--red); }
+.tl-step p{ margin-top:7px; font-size:17.5px; color:var(--body); line-height:1.4; }
+
+/* ---------- wrapper-anatomy chain ---------- */
+.chain{ margin-top:44px; display:grid; grid-template-columns:1fr 44px 1.25fr 44px 1fr 44px 1.15fr 44px 1fr; align-items:stretch; }
+.chain .node{ border:1px solid var(--hairline); background:#fff; padding:24px 24px 22px; border-top:3px solid var(--navy); }
+.chain .node.hot{ border-top-color:var(--red); background:var(--red-faint); }
+.chain .node .nk{ font-size:13px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--body); }
+.chain .node h4{ font-family:var(--serif); font-size:27px; font-weight:560; color:var(--navy); margin-top:6px; line-height:1.15; }
+.chain .node p{ margin-top:8px; font-size:17.5px; color:var(--ink); line-height:1.4; }
+.chain .node p b{ font-weight:600; color:var(--navy); }
+.chain .arrow{ display:flex; align-items:center; justify-content:center;
+  font-family:var(--serif); font-size:30px; color:#c5c1b9; }
+.walk{ margin-top:26px; border-top:1px solid var(--hairline); }
+.walk .wrow{ display:grid; grid-template-columns:250px 1fr; column-gap:36px; padding:15px 4px;
+  border-bottom:1px solid var(--hairline); align-items:baseline; }
+.walk .wlab{ font-size:15px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--red-dark); }
+.walk .wval{ font-size:21px; color:var(--ink); line-height:1.45; }
+.walk .wval b{ font-weight:600; color:var(--navy); }
+
+/* ---------- decision matrix ---------- */
+.matrix{ margin-top:40px; border-top:1px solid var(--hairline); }
+.matrix .mhead, .matrix .mrow{ display:grid; grid-template-columns:330px 1fr 1fr 230px; column-gap:36px;
+  padding:16px 4px; border-bottom:1px solid var(--hairline); align-items:baseline; }
+.matrix .mhead{ padding:12px 4px; }
+.matrix .mhead div{ font-size:15px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--body); }
+.matrix .mrow .dim{ font-size:16px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--navy); }
+.matrix .mrow .cell{ font-size:21.5px; color:var(--ink); line-height:1.4; }
+.matrix .mrow .cell b{ font-weight:600; color:var(--navy); }
+.matrix .mrow .call{ font-size:15px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; }
+.matrix .call.tok{ color:var(--red); }
+.matrix .call.trad{ color:var(--green); }
+.matrix .call.depends{ color:var(--orange); }
+
+/* ---------- reveal animation (staggered fade/rise) ---------- */
+.reveal{
+  opacity:0; transform:translateY(26px);
+  transition:opacity var(--duration-normal) var(--ease-out-expo),
+             transform var(--duration-normal) var(--ease-out-expo);
+}
+.slide.visible .reveal{ opacity:1; transform:translateY(0); }
+.r1{ transition-delay:.08s; } .r2{ transition-delay:.16s; } .r3{ transition-delay:.24s; }
+.r4{ transition-delay:.32s; } .r5{ transition-delay:.40s; } .r6{ transition-delay:.48s; }
+.r7{ transition-delay:.56s; } .r8{ transition-delay:.64s; }
+
+/* ---------- deck chrome (outside stage) ---------- */
+.progress{ position:fixed; left:0; bottom:0; height:4px; width:0%;
+  background:var(--red); z-index:1001; transition:width .3s var(--ease-out-expo); }
+.counter{ position:fixed; right:26px; bottom:16px; z-index:1001;
+  font-family:var(--mono); font-size:13px; letter-spacing:.08em; color:rgba(252,251,249,.75); }
+.edit-hotzone{ position:fixed; top:0; left:0; width:80px; height:80px; z-index:10000; cursor:pointer; }
+.edit-toggle{ position:fixed; top:18px; left:18px; z-index:10001;
+  width:44px; height:44px; border-radius:50%; border:1px solid rgba(252,251,249,.4);
+  background:rgba(26,24,71,.85); color:#FCFBF9; font-size:18px; cursor:pointer;
+  opacity:0; pointer-events:none; transition:opacity .3s ease; }
+.edit-toggle.show, .edit-toggle.active{ opacity:1; pointer-events:auto; }
+.edit-toggle.active{ background:var(--red); border-color:var(--red-tint); }
+.edit-banner{ position:fixed; top:24px; left:50%; transform:translateX(-50%);
+  z-index:10001; background:var(--red); color:#fff; font-size:13px; font-weight:600;
+  letter-spacing:.12em; text-transform:uppercase; padding:8px 18px; display:none; }
+.edit-banner.on{ display:block; }
+body.editing .slide.active{ outline:none; }
+</style>
+</head>
+<body>
+
+<div class="deck-viewport">
+<main class="deck-stage" id="deckStage" aria-label="Ready to Raise? presentation">
+
+
+
+
+<section class="slide title-slide active" id="s1">
+  <div class="ghost">01</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Founder Workshop Series</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="logo-full reveal r1" role="img" aria-label="pitchIN logo" style="margin-bottom:42px;"></div>
+    <div class="kicker reveal r1">Token-X Accelerator&nbsp;&nbsp;·&nbsp;&nbsp;July 2026</div>
+    <h1 class="title-h reveal r2">Ready to <em>Raise?</em></h1>
+    <div class="subtitle reveal r3">
+      <div class="dash"></div>
+      <p>Fundraising &amp; STO Readiness in Malaysia</p>
+    </div>
+    <div class="presenter reveal r4">
+      <b>Nicholas Chong</b><span class="sep">·</span>VP of Commercial &amp; Product, pitchIN<span class="sep">·</span><span class="cred">formerly Securities Commission Malaysia</span>
+    </div>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Ready to Raise? — Fundraising &amp; STO Readiness in Malaysia</span><span class="folio">01 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s2">
+  <div class="ghost">02</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Bridge</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Picking up where the morning left off</div>
+    <h2 class="head reveal r2">From what it is — to how you’ll <em>fund</em> it.</h2>
+    <div class="grid2 reveal r3">
+      <div class="card acc-navy">
+        <div class="card-kicker">This morning · Fundamentals of RWA</div>
+        <h3>What tokenisation <em>is</em></h3>
+        <ul>
+          <li>The asset, the token, the legal wrapper</li>
+          <li>Global RWA momentum &amp; the BNM roadmap</li>
+          <li>Standards, custody, the technology stack</li>
+        </ul>
+      </div>
+      <div class="card acc-red">
+        <div class="card-kicker">The next two hours · This session</div>
+        <h3>How you’ll <em>fund</em> your company</h3>
+        <ul>
+          <li>Equity, debt or token — what are you selling?</li>
+          <li>The real issuer journey: eligibility → campaign → liquidity</li>
+          <li>Whether a token belongs in the plan <b>at all</b></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footnote reveal r4">One rule for the room: <span class="nb">ask anytime.</span> The checkpoints are your micro-breaks.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Ready to Raise? — Fundraising &amp; STO Readiness in Malaysia</span><span class="folio">02 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s3">
+  <div class="ghost">03</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Who’s Talking</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Both sides of the table</div>
+    <h2 class="head reveal r2">Nicholas <em>Chong</em></h2>
+    <div class="mirror reveal r3" style="margin-top:72px; max-width:1500px;">
+      <div class="card acc-navy">
+        <div class="card-kicker">The lens · five years</div>
+        <h3 style="font-size:44px;">Securities Commission Malaysia</h3>
+      </div>
+      <div class="equals">
+        <div class="glyph">→</div>
+      </div>
+      <div class="card acc-red">
+        <div class="card-kicker">The rails · today</div>
+        <h3 style="font-size:44px;">pitchIN <em style="display:block; font-size:26px; margin-top:10px;">VP of Commercial &amp; Product</em></h3>
+      </div>
+    </div>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Ready to Raise? — Fundraising &amp; STO Readiness in Malaysia</span><span class="folio">03 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s4">
+  <div class="ghost">04</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Decision Map</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">How the two hours work</div>
+    <h2 class="head reveal r2">Four forks. One <em>route</em> — yours.</h2>
+    <div class="forks reveal r3" style="margin-top:30px;">
+      <div class="fork" style="padding:20px 4px;"><div class="no">1</div><div class="q">Your raise — what are you selling, on which rails?<small>Equity, debt or token · ECF · TCF · VC · grants · Labuan / offshore</small></div><div class="seg">Segments 01–02</div></div>
+      <div class="fork" style="padding:20px 4px;"><div class="no">2</div><div class="q">Is your token a security?<small>The Malaysian perimeter test</small></div><div class="seg">Segment 03</div></div>
+      <div class="fork" style="padding:20px 4px;"><div class="no">3</div><div class="q">Can you build the layers?<small>Asset · identity · settlement · custody</small></div><div class="seg">Segment 04</div></div>
+      <div class="fork" style="padding:20px 4px;"><div class="no">4</div><div class="q">Is launching a token worth it?<small>The honest scorecard</small></div><div class="seg">Segment 05</div></div>
+    </div>
+    <p class="footnote reveal r4">Your phone answers each fork as we go — and builds your <b>Raise Route</b> card by the end.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Ready to Raise? — Fundraising &amp; STO Readiness in Malaysia</span><span class="folio">04 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide checkpoint" id="s5">
+  <div class="ghost">05</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Ready to Raise?</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div>
+      <div class="checkpoint-band reveal r1">
+        <div class="dot"></div>
+        <div class="label">Checkpoint 0 <span>&nbsp;·&nbsp; On your phone</span></div>
+      </div>
+      <h2 class="reveal r2">Register — and tell us: what are you raising in the next <em>12 months</em>?</h2>
+      <div class="options slim reveal r3">
+        <div class="opt"><div class="letter">A</div><div class="name">Under RM500k</div></div>
+        <div class="opt"><div class="letter">B</div><div class="name">RM500k – RM3M</div></div>
+        <div class="opt"><div class="letter">C</div><div class="name">RM3M – RM10M</div></div>
+        <div class="opt"><div class="letter">D</div><div class="name">Over RM10M</div></div>
+        <div class="opt"><div class="letter">E</div><div class="name">Not raising — <small>the token IS my product</small></div></div>
+      </div>
+    </div>
+    <div class="qr-panel reveal r4">
+      <div class="qr-frame">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+        <img class="qr-img" alt="QR code — raise-route companion app" src="data:image/png;base64,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">
+      </div>
+      <div class="scan">Scan to register</div>
+      <div class="hint">One tap — no app, no sign-up.<br>Name · company · email.</div>
+      <div class="url">ncih.github.io/raise-route</div>
+    </div>
+    <p class="payoff reveal r5">Your answers across five checkpoints build your <b>Raise Route</b> — a personal card at the end.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Ready to Raise? — Fundraising &amp; STO Readiness in Malaysia</span><span class="folio">05 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+
+
+<section class="slide divider" id="s6">
+  <div class="ghost">01</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Segment 01 of 05</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="seg-no reveal r1">Segment 01</div>
+    <h2 class="reveal r2">The Funding <em>Landscape</em></h2>
+    <div class="sub reveal r3">
+      <div class="dash"></div>
+      <p>The whole map at speed — then the one question that decides everything else.</p>
+    </div>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 01 — The Funding Landscape</span><span class="folio">06 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s7">
+  <div class="ghost">07</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Funding Landscape</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The full menu, by stage</div>
+    <h2 class="head reveal r2">Every company rides the same <em>escalator</em>.</h2>
+    <div class="escalator reveal r3" style="grid-template-columns:repeat(7,1fr); gap:16px; margin-top:40px; height:430px;">
+      <div class="esc"><div class="bar" style="min-height:165px;"><div class="step-no">1</div><h4>Bootstrapping</h4><div class="band">Your own money + early revenue — where everyone starts</div></div></div>
+      <div class="esc"><div class="bar" style="min-height:209px;"><div class="step-no">2</div><h4>Grants</h4><div class="band"><b>Cradle CIP · MDEC</b> — non-dilutive, milestone-gated</div></div></div>
+      <div class="esc"><div class="bar" style="min-height:253px;"><div class="step-no">3</div><h4>Angels</h4><div class="band"><b>MBAN</b> networks · pre-seed: &lt;RM1M at RM1–2M valuations</div></div></div>
+      <div class="esc"><div class="bar" style="min-height:297px;"><div class="step-no">4</div><h4>VC</h4><div class="band"><b>Gobi RM1–10M</b> · MTDC / VentureTECH RM3–10M</div></div></div>
+      <div class="esc"><div class="bar" style="min-height:341px;"><div class="step-no">5</div><h4>ECF · TCF · P2P</h4><div class="band">The crowd: seed → Series A, RM1–10M. <b>Today lives here.</b></div></div></div>
+      <div class="esc"><div class="bar" style="min-height:385px;"><div class="step-no">6</div><h4>Private equity</h4><div class="band">Series B+: RM10M+ at RM100M+ valuations</div></div></div>
+      <div class="esc"><div class="bar" style="min-height:430px;"><div class="step-no">7</div><h4>LEAP · ACE · Main</h4><div class="band">Public markets: RM100M+ at RM500M+ valuations</div></div></div>
+    </div>
+    <p class="footnote reveal r4">Bands are typical Malaysian ranges — <span class="nb">where you get on depends on what you’re selling.</span></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 01 — The Funding Landscape</span><span class="folio">07 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s8">
+  <div class="ghost">08</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Funding Landscape</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Same pitch, five different judges</div>
+    <h2 class="head reveal r2">What each funder actually <em>wants</em>.</h2>
+    <div class="ref reveal r3" style="margin-top:34px;">
+      <div class="rrow"><div class="rlab">Grants</div><div class="rval"><b>Milestones + nation-building</b> — deliver the KPI the agency exists to create. Non-dilutive, but the timeline isn’t yours.</div></div>
+      <div class="rrow"><div class="rlab">Angels &amp; VC</div><div class="rval"><b>A 10× story and an exit path</b> — most bets fail, so yours must pay for the rest.</div></div>
+      <div class="rrow"><div class="rlab">Banks &amp; debt</div><div class="rval"><b>Repayment ability</b> — cash flow and collateral. Conviction doesn’t move the credit memo.</div></div>
+      <div class="rrow"><div class="rlab">The crowd · ECF / P2P</div><div class="rval"><b>Story + traction + trust</b> — people fund what they understand and already like.</div></div>
+      <div class="rrow"><div class="rlab">Token buyers</div><div class="rval"><b>Utility + community</b> — a thing they want to use, and a tribe they want to join.</div></div>
+    </div>
+    <p class="footnote reveal r4">Our own VC round: <b>7 VCs pitched, 3 ghosted us, 2+ years offer-to-close</b> — know your judge before you queue.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 01 — The Funding Landscape</span><span class="folio">08 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s9">
+  <div class="ghost">09</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Funding Landscape</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The instrument triangle</div>
+    <h2 class="head reveal r2">What are you actually <em>selling</em> to funders?</h2>
+    <div class="grid3 reveal r3" style="margin-top:52px;">
+      <div class="card acc-navy">
+        <div class="card-kicker">Instrument 01</div>
+        <h3>A share of the business</h3>
+        <p class="plain">Equity. Investors own a slice of the upside — and you take on shareholders.</p>
+      </div>
+      <div class="card acc-teal">
+        <div class="card-kicker">Instrument 02</div>
+        <h3>A promise to repay</h3>
+        <p class="plain">Debt. Notes, financing, P2P. Cheaper if you have cash flow — brutal if you don’t.</p>
+      </div>
+      <div class="card acc-red">
+        <div class="card-kicker">Instrument 03</div>
+        <h3>A product, or access</h3>
+        <p class="plain">A token, membership or pre-sale. Buyers want the <b>thing</b> — not your cap table.</p>
+      </div>
+    </div>
+    <p class="footnote reveal r4">Everything else is <b>packaging</b> — and each of the three can be traditional <span class="nb">or tokenised</span>. Hold that thought.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 01 — The Funding Landscape</span><span class="folio">09 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s10">
+  <div class="ghost">10</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Funding Landscape</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Private fundraising in Malaysia</div>
+    <h2 class="head reveal r2">This market is <em>real</em>.</h2>
+    <div class="stats reveal r3">
+      <div class="stat navy">
+        <div class="num">RM776M<em>+</em></div>
+        <div class="lbl">Industry ECF since 2015</div>
+        <div class="sub">Raised across ~400 Malaysian companies, industry-wide.</div>
+      </div>
+      <div class="stat">
+        <div class="num">RM350M<em>+</em></div>
+        <div class="lbl">Raised on pitchIN</div>
+        <div class="sub">18,000+ investors · 184+ campaigns — Malaysia’s largest ECF platform.</div>
+      </div>
+      <div class="stat green">
+        <div class="num">Jul <em>’24</em></div>
+        <div class="lbl">PSTX goes live</div>
+        <div class="sub">Malaysia’s first secondary market for ECF shares — private no longer means locked in.</div>
+      </div>
+    </div>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 01 — The Funding Landscape</span><span class="folio">10 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s11">
+  <div class="ghost">11</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Funding Landscape</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Case · Mokky’s Pizza — funded January 2026</div>
+    <h2 class="head reveal r2">A pizza shop out-raised the <em>startups</em>.</h2>
+    <div class="grid2 reveal r3" style="grid-template-columns:620px 1fr; margin-top:48px;">
+      <div>
+        <div class="stat" style="border-top:none; padding-top:8px;">
+          <div class="num" style="font-size:150px;">RM3.6M</div>
+          <div class="lbl">from 924 investors</div>
+          <div class="sub">ECF on pitchIN · successfully funded 9 Jan 2026</div>
+        </div>
+      </div>
+      <ul class="points" style="margin-top:8px;">
+        <li>Not a tech startup — a <b>pizza brand</b>, raising for a new-outlet expansion vehicle.</li>
+        <li>The founder ran the raise <b>openly on Threads &amp; Instagram</b> — performance updates, webinars, real numbers.</li>
+        <li>Hundreds of the investors were <b>customers first</b> — the crowd was already his.</li>
+      </ul>
+    </div>
+    <p class="footnote reveal r4">Ordinary companies raise here. <b>Your customers become your investors.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 01 — The Funding Landscape</span><span class="folio">11 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s12">
+  <div class="ghost">12</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Digital Twin Principle</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The digital twin principle</div>
+    <h2 class="head reveal r2">Tokenised equity is <em>still</em> equity.</h2>
+    <p class="lede reveal r2">Regulation follows <em>the instrument</em> — not the technology.</p>
+    <div class="mirror reveal r3">
+      <div class="card acc-navy">
+        <div class="card-kicker">The instrument you know</div>
+        <h3>Traditional shares</h3>
+        <ul>
+          <li>Companies Act</li>
+          <li>SC fundraising frameworks</li>
+          <li>Shareholder rights</li>
+        </ul>
+      </div>
+      <div class="equals">
+        <div class="glyph">=</div>
+        <div class="word">Same<br>instrument</div>
+      </div>
+      <div class="card acc-red">
+        <div class="card-kicker">The instrument, on new rails</div>
+        <h3>Tokenised shares</h3>
+        <ul>
+          <li>Companies Act</li>
+          <li>SC fundraising frameworks</li>
+          <li>Shareholder rights</li>
+          <li class="wrapper">A token wrapper <span class="tag">Only addition</span></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footnote reveal r4">Written into law: the <b>Prescription Amendment Order 2025</b> (in force 9 Jan 2025) — tokenised shares and bonds are <span class="nb">securities, full stop.</span></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 01 — The Funding Landscape</span><span class="folio">12 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s13">
+  <div class="ghost">13</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Funding Landscape</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The regulated rails, on one map</div>
+    <h2 class="head reveal r2">Five rails — and who <em>runs</em> them.</h2>
+    <div class="reveal r3" style="display:grid; grid-template-columns:repeat(5,1fr); gap:22px; margin-top:52px;">
+      <div class="card acc-navy" style="padding:28px 26px 24px;">
+        <div class="card-kicker">Equity</div>
+        <h3 style="font-size:30px;">ECF</h3>
+        <p class="plain" style="font-size:19.5px;">Sell shares to the crowd. <b>RM20M lifetime</b> cap. SC-registered platforms — pitchIN is the largest.</p>
+      </div>
+      <div class="card acc-red" style="padding:28px 26px 24px;">
+        <div class="card-kicker">Token</div>
+        <h3 style="font-size:30px;">TCF</h3>
+        <p class="plain" style="font-size:19.5px;">Raise with a token. <b>20× shareholders’ funds</b>, RM100M cap. Two IEO operators: <b>pitchIN + KLDX</b>.</p>
+      </div>
+      <div class="card acc-orange" style="padding:28px 26px 24px;">
+        <div class="card-kicker">Debt</div>
+        <h3 style="font-size:30px;">P2P notes</h3>
+        <p class="plain" style="font-size:19.5px;">Repayable financing on SC-registered P2P platforms.</p>
+      </div>
+      <div class="card acc-green" style="padding:28px 26px 24px;">
+        <div class="card-kicker">Offshore</div>
+        <h3 style="font-size:30px;">Labuan</h3>
+        <p class="plain" style="font-size:19.5px;">The LFSA lane — <b>Fusang</b> exchange and members. AMLA still follows you.</p>
+      </div>
+      <div class="card acc-teal" style="padding:28px 26px 24px;">
+        <div class="card-kicker">Liquidity</div>
+        <h3 style="font-size:30px;">PSTX · DAX</h3>
+        <p class="plain" style="font-size:19.5px;">The exit rails — PSTX for private shares, DAX listings for tokens.</p>
+      </div>
+    </div>
+    <p class="footnote reveal r4">The rail you pick decides your <b>regulator, your investors and your timeline</b> — not just your paperwork.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 01 — The Funding Landscape</span><span class="folio">13 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide checkpoint" id="s14">
+  <div class="ghost">14</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Ready to Raise?</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div>
+      <div class="checkpoint-band reveal r1">
+        <div class="dot"></div>
+        <div class="label">Checkpoint 1 <span>&nbsp;·&nbsp; On your phone · Your raise</span></div>
+      </div>
+      <h2 class="reveal r2">What are you <em>selling</em> — and which rails are you considering?</h2>
+      <div class="options slim reveal r3">
+        <div class="opt"><div class="letter">A</div><div class="name">A share of the business</div><div class="abbr">Equity</div></div>
+        <div class="opt"><div class="letter">B</div><div class="name">A promise to repay</div><div class="abbr">Debt</div></div>
+        <div class="opt"><div class="letter">C</div><div class="name">A token</div><div class="abbr red">Token</div></div>
+        <div class="opt"><div class="letter">D</div><div class="name">Not looking to raise</div><div class="abbr">Also valid</div></div>
+        <div class="opt"><div class="letter">E</div><div class="name">Not sure yet</div><div class="abbr soon">Valid!</div></div>
+      </div>
+    </div>
+    <div class="qr-chip reveal r4">
+      <img class="qr-img" alt="QR code — raise-route companion app" src="data:image/png;base64,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">
+      <div class="txt">
+        <div class="scan">Scan to answer</div>
+        <div class="hint">ncih.github.io/raise-route<br>Fork 1 of your Raise Route.</div>
+      </div>
+    </div>
+    <p class="payoff reveal r5">Part two on your phone: <b>tick every rail you’re considering</b> — ECF · TCF · debt · VC · grants · Labuan/offshore. Answer with today’s instinct; the next segment pressure-tests it.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 01 — The Funding Landscape</span><span class="folio">14 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+
+
+
+<section class="slide divider" id="s15">
+  <div class="ghost">02</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Segment 02 of 05</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="seg-no reveal r1">Segment 02</div>
+    <h2 class="reveal r2">Raising Capital with <em>Tokens</em></h2>
+    <div class="sub reveal r3">
+      <div class="dash"></div>
+      <p>Two very different things get called a “token raise” — this segment splits them, then walks each route end to end.</p>
+    </div>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">15 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s16">
+  <div class="ghost">16</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The fork that decides your next year</div>
+    <h2 class="head reveal r2">Two different things get called a <em>“token raise.”</em></h2>
+    <div class="grid2 reveal r3" style="margin-top:40px;">
+      <div class="card acc-red">
+        <div class="card-kicker">01 · Utility token</div>
+        <h3>You’re selling future <em>access</em></h3>
+        <ul>
+          <li>Buyers pre-pay for use of your platform or product</li>
+          <li>Route: <b>TCF</b> — the SC’s Guidelines on Digital Assets</li>
+          <li>Eligibility bites: <b>RM500k paid-up</b>, MY-incorporated, 20× shareholders’ funds, RM100M ceiling</li>
+        </ul>
+      </div>
+      <div class="card acc-navy">
+        <div class="card-kicker">02 · Tokenised security</div>
+        <h3>The token <em>IS</em> the instrument</h3>
+        <ul>
+          <li>A share, bond or note — in digital form</li>
+          <li>Route: <b>the instrument’s own rules</b> — ECF / P2P / bond frameworks</li>
+          <li>The digital twin. There is <b>no separate “STO law”</b></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footnote reveal r4">Get this fork wrong and you’ve planned <b>the wrong 12 months</b>.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">16 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s17">
+  <div class="ghost">17</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Jargon decoder</div>
+    <h2 class="head reveal r2">Five acronyms. One <em>question</em>: who vets the deal?</h2>
+    <div class="ref reveal r3">
+      <div class="rrow"><div class="rlab">ICO</div><div class="rval">Initial coin offering — the 2017 free-for-all. Nobody vets anything.</div></div>
+      <div class="rrow"><div class="rlab">IDO</div><div class="rval">DEX launch — same idea, decentralised venue. Still nobody.</div></div>
+      <div class="rrow"><div class="rlab">IEO</div><div class="rval">Initial <b>exchange</b> offering — a registered operator vets the deal before the public sees it.</div></div>
+      <div class="rrow"><div class="rlab">STO</div><div class="rval">Security token offering — a <b>marketing term</b>, not a Malaysian legal category.</div></div>
+      <div class="rrow"><div class="rlab">TCF</div><div class="rval"><b>Token crowdfunding — the term pitchIN coined.</b> Malaysia’s regulated form, under the SC’s Guidelines on Digital Assets.</div></div>
+    </div>
+    <p class="footnote reveal r4">“STO” isn’t a legal category here — <b>the underlying instrument is.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">17 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s18">
+  <div class="ghost">18</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Two ways to tokenise a security</div>
+    <h2 class="head reveal r2">The twin — or the <em>native</em>.</h2>
+    <div class="grid2 reveal r3">
+      <div class="card acc-red">
+        <div class="card-kicker">Malaysia’s path today</div>
+        <h3>The digital <em>twin</em></h3>
+        <ul>
+          <li>Token <b>mirrors</b> a registered share or bond</li>
+          <li>The register / trust stays the <b>legal truth</b></li>
+          <li>Pilot-first: Khazanah sukuk ran exactly this way</li>
+        </ul>
+      </div>
+      <div class="card acc-navy">
+        <div class="card-kicker">Not yet the Malaysian path</div>
+        <h3>Native issuance</h3>
+        <ul>
+          <li>The token <b>IS</b> the security — ledger as register</li>
+          <li>Needs law that recognises an on-chain register</li>
+          <li>Live in a few EU states — not here, not yet</li>
+        </ul>
+      </div>
+    </div>
+    <p class="footnote reveal r4">Status: detailed tokenised-CMP framework consulted <b>May 2025</b> — final guidelines <span class="nb">still pending</span>. Until then: twin, pilot-first, consult the SC.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">18 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s19">
+  <div class="ghost">19</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Already happening — at institutional scale</div>
+    <h2 class="head reveal r2">The grown-ups are <em>already</em> tokenising.</h2>
+    <div class="stats reveal r3">
+      <div class="stat">
+        <div class="num">RM100M</div>
+        <div class="lbl">Khazanah × SC — first tokenised sukuk</div>
+        <div class="sub">Priced 28 Apr 2026 · CIMB + Maybank arranged · CGC, KWAP, OCBC invested. Run under the SC’s pilot.</div>
+      </div>
+      <div class="stat navy">
+        <div class="num">RM150M</div>
+        <div class="lbl">KLDX tokenised sukuk programme</div>
+        <div class="sub">7 primary listings to date — institutional fixed income, tokenised.</div>
+      </div>
+      <div class="stat green">
+        <div class="num">2</div>
+        <div class="lbl">SC-registered IEO operators</div>
+        <div class="sub">pitchIN and KLDX. That’s the whole list.</div>
+      </div>
+    </div>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">19 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s20">
+  <div class="ghost">20</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Reference · photograph this one</div>
+    <h2 class="head reveal r2" style="font-size:72px;">TCF issuer <em>eligibility</em></h2>
+    <div class="ref compact reveal r3" style="margin-top:32px;">
+      <div class="rrow"><div class="rlab">Entity</div><div class="rval">Malaysia-incorporated <b>Sdn Bhd or LLP</b> — not an EPC or listed PLC</div></div>
+      <div class="rrow"><div class="rlab">Operations</div><div class="rval">Main operations <b>in Malaysia</b></div></div>
+      <div class="rrow"><div class="rlab">Directors</div><div class="rval">At least <b>2 resident directors</b></div></div>
+      <div class="rrow"><div class="rlab">Skin in the game</div><div class="rval"><b>≥50% of equity</b> held by directors + senior management</div></div>
+      <div class="rrow"><div class="rlab">Capital</div><div class="rval"><b>RM500k paid-up</b> + RM500k shareholders’ funds, maintained</div></div>
+      <div class="rrow"><div class="rlab">Project</div><div class="rval">A real need — addresses a market need or improves efficiency</div></div>
+      <div class="rrow"><div class="rlab">Exclusivity</div><div class="rval"><span class="warn">No concurrent ECF / P2P raise</span> while the TCF runs</div></div>
+    </div>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">20 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s21">
+  <div class="ghost">21</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Utility token · where do you launch it?</div>
+    <h2 class="head reveal r2" style="font-size:72px;">Four doors. No “best” one — <em>trade-offs</em>.</h2>
+    <div class="reveal r3" style="display:grid; grid-template-columns:repeat(4,1fr); gap:22px; margin-top:44px;">
+      <div class="card acc-red" style="padding:28px 26px 24px;">
+        <div class="card-kicker">Door 01 · Local, regulated</div>
+        <h3 style="font-size:29px;">TCF</h3>
+        <p class="plain" style="font-size:19.5px;"><b>Public promo OK · foreign investors OK</b> · SC-reviewed. Cost: the eligibility bar + a 3–6-month review.</p>
+      </div>
+      <div class="card acc-navy" style="padding:28px 26px 24px;">
+        <div class="card-kicker">Door 02 · Private</div>
+        <h3 style="font-size:29px;">Placement / SAFT</h3>
+        <p class="plain" style="font-size:19.5px;"><b>Sophisticated investors only, no public promo.</b> Fast and cheap — but no retail crowd.</p>
+      </div>
+      <div class="card acc-green" style="padding:28px 26px 24px;">
+        <div class="card-kicker">Door 03 · Offshore-lite</div>
+        <h3 style="font-size:29px;">Labuan</h3>
+        <p class="plain" style="font-size:19.5px;">The <b>LFSA regime</b> — Fusang exchange; Fasset is a live member. Different regulator, offshore investor base.</p>
+      </div>
+      <div class="card acc-orange" style="padding:28px 26px 24px;">
+        <div class="card-kicker">Door 04 · Fully offshore</div>
+        <h3 style="font-size:29px;">Dubai · EU</h3>
+        <p class="plain" style="font-size:19.5px;">Outside the SC’s perimeter — but <b>AMLA still follows you</b>, and no active promotion to Malaysians.</p>
+      </div>
+    </div>
+    <p class="footnote reveal r4">The door decides your <b>investors, your promo rules and your timeline</b>. Pick it before the tokenomics deck.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">21 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s22">
+  <div class="ghost">22</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The map · photograph this one</div>
+    <h2 class="head reveal r2" style="font-size:68px;">“I want to launch a token” — your <em>options</em>.</h2>
+    <div class="omap reveal r3">
+      <div class="root">
+        <h3>What is the token’s <em style="font-style:italic; color:var(--red);">main job</em>?</h3>
+        <p>Substance, not the whitepaper’s label — the same question the regulator asks.</p>
+      </div>
+      <div class="stem">→</div>
+      <div class="branches">
+        <div class="obr b-red">
+          <div class="cond"><h4>It raises money to build or grow the project</h4><p>Buyers’ money is pooled to fund the business</p></div>
+          <div class="out"><span class="verdict">Security — fundraising use</span><br>Utility token → <b>TCF</b> · instrument in token form → <b>the instrument’s own rules</b> (the digital twin)</div>
+        </div>
+        <div class="obr b-orange">
+          <div class="cond"><h4>It carries rights over an asset</h4><p>Gold, property, shares, debt — asset-linked</p></div>
+          <div class="out"><span class="verdict">Asset-linked</span><br><b>Structure the wrapper first</b> — the asset’s own regime + AMLA govern</div>
+        </div>
+        <div class="obr b-green">
+          <div class="cond"><h4>It’s pure access to something that already works</h4><p>No fundraising — buyers just use the product</p></div>
+          <div class="out"><span class="verdict">Product territory</span><br>Likely <b>outside the securities perimeter</b> — consumer &amp; contract law, plus AMLA</div>
+        </div>
+      </div>
+    </div>
+    <p class="footnote reveal r4">This map is the segment in one picture — <b>your phone runs the same test</b> at the perimeter checkpoint.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">22 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s23">
+  <div class="ghost">23</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The issuer journey, end to end</div>
+    <h2 class="head reveal r2" style="font-size:70px;">Application to <em>listing</em> — seven moves.</h2>
+    <ul class="points tight reveal r3" style="margin-top:30px;">
+      <li><b>1 · Apply</b> — application + whitepaper (we hand you the 10-section template)<span class="tail">Week 1</span></li>
+      <li><b>2 · pitchIN due diligence</b> — legal, financial, token design<span class="tail">Weeks</span></li>
+      <li><b>3 · SC review</b> — plan a <b>3–6 month</b> lead time<span class="tail orange">Months</span></li>
+      <li><b>4 · Hosted campaign</b> — all-or-nothing; investor funds sit in trust<span class="tail">4–12 wks</span></li>
+      <li><b>5 · Token issuance</b> — contract audit → mint → allocate<span class="tail">Close</span></li>
+      <li><b>6 · Drawdown</b> — milestone-batched funds + semi-annual investor updates<span class="tail green">Post-raise</span></li>
+      <li><b>7 · Optional DAX listing</b> — local or global, preferably regulated<span class="tail green">The arc</span></li>
+    </ul>
+    <p class="footnote reveal r4">Insider note: for the first deals, the SC gave final approval <b>deal-by-deal</b> — plan your timeline like you’re one of them.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">23 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s24">
+  <div class="ghost">24</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Application to listing · the two clocks</div>
+    <h2 class="head reveal r2" style="font-size:68px;">Same word, two very different <em>timelines</em>.</h2>
+    <div class="tl reveal r3" style="margin-top:38px;">
+      <div class="tl-lane t-navy">
+        <div class="tl-head"><h3>Tokenised equity — the digital twin</h3><div class="tag">No extra SC review for the token</div></div>
+        <div class="tl-steps">
+          <div class="tl-step"><h5>Normal campaign</h5><p>ECF process as usual — tokenised certs disclosed upfront</p></div>
+          <div class="tl-step"><h5>Close + allotment</h5><p>All-or-nothing close, shares allotted</p></div>
+          <div class="tl-step"><h5>Tokenise <em>after</em> close</h5><p>Share cert issued as a token — a corporate exercise</p></div>
+          <div class="tl-step"><h5>Asset servicing</h5><p>Registry, dividends, transfers</p></div>
+        </div>
+      </div>
+      <div class="tl-lane t-red">
+        <div class="tl-head"><h3>Utility token — TCF</h3><div class="tag hot">+3–6 months of SC review</div></div>
+        <div class="tl-steps">
+          <div class="tl-step"><h5>Whitepaper</h5><p>10-section outline</p></div>
+          <div class="tl-step"><h5>Platform DD</h5><p>Legal · financial · token design</p></div>
+          <div class="tl-step"><h5><em>SC review</em></h5><p><b>3–6 months</b> — plan for it</p></div>
+          <div class="tl-step"><h5>Campaign</h5><p>4–12 weeks, funds in trust</p></div>
+          <div class="tl-step"><h5>Issuance</h5><p>Audit → mint → allocate</p></div>
+          <div class="tl-step"><h5>DAX listing</h5><p>Optional — local or global</p></div>
+        </div>
+      </div>
+    </div>
+    <p class="footnote reveal r4">The twin adds tokenisation <b>after</b> the raise. TCF adds months <b>before</b> it. Budget accordingly.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">24 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s25">
+  <div class="ghost">25</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Why regulated rails have distribution power</div>
+    <h2 class="head reveal r2">Protection is why the crowd <em>shows up</em>.</h2>
+    <ul class="points reveal r3">
+      <li><b>Trustee-held funds</b> — investor money never touches you until the raise succeeds.</li>
+      <li><b>Full refund if it fails</b> — all-or-nothing campaigns, by design.</li>
+      <li><b>A KYC’d crowd &amp; regulated custody</b> — everyone in the room is identified; tokens sit with a regulated custodian.</li>
+      <li><b>KYT-gated withdrawals</b> — tokens leave the platform only through screened routes.</li>
+    </ul>
+    <p class="footnote reveal r4">Regulation is a <b>distribution feature</b>, not a tax — it’s what lets strangers fund you.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">25 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s26">
+  <div class="ghost">26</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Case · BidNow — Malaysia’s first TCF, Aug 2024</div>
+    <h2 class="head reveal r2">The full arc: raise → utility → <em>listing</em>.</h2>
+    <div class="stats reveal r3" style="margin-top:52px;">
+      <div class="stat">
+        <div class="num">RM10M</div>
+        <div class="lbl">raised — double the minimum</div>
+        <div class="sub">RM5M minimum target, doubled.</div>
+      </div>
+      <div class="stat navy">
+        <div class="num">469</div>
+        <div class="lbl">investors in ~8 weeks</div>
+        <div class="sub">A retail crowd, on a regulated rail.</div>
+      </div>
+      <div class="stat green">
+        <div class="num">Dec <em>’24</em></div>
+        <div class="lbl">$BID lists on exchanges</div>
+        <div class="sub">Hata + Coinstore — the first IEO-framework token to reach a listing.</div>
+      </div>
+    </div>
+    <p class="footnote reveal r4">A working auction platform, a real user base, real token utility — <b>then</b> the raise.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">26 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s27">
+  <div class="ghost">27</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Case · Frac — the other data point</div>
+    <h2 class="head reveal r2">Same rail. Thirteen <em>investors</em>.</h2>
+    <div class="stats reveal r3" style="margin-top:52px;">
+      <div class="stat navy">
+        <div class="num">Nov <em>’24</em></div>
+        <div class="lbl">SC-cleared</div>
+        <div class="sub">B2B tokenisation-as-a-service — a real, approved business.</div>
+      </div>
+      <div class="stat">
+        <div class="num">RM1.54M</div>
+        <div class="lbl">raised — barely past minimum</div>
+        <div class="sub">Minimum target RM1.5M. It cleared it — just.</div>
+      </div>
+      <div class="stat">
+        <div class="num">13</div>
+        <div class="lbl">investors, total</div>
+        <div class="sub">Against BidNow’s 469 — on the same platform.</div>
+      </div>
+    </div>
+    <p class="footnote reveal r4">Same platform, same regulator, same framework. <b>Hold that thought</b> — Segment 5 explains the gap.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">27 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s28">
+  <div class="ghost">28</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">After the raise</div>
+    <h2 class="head reveal r2">Your journey doesn’t end at a successful <em>raise</em>.</h2>
+    <div class="grid2 reveal r3" style="grid-template-columns:1fr 1.35fr; margin-top:40px;">
+      <div class="card acc-navy">
+        <div class="card-kicker">The part nobody budgets for</div>
+        <h3>Hundreds of investors</h3>
+        <ul>
+          <li><b>Investor comms</b> — updates, semi-annual reports</li>
+          <li><b>Corporate actions</b> — dividends, votes, buybacks</li>
+          <li><b>Registry &amp; transfers</b> — who owns what, always current</li>
+        </ul>
+      </div>
+      <div class="card acc-teal">
+        <div class="card-kicker">Liquidity &amp; exits — an ecosystem, not one product</div>
+        <h3>Where holders eventually <em>exit</em></h3>
+        <ul>
+          <li><b>PSTX</b> — secondary trading for private shares</li>
+          <li><b>DAX listings</b> — the token exit route</li>
+          <li><b>LEAP 2.0</b> — Bursa proposal removes the delisting trap</li>
+          <li><b>PKS@Bursa</b> — the Bursa path: RM50M fund, 200 SMEs to Bursa by 2030</li>
+        </ul>
+      </div>
+    </div>
+    <p class="footnote reveal r4">You’re not choosing a raise — <b>you’re choosing a runway.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">28 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+
+
+<section class="slide divider" id="s29">
+  <div class="ghost">03</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Segment 03 of 05</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="seg-no reveal r1">Segment 03</div>
+    <h2 class="reveal r2">The Regulator’s <em>Lens</em></h2>
+    <div class="sub reveal r3">
+      <div class="dash"></div>
+      <p><b>Your token can be your <em>product</em> — instead of a security.</b> How that line actually gets drawn, from the desk that drew it.</p>
+    </div>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">29 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s30">
+  <div class="ghost">30</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Regulator’s Lens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Misconception № 1</div>
+    <h2 class="head reveal r2">The SC doesn’t regulate Web3. It regulates <em>activities</em>.</h2>
+    <div class="grid2 reveal r3">
+      <div class="card acc-red">
+        <div class="card-kicker">Regulated activities</div>
+        <h3>You need a licence — or a licensed rail</h3>
+        <ul>
+          <li><b>Public fundraising</b> — TCF / ECF / P2P</li>
+          <li><b>Operating a market</b> — an exchange, a DAX</li>
+          <li><b>Custody</b> — holding assets for others</li>
+          <li><b>Fund management</b> — pooling money to invest</li>
+          <li><b>Payments</b> — that one’s BNM’s turf</li>
+        </ul>
+      </div>
+      <div class="card acc-green">
+        <div class="card-kicker">Not regulated</div>
+        <h3>Build freely</h3>
+        <ul>
+          <li>Building a Web3 project or protocol</li>
+          <li>Free airdrops</li>
+          <li>Token sales <b>not</b> used for fundraising</li>
+          <li>Blockchain record-keeping</li>
+        </ul>
+      </div>
+    </div>
+    <p class="footnote reveal r4">Ask <b>what you’re doing</b>, not what you’re building.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">30 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide statement" id="s31">
+  <div class="ghost">31</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Regulator’s Lens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The Malaysian rule</div>
+    <h2 class="reveal r2">If the token is used for <em>fundraising</em>, it is a security.</h2>
+    <p class="after reveal r3">The test is <b>use</b> — not the whitepaper’s label. A “utility token pre-sale to fund development” is a securities offering. It always was.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">31 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s32">
+  <div class="ghost">32</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Regulator’s Lens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Misconception № 2</div>
+    <h2 class="head reveal r2">Investors aren’t liable. <em>Operators</em> are.</h2>
+    <ul class="points reveal r3">
+      <li><b>Investors may buy anything, anywhere.</b> Even scam victims aren’t “at fault” — their only duties are tax and AML.</li>
+      <li><b>Accountability sits with the business.</b> If an activity should be licensed and isn’t, it’s the operator who answers for it.</li>
+      <li><b>The tripwire: active promotion.</b> Unregulated players may not actively market to Malaysians — that’s the line cases actually turned on.</li>
+    </ul>
+    <p class="footnote reveal r4">First question on the regulator’s desk was never <i>who bought it</i> — it was <b>who sold it, and how.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">32 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s33">
+  <div class="ghost">33</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Regulator’s Lens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The Malaysian perimeter test · the Prescription Order factors, plainly</div>
+    <h2 class="head reveal r2">Four questions decide the <em>perimeter</em>.</h2>
+    <div class="forks reveal r3" style="margin-top:32px;">
+      <div class="fork" style="padding:18px 4px;"><div class="no">1</div><div class="q">Do buyers pay consideration for the token?</div><div class="seg">Money changes hands</div></div>
+      <div class="fork" style="padding:18px 4px;"><div class="no">2</div><div class="q">Is that money pooled to <small style="display:inline;font-size:inherit;color:inherit;font-weight:600;">fund the project or business</small>?</div><div class="seg">Pooling</div></div>
+      <div class="fork" style="padding:18px 4px;"><div class="no">3</div><div class="q">Do buyers expect income, returns or appreciation from the project’s success?</div><div class="seg">Expectation</div></div>
+      <div class="fork" style="padding:18px 4px;"><div class="no">4</div><div class="q">Is management in <small style="display:inline;font-size:inherit;color:inherit;font-weight:600;">your</small> hands — not theirs?</div><div class="seg">Control</div></div>
+    </div>
+    <p class="footnote reveal r4">The bright line: a token sold to <b>BUILD</b> the thing = fundraising = security · access to a thing that <b>ALREADY WORKS</b> = product. <span class="nb">The label is irrelevant — substance wins.</span></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">33 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s34">
+  <div class="ghost">34</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Regulator’s Lens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Token as product — not fundraising</div>
+    <h2 class="head reveal r2">Then regulation follows the <em>asset</em>.</h2>
+    <div class="grid3 reveal r3">
+      <div class="card acc-navy">
+        <div class="card-kicker">Shares / SPV interests</div>
+        <h3>Companies Act</h3>
+        <p class="plain">The wrapper is a company or trust — corporate law governs the rights, the SC governs any public offer.</p>
+      </div>
+      <div class="card acc-orange">
+        <div class="card-kicker">Gold &amp; physical assets</div>
+        <h3>Gold Exemption Order 1986</h3>
+        <p class="plain">Direct gold sales sit <b>outside the SC entirely</b> — KPDN consumer-protection rules only.</p>
+      </div>
+      <div class="card acc-teal">
+        <div class="card-kicker">Payment-like tokens</div>
+        <h3>BNM territory</h3>
+        <p class="plain">Anything that behaves like money — stablecoins, payment tokens — belongs to the central bank.</p>
+      </div>
+    </div>
+    <p class="footnote reveal r4">The morning session called this the <i>legal wrapper</i>. This is its regulatory face: <b>the wrapper picks your regulator.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">34 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s35">
+  <div class="ghost">35</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Regulator’s Lens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">How a tokenised asset is actually structured</div>
+    <h2 class="head reveal r2" style="font-size:64px;">The token never holds the asset — the <em>wrapper</em> does.</h2>
+    <div class="chain reveal r3">
+      <div class="node">
+        <div class="nk">01 · Asset</div>
+        <h4>The thing</h4>
+        <p>Shares, gold, property, debt — off-chain, real</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node hot">
+        <div class="nk">02 · Legal wrapper</div>
+        <h4>Holds title</h4>
+        <p><b>SPV / Sdn Bhd / LLP / trustee / licensed trust</b> — the legal owner of record</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="nk">03 · Rights</div>
+        <h4>What it issues</h4>
+        <p>Income, voting, redemption — the rights bundle</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="nk">04 · Token</div>
+        <h4>Carries the rights</h4>
+        <p>Bound <b>programmatically + contractually</b> — code and contract together</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="nk">05 · Buyer</div>
+        <h4>Holds the token</h4>
+        <p>Owns rights against the wrapper — not the asset itself</p>
+      </div>
+    </div>
+    <div class="walk reveal r4" style="margin-top:30px;">
+      <div class="wrow"><div class="wlab">Enegra’s version</div><div class="wval">100% of the shares held by a <b>Labuan licensed trust as nominee</b> — dividends <b>and</b> voting pass through to EGX token-holders.</div></div>
+      <div class="wrow"><div class="wlab">Gold’s version</div><div class="wval">Vaulted bars, title with the <b>dealer / custodian</b> — the token is a contractual claim to grams, under consumer law, not the SC.</div></div>
+    </div>
+    <p class="footnote reveal r4">Structure the wrapper <b>first</b> — the token only ever carries what the wrapper gives it.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">35 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s36">
+  <div class="ghost">36</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Regulator’s Lens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Worked example · gold tokens</div>
+    <h2 class="head reveal r2">Gold, <em>walked</em> through the test.</h2>
+    <div class="grid2 reveal r3">
+      <div class="card acc-orange">
+        <div class="card-kicker">HelloGold · shut Feb 2023</div>
+        <h3>Compliant — and gone</h3>
+        <ul>
+          <li><b>60,000+ users, RM25M+ invested</b> — a Shariah gold token, from RM1</li>
+          <li>Did the right things, in the right lane</li>
+          <li>Closed anyway: <i>“no longer commercially viable”</i></li>
+        </ul>
+      </div>
+      <div class="card acc-red">
+        <div class="card-kicker">Quantum Metal · BNM statement Jan 2024</div>
+        <h3>Never licensed</h3>
+        <ul>
+          <li>Digital gold with MLM-style distribution</li>
+          <li>BNM, publicly: claims of approval are <b>false</b></li>
+          <li>AMLA reporting duty ≠ a licence</li>
+        </ul>
+      </div>
+    </div>
+    <p class="footnote reveal r4">Outside the SC doesn’t mean easy — it means <b>a different regulator</b>, and no capital-markets distribution.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">36 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s37">
+  <div class="ghost">37</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Regulator’s Lens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The honest part</div>
+    <h2 class="head reveal r2">Grey areas are <em>normal</em>.</h2>
+    <ul class="points reveal r3">
+      <li><b>MYRC</b> — Malaysia’s first ringgit stablecoin, live in public beta. There is <b>no licensing regime for it yet</b>. That’s not a loophole; it’s a frontier.</li>
+      <li><b>BNM’s DAIH pilots are running</b> — StanChart + Capital A on a ringgit stablecoin; Maybank + CIMB on tokenised deposits. Policy clarity promised <b>end-2026</b>.</li>
+      <li><b>PeerHive</b> — SC sandbox cohort Nov 2025, shut down Jun 2026. First-hand: the settlement rail its model needed <b>didn’t exist yet</b>.<span class="tail orange">First-hand</span></li>
+    </ul>
+    <p class="footnote reveal r4">The rail PeerHive needed is being built <b>right now</b> — under supervision, with clarity due end-2026.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">37 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide statement" id="s38">
+  <div class="ghost">38</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Regulator’s Lens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Advice from the old desk</div>
+    <h2 class="reveal r2">Get counsel to support your case. Then — <em>innovate</em> ahead.</h2>
+    <p class="after reveal r3">Grey isn’t a stop sign. As long as you don’t break the law, the frontier is <b>yours to build on</b> — with a lawyer’s letter in the drawer.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">38 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide checkpoint" id="s39">
+  <div class="ghost">39</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Ready to Raise?</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div>
+      <div class="checkpoint-band reveal r1">
+        <div class="dot"></div>
+        <div class="label">Checkpoint 2 <span>&nbsp;·&nbsp; On your phone · The perimeter test</span></div>
+      </div>
+      <h2 class="reveal r2">Run <em>your</em> token through the perimeter test.</h2>
+      <div class="options slim reveal r3">
+        <div class="opt"><div class="letter">→</div><div class="name">Four honest questions — build vs works, pooling, asset link</div><div class="abbr">In the app</div></div>
+        <div class="opt"><div class="letter">A</div><div class="name">Fundraising use — <small>in Malaysia, a security</small></div><div class="abbr red">TCF / twin</div></div>
+        <div class="opt"><div class="letter">B</div><div class="name">Asset-linked — <small>structure the wrapper first</small></div><div class="abbr">Asset’s regime</div></div>
+        <div class="opt"><div class="letter">C</div><div class="name">Product territory — <small>likely outside the perimeter</small></div><div class="abbr">Consumer law</div></div>
+        <div class="opt"><div class="letter">D</div><div class="name">Grey zone</div><div class="abbr soon">Counsel, then build</div></div>
+      </div>
+    </div>
+    <div class="qr-chip reveal r4">
+      <img class="qr-img" alt="QR code — raise-route companion app" src="data:image/png;base64,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">
+      <div class="txt">
+        <div class="scan">Scan to answer</div>
+        <div class="hint">ncih.github.io/raise-route<br>Fork 2 of your Raise Route.</div>
+      </div>
+    </div>
+    <p class="payoff reveal r5">Whatever the verdict — <b>AMLA applies. Always.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">39 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+
+
+
+<section class="slide divider" id="s40">
+  <div class="ghost">04</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Segment 04 of 05</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="seg-no reveal r1">Segment 04</div>
+    <h2 class="reveal r2" style="font-size:118px;">Launching a Token — what you must actually <em>build</em></h2>
+    <div class="sub reveal r3">
+      <div class="dash"></div>
+      <p>Utility token <b>or</b> tokenised security — the stack is the same. Layer by layer, and where each one bites in Malaysia.</p>
+    </div>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">40 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s41">
+  <div class="ghost">41</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Launching a Token</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">From the old desk · what’s lost in translation</div>
+    <h2 class="head reveal r2">Regulators care about <em>outcomes</em> — and how your tech delivers them.</h2>
+    <ul class="points reveal r3" style="margin-top:36px;">
+      <li><b>Transfer restrictions in the token contract</b> → AMLA screening enforced at <b>every hop</b> — not just at onboarding.</li>
+      <li><b>An on-chain registry</b> → an audit trail the regulator can <b>inspect</b>, not request.</li>
+      <li><b>Programmatic caps</b> → investor limits that <b>can’t be fat-fingered</b>.</li>
+    </ul>
+    <p class="footnote reveal r4">Compliance isn’t a PDF — it’s built into the stack. <b>Show the regulator the outcome your tech guarantees, and the conversation changes.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">41 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s42">
+  <div class="ghost">42</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Launching a Token</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The stack you must stand up</div>
+    <h2 class="head reveal r2" style="font-size:72px;">Four <em>layers</em> — no skipping.</h2>
+    <div class="layers reveal r3" style="margin-top:36px;">
+      <div class="layer l1">
+        <h4>Asset<small>Layer 01</small></h4>
+        <p>The thing itself + its <b>legal wrapper</b> — what does the token-holder actually own?</p>
+      </div>
+      <div class="layer l2">
+        <h4>Identity<small>Layer 02</small></h4>
+        <p>KYC / AML on every holder — <b>AMLA always applies</b>, licensed or not.</p>
+      </div>
+      <div class="layer l3">
+        <h4>Settlement<small>Layer 03</small></h4>
+        <p>The money leg — how ringgit actually moves against the token.</p>
+      </div>
+      <div class="layer l4">
+        <h4>Custody &amp; transfer compliance<small>Woven through</small></h4>
+        <p>Who holds the keys — <b>custodian or self-custody</b> — and who is allowed to receive a transfer.</p>
+      </div>
+    </div>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">42 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s43">
+  <div class="ghost">43</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Launching a Token</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Layer 01 · Asset — walked example: Enegra Group (EGX)</div>
+    <h2 class="head reveal r2">What exactly does the holder <em>own</em>?</h2>
+    <ul class="points reveal r3">
+      <li><b>100% of the ordinary shares</b> of a Malaysian-run commodities group — held by a <b>Labuan trust as nominee</b> since 2019.</li>
+      <li>The token carries the <b>beneficial interest</b>: dividends <b>and</b> voting pass through to holders.</li>
+      <li>The share register is the <b>legal truth</b>. The token is the mirror — lose the token model, the shares still exist.</li>
+    </ul>
+    <p class="footnote reveal r4">Define the <b>rights bundle</b> first. The token only ever carries what the wrapper gives it.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">43 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s44">
+  <div class="ghost">44</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Launching a Token</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Layer 02 · Identity</div>
+    <h2 class="head reveal r2">Compliance can live <em>inside</em> the token.</h2>
+    <div class="grid2 reveal r3">
+      <div class="card acc-red">
+        <div class="card-kicker">Permissioned · ERC-3643</div>
+        <h3>Built for securities</h3>
+        <ul>
+          <li>KYC / AML enforced <b>in the token contract</b></li>
+          <li>Wallet whitelisting — only vetted holders</li>
+          <li>Programmable transfer restrictions — <b>cap-table control survives</b> tokenisation</li>
+        </ul>
+      </div>
+      <div class="card acc-navy">
+        <div class="card-kicker">Plain · ERC-20</div>
+        <h3>The compliance gap</h3>
+        <ul>
+          <li>Can gate the <b>primary</b> sale…</li>
+          <li>…but <b>NOT secondary transfers</b></li>
+          <li>Day two, your token is with strangers you never screened</li>
+        </ul>
+      </div>
+    </div>
+    <p class="footnote reveal r4">Enegra runs on ERC-3643 — <b>the transfer restriction is the contract.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">44 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s45">
+  <div class="ghost">45</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Launching a Token</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Layer 03 · Settlement</div>
+    <h2 class="head reveal r2">The money leg is Malaysia’s real <em>bottleneck</em>.</h2>
+    <ul class="points reveal r3">
+      <li><b>No licensed ringgit stablecoin exists.</b> MYRC is in beta; BNM’s pilots are running; policy clarity is promised <b>end-2026</b>.</li>
+      <li><b>This is the exact wall PeerHive hit</b> — a sandboxed, SC-selected model that couldn’t settle on-chain in ringgit.<span class="tail orange">First-hand</span></li>
+      <li><b>Today’s workaround:</b> fiat rails + a trustee for the money leg. <b>Tomorrow:</b> tokenised deposits (Maybank + CIMB pilots) are coming.</li>
+    </ul>
+    <p class="footnote reveal r4">Design your model to survive on <b>today’s</b> rails — and upgrade when the ringgit goes on-chain.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">45 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s46">
+  <div class="ghost">46</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Launching a Token</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Layer 04 · Custody — the choice</div>
+    <h2 class="head reveal r2">Custodian — or <em>self-custody</em>?</h2>
+    <div class="grid2 reveal r3">
+      <div class="card acc-navy">
+        <div class="card-kicker">Licensed custodian · DAC</div>
+        <h3>Someone else holds the keys</h3>
+        <ul>
+          <li><b>SC segregation rules</b> — client assets ring-fenced</li>
+          <li>Recoverable if the holder loses access</li>
+          <li>Cost + counterparty: you trust the custodian’s ops</li>
+        </ul>
+      </div>
+      <div class="card acc-red">
+        <div class="card-kicker">Self-custody · the holder’s own wallet</div>
+        <h3>The holder bears key risk</h3>
+        <ul>
+          <li>TCF tokens are <b>withdrawable — including self-custodial</b></li>
+          <li>Withdrawals leave through <b>KYT-screened routes</b></li>
+          <li>Lost keys = lost tokens. No help desk on-chain</li>
+        </ul>
+      </div>
+    </div>
+    <p class="footnote reveal r4">Decide <b>who bears key risk</b> — then write it into the offer documents, not the FAQ.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">46 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s47">
+  <div class="ghost">47</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Launching a Token</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Layer 04 · Custody — case: Tokenize Xchange → KDX</div>
+    <h2 class="head reveal r2">The collapse that <em>proved</em> the rules.</h2>
+    <ul class="points reveal r3">
+      <li><b>2025: the Singapore parent collapses.</b> Founder arrested — roughly <b>S$2.6M left against S$266M owed</b>.</li>
+      <li><b>The Malaysian entity survived.</b> Client assets were <b>ring-fenced under SC segregation rules</b> — untouched by the parent’s implosion.</li>
+      <li><b>The rebirth:</b> rebranded Kinetic DAX; <b>Kenanga upped its stake</b> — Malaysia’s first bank-backed digital asset exchange.</li>
+    </ul>
+    <p class="footnote reveal r4">Regulated custody isn’t bureaucracy. <b>It’s what saved the Malaysian clients.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">47 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s48">
+  <div class="ghost">48</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Launching a Token</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The ecosystem, by name</div>
+    <h2 class="head reveal r2" style="font-size:72px;">You don’t build these rails. You <em>rent</em> them.</h2>
+    <div class="ref reveal r3" style="margin-top:30px;">
+      <div class="rrow"><div class="rlab">Raise · IEO operators</div><div class="rval"><b>pitchIN · KLDX</b> — the entire SC-registered list</div></div>
+      <div class="rrow"><div class="rlab">Trade · DAX-es</div><div class="rval"><b>Luno · KDX</b> (Kenanga-backed, ex-Tokenize) · <b>Hata</b> — regulated venues for listing &amp; liquidity</div></div>
+      <div class="rrow"><div class="rlab">Custody · DACs</div><div class="rval">SC-registered digital-asset custodians — client assets <b>ring-fenced by segregation rules</b></div></div>
+      <div class="rrow"><div class="rlab">Money leg · Trustees</div><div class="rval">Licensed trustees hold campaign funds until the raise <b>succeeds or refunds</b></div></div>
+      <div class="rrow"><div class="rlab">Offshore · Labuan</div><div class="rval"><b>Fusang</b> exchange · <b>Fasset</b> (live member) — the LFSA lane, if your investors are offshore</div></div>
+    </div>
+    <p class="footnote reveal r4">You bring the asset and the community — <b>every other layer has a licensed operator with a rate card.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">48 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide checkpoint" id="s49">
+  <div class="ghost">49</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Ready to Raise?</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div>
+      <div class="checkpoint-band reveal r1">
+        <div class="dot"></div>
+        <div class="label">Checkpoint 3 <span>&nbsp;·&nbsp; On your phone · Build readiness</span></div>
+      </div>
+      <h2 class="reveal r2">Which layers are your <em>weakest</em>? Pick up to two.</h2>
+      <div class="options slim reveal r3">
+        <div class="opt"><div class="letter">A</div><div class="name">Asset / legal wrapper</div><div class="abbr">Layer 01</div></div>
+        <div class="opt"><div class="letter">B</div><div class="name">Identity / KYC</div><div class="abbr">Layer 02</div></div>
+        <div class="opt"><div class="letter">C</div><div class="name">Settlement</div><div class="abbr">Layer 03</div></div>
+        <div class="opt"><div class="letter">D</div><div class="name">Custody — <small>incl. self-custody</small></div><div class="abbr">Woven through</div></div>
+        <div class="opt"><div class="letter">E</div><div class="name">We’d partner for all of it</div><div class="abbr red">Honest</div></div>
+      </div>
+    </div>
+    <div class="qr-chip reveal r4">
+      <img class="qr-img" alt="QR code — raise-route companion app" src="data:image/png;base64,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">
+      <div class="txt">
+        <div class="scan">Scan to answer</div>
+        <div class="hint">ncih.github.io/raise-route<br>Fork 3 of your Raise Route.</div>
+      </div>
+    </div>
+    <p class="payoff reveal r5">Your weakest layers are your <b>project plan</b> for the next two quarters.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">49 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+
+
+
+<section class="slide divider" id="s50">
+  <div class="ghost">05</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Segment 05 of 05</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="seg-no reveal r1">Segment 05</div>
+    <h2 class="reveal r2">Is It Actually <em>Worth</em> It?</h2>
+    <div class="sub reveal r3">
+      <div class="dash"></div>
+      <p>The honest scorecard — when the token earns its keep, and when the traditional route simply wins.</p>
+    </div>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">50 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s51">
+  <div class="ghost">51</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Is It Actually Worth It?</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The conditions test</div>
+    <h2 class="head reveal r2">Almost anything <em>can</em> be tokenised. Not everything should be.</h2>
+    <ul class="points reveal r3">
+      <li><b>Many small buyers</b> you genuinely can’t reach through conventional channels.</li>
+      <li>The asset <b>gains something real</b> from fractionalisation or programmability.</li>
+      <li>A <b>real secondary market</b> can plausibly exist — not just be promised.</li>
+      <li>Your counterparties will actually <b>accept digital settlement</b>.</li>
+    </ul>
+    <p class="footnote reveal r4">If none of these apply — the traditional route is <b>cheaper and faster</b>. That’s not a failure; it’s an answer.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">51 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s52">
+  <div class="ghost">52</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Is It Actually Worth It?</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The natural experiment — one platform, two outcomes</div>
+    <h2 class="head reveal r2" style="font-size:72px;">BidNow vs Frac: the <em>community</em> variable.</h2>
+    <div class="duel reveal r3" style="margin-top:36px;">
+      <div class="side win">
+        <h3>BidNow</h3>
+        <div class="big">RM10M <em>· 469</em></div>
+        <div class="fact">In ~8 weeks — double the minimum. Walked in with an <b>existing ~20,000-user platform</b> and real token utility: bids, fees, rewards.</div>
+      </div>
+      <div class="vs">vs</div>
+      <div class="side lose">
+        <h3>Frac</h3>
+        <div class="big">RM1.54M <em>· 13</em></div>
+        <div class="fact">Barely past minimum. A <b>B2B service token</b> — solid business, but no retail crowd with a reason to hold it.</div>
+      </div>
+    </div>
+    <p class="footnote reveal r4">The token doesn’t sell itself — <b>your community does.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">52 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s53">
+  <div class="ghost">53</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Is It Actually Worth It?</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Enegra, revisited · the numbers this time</div>
+    <h2 class="head reveal r2">The plumbing works. Where’s the <em>market</em>?</h2>
+    <div class="stats reveal r3" style="margin-top:48px;">
+      <div class="stat">
+        <div class="num">US$16.6<em>bn</em></div>
+        <div class="lbl">Implied valuation — on paper</div>
+        <div class="sub">Token price × supply. Self-reported, never independently verified.</div>
+      </div>
+      <div class="stat navy">
+        <div class="num">US$70<em>k</em></div>
+        <div class="lbl">Daily trading volume</div>
+        <div class="sub">Across three obscure offshore venues — ~0.0004% of the implied value.</div>
+      </div>
+      <div class="stat">
+        <div class="num">~90<em>%</em></div>
+        <div class="lbl">Of the global STO market cap</div>
+        <div class="sub">At one point, EGX alone — on paper — was most of the entire asset class.</div>
+      </div>
+    </div>
+    <p class="footnote reveal r4">Live since 2019, still running — and still barely trading. <b>A price is not a market.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">53 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s54">
+  <div class="ghost">54</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Is It Actually Worth It?</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The liquidity mirage · three markets, same lesson</div>
+    <h2 class="head reveal r2">What tokenisation does <em>not</em> give you.</h2>
+    <ul class="points reveal r3">
+      <li><b>Property tokens resell at ~2% globally</b> <span style="color:var(--body);">(The Star, Jun 2026)</span> — and a token is <b>not a land title</b> without a blockchain land registry.</li>
+      <li><b>ASX abandoned its CHESS blockchain replacement</b> — a national exchange, with national-exchange money: too early, too ambitious.</li>
+      <li><b>Blockchain Capital’s fund token traded at ~50% below NAV</b> — liquid in theory, discounted in practice.</li>
+    </ul>
+    <p class="footnote reveal r4">Tokenisation promises liquidity. <b>Liquidity comes from buyers — not from tokens.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">54 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s55">
+  <div class="ghost">55</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Is It Actually Worth It?</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Reference · the worth-it scorecard</div>
+    <h2 class="head reveal r2" style="font-size:72px;">Five rows. Score <em>honestly</em>.</h2>
+    <div class="ref reveal r3" style="margin-top:32px;">
+      <div class="rrow"><div class="rlab">1 · Distribution</div><div class="rval">Do you need reach you <b>can’t get conventionally</b>?</div></div>
+      <div class="rrow"><div class="rlab">2 · Liquidity</div><div class="rval">Will a <b>real</b> secondary market exist — buyers, not hope?</div></div>
+      <div class="rrow"><div class="rlab">3 · Compliance</div><div class="rval">Is the budget there — fees, counsel, audits, reporting?</div></div>
+      <div class="rrow"><div class="rlab">4 · Capacity</div><div class="rval">Tech &amp; ops in-house — <b>or partners lined up</b>?</div></div>
+      <div class="rrow"><div class="rlab">5 · Community</div><div class="rval">Genuine utility, and a crowd that <b>wants</b> the token?</div></div>
+    </div>
+    <p class="footnote reveal r4">The app walks these five with you — <b>at the final checkpoint.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">55 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s56">
+  <div class="ghost">56</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Is It Actually Worth It?</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Token route vs traditional route · the honest matrix</div>
+    <h2 class="head reveal r2" style="font-size:68px;">Row by row, no <em>romance</em>.</h2>
+    <div class="matrix reveal r3">
+      <div class="mhead"><div>Dimension</div><div>Token route</div><div>Traditional route</div><div>Honest verdict</div></div>
+      <div class="mrow"><div class="dim">Distribution</div><div class="cell">Thousands of small holders, cross-border reach</div><div class="cell">Your network + the platform’s investor base</div><div class="call tok">Token — if a crowd exists</div></div>
+      <div class="mrow"><div class="dim">Liquidity reality</div><div class="cell">Promised 24/7 — delivered ~2% resale, NAV discounts</div><div class="cell">PSTX / trade sale — slow, but real buyers</div><div class="call depends">Buyers decide, not tech</div></div>
+      <div class="mrow"><div class="dim">Compliance cost</div><div class="cell">Everything traditional <b>plus</b> token DD, contract audits, custody</div><div class="cell">A known, priced process</div><div class="call trad">Traditional</div></div>
+      <div class="mrow"><div class="dim">Time-to-money</div><div class="cell">TCF adds <b>3–6 months</b> of SC review before campaign</div><div class="cell">ECF: DD → campaign → close</div><div class="call trad">Traditional</div></div>
+      <div class="mrow"><div class="dim">Ongoing obligations</div><div class="cell">Registry + contract upkeep + listings, forever</div><div class="cell">Investor reporting you’d do anyway</div><div class="call trad">Traditional</div></div>
+    </div>
+    <p class="footnote reveal r4">The token reliably wins <b>one row</b>. Make sure that row is real before paying for the other four.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">56 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s57">
+  <div class="ghost">57</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Is It Actually Worth It?</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">When the traditional route simply wins</div>
+    <h2 class="head reveal r2">Sometimes the answer is <em>no token</em>.</h2>
+    <ul class="points reveal r3">
+      <li>Raising <b>&lt;RM5M from your own customers</b>? Plain ECF. Cheaper, faster, proven.</li>
+      <li>Selling gold? <b>Sell gold.</b> The Gold Exemption Order has worked fine since 1986.</li>
+      <li><b>B2B with 10 customers?</b> You don’t need 10,000 token holders — you need 11 customers.</li>
+    </ul>
+    <p class="footnote reveal r4">Tokenise because it <b>earns its keep</b> — not because it’s 2026.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">57 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide checkpoint" id="s58">
+  <div class="ghost">58</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Ready to Raise?</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div>
+      <div class="checkpoint-band reveal r1">
+        <div class="dot"></div>
+        <div class="label">Checkpoint 4 <span>&nbsp;·&nbsp; On your phone — the last one</span></div>
+      </div>
+      <h2 class="reveal r2">Is launching a token worth it — for the <em>token</em> itself?</h2>
+      <div class="options slim reveal r3">
+        <div class="opt"><div class="letter">→</div><div class="name">Agree · neutral · disagree — five statements</div><div class="abbr">In the app</div></div>
+        <div class="opt"><div class="letter">1</div><div class="name">The token does a job my product <small>can’t do without it</small></div><div class="abbr">Utility</div></div>
+        <div class="opt"><div class="letter">2</div><div class="name">A community would actually <small>hold and use it</small></div><div class="abbr">Crowd</div></div>
+        <div class="opt"><div class="letter">3</div><div class="name">Fractionalising genuinely <small>changes my asset’s economics</small></div><div class="abbr">Economics</div></div>
+        <div class="opt"><div class="letter">4</div><div class="name">I can fund — or rent — <small>the compliance + tech stack</small></div><div class="abbr">Stack</div></div>
+        <div class="opt"><div class="letter">5</div><div class="name">A real secondary market <small>could exist</small></div><div class="abbr red">Buyers</div></div>
+      </div>
+    </div>
+    <div class="qr-chip reveal r4">
+      <img class="qr-img" alt="QR code — raise-route companion app" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUoAAAFKCAIAAAD0S4FSAAAGQklEQVR4nO3dQW7kNhBA0XGQSwS6UI6cCzVyDGU7QIJGPJwaUt/v7eWW5P5gLwrkx33f34Ci33bfADBF3pAlb8iSN2TJG7LkDVnyhix5Q5a8IUvekCVvyJI3ZMkbsuQNWfKGLHlDlrwhS96QJW/I+n3l4uuPP7+1vP7+a8vnvn+Tc3d15n9w5XnPfKJdb8PqDVnyhix5Q5a8IUvekCVvyJI3ZMkbsuQNWUtTa2dOgO2aalr5y7ve1dx82Jl/+fXFvpNWb8iSN2TJG7LkDVnyhix5Q5a8IUvekCVvyBqcWts1qbNrZ7L3n7vyvHOfO3ftE3dEux74nXzP6g1Z8oYseUOWvCFL3pAlb8iSN2TJG7LkDVnbptZ6ds2lvTd37Zn3zPes3pAlb8iSN2TJG7LkDVnyhix5Q5a8IUvekGVq7RfZtQPc3D2fuacd37N6Q5a8IUvekCVvyJI3ZMkbsuQNWfKGLHlD1rapta82e7QyW7brXe2ah9t1fugr9520ekOWvCFL3pAlb8iSN2TJG7LkDVnyhix5Q9bg1Nqu2aNd5s7T7F27y3XkXc2xekOWvCFL3pAlb8iSN2TJG7LkDVnyhix5Q9bS1Fpvb6on6p2nuXLPT3zeOVZvyJI3ZMkbsuQNWfKGLHlDlrwhS96QJW/I+rjv+4cv7u3FtTLzdOa5lnMzbbt2cVu5q112zdJZvSFL3pAlb8iSN2TJG7LkDVnyhix5Q5a8IWtpau2JU00rViaids2H7fLE6bFr03ue+1yrN2TJG7LkDVnyhix5Q5a8IUvekCVvyJI3ZC2dELprqmluIur9hFBv8mzXHN6uCbAzzb0NqzdkyRuy5A1Z8oYseUOWvCFL3pAlb8iSN2QNTq2duQfYrtmyJ86lreidD3s9cO9AqzdkyRuy5A1Z8oYseUOWvCFL3pAlb8iSN2QNTq2ded5ib9aqN4ll3vFnsXpDlrwhS96QJW/IkjdkyRuy5A1Z8oYseUPWx33fP3zx3NxSb+Jt5XPnZunOnNJ74l2tmPu2W70hS96QJW/IkjdkyRuy5A1Z8oYseUOWvCFraWptzhPn4c6ceFtx5nteceUm3t6zekOWvCFL3pAlb8iSN2TJG7LkDVnyhix5Q9a2E0J3/eVdp17usvK8K29j13s+8z94bborqzdkyRuy5A1Z8oYseUOWvCFL3pAlb8iSN2QNnhDaO09zzplnnq544oTfmd/2FVZvyJI3ZMkbsuQNWfKGLHlDlrwhS96QJW/IGtxr7YnTVHPzcHOzdCt7nj3xNNVdXmP/wbn3bPWGLHlDlrwhS96QJW/IkjdkyRuy5A1Z8oaswam1M/c8m/vcM2fa3pubtXrid+O1aUc0J4QCn+bHOWTJG7LkDVnyhix5Q5a8IUvekCVvyNq219p7Z+4QNve5Z86lfbUZr2vhPzg3s7jC6g1Z8oYseUOWvCFL3pAlb8iSN2TJG7LkDVmHTq3NmZsfmrv2zF3NzpwO3OU68k1avSFL3pAlb8iSN2TJG7LkDVnyhix5Q5a8Ievjvu/d9/AYc9NFZ56JeebucV9tHu5lag34Nz/OIUvekCVvyJI3ZMkbsuQNWfKGLHlD1tLU2plTPr2TSc98z7ueyKTd/2f1hix5Q5a8IUvekCVvyJI3ZMkbsuQNWfKGrMETQuf2xDrzJMcnzmk9cVpu17futWmPN3utAf/Bj3PIkjdkyRuy5A1Z8oYseUOWvCFL3pA1OLX23hNPkJyzcs9zM21zZ4Cu/OUzZ+musbexwuoNWfKGLHlDlrwhS96QJW/IkjdkyRuy5A1Z26bW+DW7bT1xr7Uz5w6vsbdhrzXg0/w4hyx5Q5a8IUvekCVvyJI3ZMkbsuQNWabWfpq5Pc/mrj1zemzX8+5irzXg0/w4hyx5Q5a8IUvekCVvyJI3ZMkbsuQNWdum1s7cT+uJc2m997xi7nmvB87SWb0hS96QJW/IkjdkyRuy5A1Z8oYseUOWvCFrcGrtibte7XqiXfulnflEZ1772jR3uMLqDVnyhix5Q5a8IUvekCVvyJI3ZMkbsuQNWR/3fe++B2CE1Ruy5A1Z8oYseUOWvCFL3pAlb8iSN2TJG7LkDVnyhix5Q5a8IUvekCVvyJI3ZMkbsuQNWfKGb1X/AEslJvPRrfBHAAAAAElFTkSuQmCC">
+      <div class="txt">
+        <div class="scan">Scan to finish</div>
+        <div class="hint">ncih.github.io/raise-route<br>Fork 4 — the last fork.</div>
+      </div>
+    </div>
+    <p class="payoff reveal r5">Verdicts: <b>launch-worthy</b> · borderline · the token adds nothing yet. Your card appears — <b>keep it open for the reveal.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">58 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+
+
+<section class="slide" id="s59">
+  <div class="ghost">59</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">How to Raise, Successfully</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Whatever the instrument · rule 01</div>
+    <h2 class="head reveal r2">Fundraising is a <em>sales</em> process.</h2>
+    <ul class="points reveal r3">
+      <li><b>Build the list</b> — research and qualify funders like a sales pipeline. <b>Warm intros convert</b>; cold decks mostly don’t.</li>
+      <li><b>Work the pipeline</b> — meetings, follow-ups, momentum. Every <i>no</i> gets you closer to a <i>yes</i>.</li>
+      <li><b>Prep is the hardest part</b> — data room, financial model, projections, pitch deck. Budget <b>3–6 months</b> before money moves.</li>
+    </ul>
+    <p class="footnote reveal r4">Mark Suster’s rule — and true on every rail in this deck. <b>The raise is a campaign, not an event.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>How to Raise, Successfully</span><span class="folio">59 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s60">
+  <div class="ghost">60</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">How to Raise, Successfully</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Whatever the instrument · rule 02</div>
+    <h2 class="head reveal r2">Campaigns succeed on three <em>multipliers</em>.</h2>
+    <div class="grid3 reveal r3" style="margin-top:48px;">
+      <div class="card acc-navy">
+        <div class="card-kicker">Multiplier 01</div>
+        <h3>Business fundamentals</h3>
+        <p class="plain">Real traction, a believable model — the campaign can’t fix the business.</p>
+      </div>
+      <div class="card acc-teal">
+        <div class="card-kicker">Multiplier 02</div>
+        <h3>Investment terms</h3>
+        <p class="plain">A fair valuation and a clean structure — priced so the <b>next</b> round works too.</p>
+      </div>
+      <div class="card acc-red">
+        <div class="card-kicker">Multiplier 03</div>
+        <h3>Marketability</h3>
+        <p class="plain">Your crowd <b>is</b> your distribution — the campaign is a distribution exercise.</p>
+      </div>
+    </div>
+    <p class="footnote reveal r4">Mokky’s ran its raise <b>openly on Threads</b> — 924 investors. BidNow walked in with <b>20,000 users</b>. The crowd was the campaign.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>How to Raise, Successfully</span><span class="folio">60 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s61">
+  <div class="ghost">61</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">How to Raise, Successfully</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Whatever the instrument · rule 03</div>
+    <h2 class="head reveal r2">Raise from <em>strength</em> — not from fumes.</h2>
+    <ul class="points reveal r3">
+      <li><b>The runway rule</b> — start raising while you still have <b>6–12 months of cash</b>. Desperation prices badly.</li>
+      <li><b>A realistic valuation</b> — there is no formula. Price for the <b>next round</b>, not the ego.</li>
+      <li><b>Know the dilution norms</b> — seed <b>20–30%</b>, Series A <b>~25%</b>. Plan the whole journey, not one round.</li>
+    </ul>
+    <p class="footnote reveal r4">Three to six months, start to money-in-bank — <b>put it in the calendar before you need it.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>How to Raise, Successfully</span><span class="folio">61 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+
+
+<section class="slide" id="s62">
+  <div class="ghost">62</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Reveal</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Live · the room map</div>
+    <h2 class="head reveal r2">Here’s what this <em>cohort</em> looks like.</h2>
+    <div class="reveal r3" style="margin-top:48px; height:420px; border:1px solid var(--hairline); background:#fff; display:flex; align-items:center; justify-content:center; position:relative;">
+      <div style="position:absolute; top:0; left:0; width:38px; height:38px; border-top:3px solid var(--navy); border-left:3px solid var(--navy);"></div>
+      <div style="position:absolute; top:0; right:0; width:38px; height:38px; border-top:3px solid var(--navy); border-right:3px solid var(--navy);"></div>
+      <div style="position:absolute; bottom:0; left:0; width:38px; height:38px; border-bottom:3px solid var(--navy); border-left:3px solid var(--navy);"></div>
+      <div style="position:absolute; bottom:0; right:0; width:38px; height:38px; border-bottom:3px solid var(--navy); border-right:3px solid var(--navy);"></div>
+      <div style="text-align:center;">
+        <div style="font-family:var(--serif); font-style:italic; font-size:34px; color:var(--body);">Live room tally — presenter view</div>
+        <div style="margin-top:14px; font-size:16px; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:var(--red);">Switch to the app dashboard</div>
+      </div>
+    </div>
+    <p class="footnote reveal r4">Two or three volunteers: <b>what route did you get — and do you agree with it?</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Close — The Reveal</span><span class="folio">62 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s63">
+  <div class="ghost">63</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Ready to Raise</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Reference · photograph this one too</div>
+    <h2 class="head reveal r2" style="font-size:72px;">The ready-to-raise <em>checklist</em> — two tiers.</h2>
+    <div class="reveal r3" style="display:grid; grid-template-columns:1fr 1.25fr; column-gap:64px; margin-top:36px;">
+      <div>
+        <div style="font-size:15px; font-weight:600; letter-spacing:0.24em; text-transform:uppercase; color:var(--red-dark); padding-bottom:12px; border-bottom:1px solid var(--hairline);">Universal — any raise</div>
+        <div class="chk" style="display:flex; align-items:baseline; gap:22px; padding:17px 4px; border-bottom:1px solid var(--hairline);"><div class="box" style="flex:none; width:22px; height:22px; border:2px solid var(--navy); transform:translateY(3px);"></div><p style="font-size:24px; color:var(--ink); line-height:1.4;"><b style="color:var(--navy);">Clean cap table + Sdn Bhd</b> — no tangles a DD team trips on</p></div>
+        <div class="chk" style="display:flex; align-items:baseline; gap:22px; padding:17px 4px; border-bottom:1px solid var(--hairline);"><div class="box" style="flex:none; width:22px; height:22px; border:2px solid var(--navy); transform:translateY(3px);"></div><p style="font-size:24px; color:var(--ink); line-height:1.4;"><b style="color:var(--navy);">Financials ready</b> — audited statements, management accounts</p></div>
+        <div class="chk" style="display:flex; align-items:baseline; gap:22px; padding:17px 4px; border-bottom:1px solid var(--hairline);"><div class="box" style="flex:none; width:22px; height:22px; border:2px solid var(--navy); transform:translateY(3px);"></div><p style="font-size:24px; color:var(--ink); line-height:1.4;"><b style="color:var(--navy);">A realistic valuation</b> — priced for the next round, not the ego</p></div>
+        <div class="chk" style="display:flex; align-items:baseline; gap:22px; padding:17px 4px; border-bottom:1px solid var(--hairline);"><div class="box" style="flex:none; width:22px; height:22px; border:2px solid var(--navy); transform:translateY(3px);"></div><p style="font-size:24px; color:var(--ink); line-height:1.4;"><b style="color:var(--navy);">A story + a crowd</b> — the campaign is a distribution exercise</p></div>
+        <div class="chk" style="display:flex; align-items:baseline; gap:22px; padding:17px 4px; border-bottom:1px solid var(--hairline);"><div class="box" style="flex:none; width:22px; height:22px; border:2px solid var(--navy); transform:translateY(3px);"></div><p style="font-size:24px; color:var(--ink); line-height:1.4;"><b style="color:var(--navy);">Founder time budget</b> — 3–6 months for the process itself</p></div>
+      </div>
+      <div>
+        <div style="font-size:15px; font-weight:600; letter-spacing:0.24em; text-transform:uppercase; color:var(--red-dark); padding-bottom:12px; border-bottom:1px solid var(--hairline);">Then, per instrument</div>
+        <div class="ref compact" style="margin-top:0; border-top:none;">
+          <div class="rrow" style="grid-template-columns:270px 1fr;"><div class="rlab">Equity</div><div class="rval" style="font-size:22px;">Growth story · exit path · governance readiness</div></div>
+          <div class="rrow" style="grid-template-columns:270px 1fr;"><div class="rlab">Debt</div><div class="rval" style="font-size:22px;">Repayment ability · cash-flow evidence · collateral / guarantees</div></div>
+          <div class="rrow" style="grid-template-columns:270px 1fr;"><div class="rlab">Utility token</div><div class="rval" style="font-size:22px;">Working product <b>or</b> credible build plan · community · token utility design · <b>RM500k paid-up</b></div></div>
+          <div class="rrow" style="grid-template-columns:270px 1fr;"><div class="rlab">Tokenised security</div><div class="rval" style="font-size:22px;">Everything the underlying instrument needs <b>+ a wrapper / registry plan</b></div></div>
+        </div>
+      </div>
+    </div>
+    <p class="footnote reveal r4">The left column is the real gate — <b>arrive with it done and you skip months.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Close — Ready to Raise</span><span class="folio">63 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s64">
+  <div class="ghost">64</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">The Momentum</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">The rails are being laid now</div>
+    <h2 class="head reveal r2" style="font-size:72px;">All of this is <em>recent</em>.</h2>
+    <div class="tiles reveal r3">
+      <div class="tile"><div class="t-num">CMM 2026–2030</div><div class="t-lbl">Capital Market Masterplan names <b>tokenisation a priority</b> (Mar 2026)</div></div>
+      <div class="tile"><div class="t-num">RM17.14bn</div><div class="t-lbl">Regulated DAX volume in 2025 — <b>up 23%</b> year on year</div></div>
+      <div class="tile"><div class="t-num">SC × Google</div><div class="t-lbl">Unregistered exchanges <b>blocked from advertising</b> to Malaysians (Apr 2026)</div></div>
+      <div class="tile"><div class="t-num">Budget 2026</div><div class="t-lbl"><b>Retail tokenised sukuk</b> announced — the retail leg after Khazanah’s pilot</div></div>
+      <div class="tile"><div class="t-num">FIKRALab</div><div class="t-lbl">SC’s Islamic-innovation lab — tokenised ICM products in scope (Mar 2026)</div></div>
+      <div class="tile"><div class="t-num">US$40M</div><div class="t-lbl"><b>IFC (World Bank Group) into Zetrix AI</b> — first World Bank-arm equity in Malaysian blockchain</div></div>
+    </div>
+    <p class="footnote reveal r4"><b>Regulated is where the momentum is.</b></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Close — The Momentum</span><span class="folio">64 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s65">
+  <div class="ghost">65</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Talk to Us</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage" style="display:grid; grid-template-columns:1fr 400px; column-gap:100px; align-items:center;">
+    <div>
+      <div class="logo-full reveal r1" role="img" aria-label="pitchIN logo" style="margin-bottom:40px;"></div>
+      <h2 class="reveal r2" style="font-family:var(--serif); font-optical-sizing:auto; font-size:96px; font-weight:540; letter-spacing:-0.02em; line-height:1.06; color:var(--navy);">Whichever route lit up — <em style="font-style:italic; font-weight:440; color:var(--red);">talk</em> to us.</h2>
+      <p class="lede reveal r3" style="margin-top:34px;">pitchIN is the private fundraising platform — equity, token, debt, and the liquidity after. Bring your Raise Route card to the conversation.</p>
+      <p class="reveal r4" style="margin-top:44px; font-size:21px; color:var(--ink);"><b style="color:var(--navy);">Nicholas Chong</b><span style="color:#c5c1b9; margin:0 14px;">·</span>VP of Commercial &amp; Product, pitchIN<span style="color:#c5c1b9; margin:0 14px;">·</span><span style="font-family:var(--mono); font-size:17px; color:var(--teal);">pitchin.my</span></p>
+    </div>
+    <div class="qr-chip reveal r5" style="justify-self:end;">
+      <img class="qr-img" alt="QR code — raise-route companion app" src="data:image/png;base64,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">
+      <div class="txt">
+        <div class="scan">Your Raise Route</div>
+        <div class="hint">ncih.github.io/raise-route<br>Card + slides + contact.</div>
+      </div>
+    </div>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Close — Talk to Us</span><span class="folio">65 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide statement" id="s66">
+  <div class="ghost">66</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Q &amp; A</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Thank you</div>
+    <h2 class="reveal r2">Questions — especially the <em>grey-area</em> ones.</h2>
+    <p class="after reveal r3">Those are the fun ones. <b>Ask anything</b> — regulator stories included.</p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Ready to Raise? — Fundraising &amp; STO Readiness in Malaysia</span><span class="folio">66 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter">01 / 66</div>
+<div class="edit-hotzone" id="editHotzone"></div>
+<button class="edit-toggle" id="editToggle" title="Edit mode (E)">✏️</button>
+<div class="edit-banner" id="editBanner">Edit mode — click text to edit · Ctrl/Cmd+S to save · E to exit</div>
+
+<script>
+/* ===========================================
+   SLIDE PRESENTATION CONTROLLER
+   Keyboard: ← → ↑ ↓ Space PgUp PgDn Home End · E = edit mode
+   Ctrl/Cmd+S in edit mode = save (localStorage + download)
+   =========================================== */
+class SlidePresentation {
+  constructor() {
+    this.slides = Array.from(document.querySelectorAll('.slide'));
+    this.stage = document.getElementById('deckStage');
+    this.progress = document.getElementById('progress');
+    this.counter = document.getElementById('counter');
+    this.currentSlide = 0;
+    this.setupStageScale();
+    this.setupKeyboardNav();
+    this.setupTouchNav();
+    // deep-link support: #12 opens slide 12
+    const h = parseInt((location.hash || '').replace('#', ''), 10);
+    this.showSlide(Number.isFinite(h) && h >= 1 && h <= this.slides.length ? h - 1 : 0);
+  }
+
+  /* Scale the fixed 1920×1080 stage to fit the window (letterbox/pillarbox) */
+  setupStageScale() {
+    const scale = () => {
+      const f = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      const x = (window.innerWidth - 1920 * f) / 2;
+      const y = (window.innerHeight - 1080 * f) / 2;
+      this.stage.style.transform = `translate(${x}px, ${y}px) scale(${f})`;
+    };
+    scale();
+    window.addEventListener('resize', scale);
+  }
+
+  setupKeyboardNav() {
+    document.addEventListener('keydown', (e) => {
+      if (e.target.isContentEditable) return;               // don't navigate while editing text
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      switch (e.key) {
+        case 'ArrowRight': case 'ArrowDown': case ' ': case 'PageDown':
+          e.preventDefault(); this.next(); break;
+        case 'ArrowLeft': case 'ArrowUp': case 'PageUp':
+          e.preventDefault(); this.prev(); break;
+        case 'Home': e.preventDefault(); this.showSlide(0); break;
+        case 'End':  e.preventDefault(); this.showSlide(this.slides.length - 1); break;
+      }
+    });
+  }
+
+  setupTouchNav() {
+    let x0 = null;
+    document.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 60) (dx < 0 ? this.next() : this.prev());
+      x0 = null;
+    }, { passive: true });
+  }
+
+  next() { this.showSlide(this.currentSlide + 1); }
+  prev() { this.showSlide(this.currentSlide - 1); }
+
+  showSlide(index) {
+    this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+    this.slides.forEach((s, i) => {
+      s.classList.toggle('active', i === this.currentSlide);
+      s.classList.toggle('visible', i === this.currentSlide);
+    });
+    const n = this.currentSlide + 1, total = this.slides.length;
+    this.progress.style.width = (n / total * 100) + '%';
+    this.counter.textContent = String(n).padStart(2, '0') + ' / ' + total;
+    history.replaceState(null, '', '#' + n);
+  }
+}
+
+/* ===========================================
+   INLINE EDIT MODE
+   E key / top-left hotzone → toggle. Content-editable slide stages.
+   Ctrl/Cmd+S → persist to localStorage + download edited HTML.
+   =========================================== */
+const EDIT_KEY = 'ready-to-raise-deck-edits-v1';
+const editor = {
+  isActive: false,
+  regions() { return document.querySelectorAll('.slide .stage'); },
+  toggleEditMode() {
+    this.isActive = !this.isActive;
+    document.body.classList.toggle('editing', this.isActive);
+    document.getElementById('editToggle').classList.toggle('active', this.isActive);
+    document.getElementById('editBanner').classList.toggle('on', this.isActive);
+    this.regions().forEach(r => r.setAttribute('contenteditable', this.isActive ? 'true' : 'false'));
+    if (!this.isActive) this.save(false);
+  },
+  save(download = true) {
+    const edits = {};
+    this.regions().forEach((r, i) => { edits[i] = r.innerHTML; });
+    try { localStorage.setItem(EDIT_KEY, JSON.stringify(edits)); } catch (e) {}
+    if (download) {
+      const doc = document.documentElement.cloneNode(true);
+      doc.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+      doc.querySelector('body').classList.remove('editing');
+      const blob = new Blob(['<!DOCTYPE html>\n' + doc.outerHTML], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'ready-to-raise-deck.html';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+  },
+  restore() {
+    let edits = null;
+    try { edits = JSON.parse(localStorage.getItem(EDIT_KEY) || 'null'); } catch (e) {}
+    if (!edits) return;
+    this.regions().forEach((r, i) => { if (edits[i] !== undefined) r.innerHTML = edits[i]; });
+  }
+};
+editor.restore();
+
+/* Edit toggle: button click, hotzone hover with 400ms grace, hotzone click, E key */
+const editToggle = document.getElementById('editToggle');
+const hotzone = document.getElementById('editHotzone');
+let hideTimeout = null;
+editToggle.addEventListener('click', () => editor.toggleEditMode());
+hotzone.addEventListener('mouseenter', () => { clearTimeout(hideTimeout); editToggle.classList.add('show'); });
+hotzone.addEventListener('mouseleave', () => {
+  hideTimeout = setTimeout(() => { if (!editor.isActive) editToggle.classList.remove('show'); }, 400);
+});
+editToggle.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
+editToggle.addEventListener('mouseleave', () => {
+  hideTimeout = setTimeout(() => { if (!editor.isActive) editToggle.classList.remove('show'); }, 400);
+});
+hotzone.addEventListener('click', () => editor.toggleEditMode());
+document.addEventListener('keydown', (e) => {
+  if ((e.key === 'e' || e.key === 'E') && !e.metaKey && !e.ctrlKey && !e.target.isContentEditable) {
+    editor.toggleEditMode();
+  }
+  if ((e.metaKey || e.ctrlKey) && e.key === 's' && editor.isActive) {
+    e.preventDefault();
+    editor.save(true);
+  }
+});
+
+const deck = new SlidePresentation();
+window.deck = deck;   // exposed for scripted verification
+</script>
+
+</body>
+</html>

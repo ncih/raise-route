@@ -487,6 +487,15 @@
   }
   .donote b{ font-style:normal; font-weight:560; color:var(--navy); }
 
+  .decklink{
+    display:block; margin-top:18px; text-align:center;
+    font-family:var(--sans); font-size:13px; font-weight:600;
+    letter-spacing:.08em; text-transform:uppercase;
+    color:var(--red); text-decoration:none;
+    padding:12px 0; border-top:1px solid var(--divider);
+  }
+  .decklink:active{ opacity:.7; }
+
   /* fade-in per step */
   .step{ animation:rise .35s ease both; }
   @keyframes rise{
@@ -1259,6 +1268,7 @@
               '<button class="btn primary" id="saveImg">Save as image</button>' +
               '<button class="btn ghost" id="done">Done</button>' +
             "</div>" +
+            '<a class="decklink" href="deck.html" target="_blank" rel="noopener">View today’s slides →</a>' +
             '<p class="donote" id="doneNote" style="display:none">All set — <b>we’ll be in touch.</b><br>Enjoy the rest of the session.</p>' +
           "</div>";
         bindBack(function(){ nav("cp4"); });
