@@ -39,7 +39,7 @@
   .frame{
     height:100vh;
     display:flex; flex-direction:column;
-    padding:28px 44px 24px;
+    padding:24px 44px 20px;
     max-width:1920px; margin:0 auto;
   }
 
@@ -66,18 +66,64 @@
   }
   header .live .dot.stale{ background:#E18437; }
   @keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:.25} }
-  header .line{ height:1px; background:var(--hairline); margin-top:16px; }
+  header .line{ height:1px; background:var(--hairline); margin-top:14px; }
+
+  /* ---------- gate control strip ---------- */
+  .control{
+    display:flex; align-items:center; gap:16px;
+    margin-top:14px;
+    border:1px solid var(--hairline);
+    border-left:3px solid var(--red);
+    background:var(--navy-card);
+    padding:10px 18px;
+  }
+  .control .clab{
+    font-size:9.5px; font-weight:600; letter-spacing:0.24em;
+    text-transform:uppercase; color:var(--fainter);
+    flex:none;
+  }
+  .gatechips{ display:flex; gap:6px; }
+  .gatechips button{
+    font-family:var(--sans);
+    font-size:10.5px; font-weight:600; letter-spacing:0.14em;
+    text-transform:uppercase;
+    background:transparent; color:var(--faint);
+    border:1px solid var(--hairline);
+    padding:7px 13px;
+    cursor:pointer;
+    transition:all .15s;
+  }
+  .gatechips button:hover{ border-color:var(--faint); }
+  .gatechips button.lit{
+    background:var(--red); border-color:var(--red); color:#fff;
+  }
+  .gatechips button.now{ box-shadow:0 0 0 2px rgba(228,85,91,.45); }
+  .opennext{
+    font-family:var(--sans);
+    font-size:11px; font-weight:600; letter-spacing:0.18em;
+    text-transform:uppercase;
+    background:var(--paper); color:var(--navy);
+    border:none; padding:9px 20px;
+    cursor:pointer;
+  }
+  .opennext:disabled{ opacity:.3; cursor:default; }
+  .control .cstate{
+    margin-left:auto;
+    font-family:var(--serif); font-style:italic;
+    font-size:13.5px; color:var(--faint);
+  }
+  .control .cstate b{ font-style:normal; color:var(--paper); font-weight:600; }
 
   /* ---------- room map strip ---------- */
   .strip{
     display:grid; grid-template-columns:repeat(5, 1fr);
     gap:1px; background:var(--hairline);
     border:1px solid var(--hairline);
-    margin-top:18px;
+    margin-top:14px;
   }
   .stat{
     background:var(--navy-deep);
-    padding:14px 22px 16px;
+    padding:12px 22px 14px;
   }
   .stat .slab{
     font-size:9.5px; font-weight:600; letter-spacing:0.24em;
@@ -85,17 +131,17 @@
   }
   .stat .sval{
     font-family:var(--serif); font-optical-sizing:auto;
-    font-size:30px; font-weight:540; letter-spacing:-0.01em;
+    font-size:28px; font-weight:540; letter-spacing:-0.01em;
     color:var(--paper);
     margin-top:5px; line-height:1.1;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
   .stat .sval .unit{ font-size:15px; color:var(--faint); font-style:italic; font-weight:440; }
-  .stat .sval .seg{ font-size:22px; }
+  .stat .sval .seg{ font-size:21px; }
   .stat .sval .seg small{
-    font-size:10px; font-family:var(--sans); font-weight:600;
-    letter-spacing:0.14em; text-transform:uppercase; color:var(--fainter);
-    margin:0 10px 0 4px;
+    font-size:9.5px; font-family:var(--sans); font-weight:600;
+    letter-spacing:0.12em; text-transform:uppercase; color:var(--fainter);
+    margin:0 9px 0 4px;
   }
   .stat .sval .seg small:last-child{ margin-right:0; }
   .stat.hero .sval{ color:var(--red-soft); }
@@ -106,14 +152,14 @@
     display:grid;
     grid-template-columns:repeat(3, 1fr);
     grid-template-rows:1fr 1fr;
-    gap:16px;
-    margin-top:16px;
+    gap:14px;
+    margin-top:14px;
   }
   .panel{
     background:var(--navy-card);
     border:1px solid var(--hairline);
     border-top:2px solid var(--red);
-    padding:18px 24px 16px;
+    padding:16px 24px 14px;
     display:flex; flex-direction:column;
     min-height:0;
     position:relative;
@@ -132,21 +178,32 @@
   }
   .panel h2{
     font-family:var(--serif); font-optical-sizing:auto;
-    font-size:19px; font-weight:520; letter-spacing:-0.01em;
+    font-size:18px; font-weight:520; letter-spacing:-0.01em;
     color:var(--paper); line-height:1.15;
-    margin-bottom:12px;
+    margin-bottom:10px;
   }
   .panel h2 em{ font-style:italic; font-weight:440; color:var(--red-soft); }
 
-  .bars{ flex:1; min-height:0; display:flex; flex-direction:column; justify-content:center; justify-content:safe center; gap:5px; }
-  .bar{ display:grid; grid-template-columns:minmax(0,190px) 1fr 52px; align-items:center; gap:12px; }
+  .bars{ flex:1; min-height:0; display:flex; flex-direction:column; justify-content:center; justify-content:safe center; gap:5px; overflow:hidden; }
+  .bars.split{ flex-direction:row; gap:22px; align-items:center; }
+  .ggroup{ display:flex; flex-direction:column; gap:5px; min-width:0; }
+  .bars.split .ggroup{ flex:1; }
+  .bars.split .bar{ grid-template-columns:minmax(0,120px) 1fr 30px; gap:8px; }
+  .bars.split .bar .blab{ font-size:10.5px; }
+  .bars.split .bar .bnum{ font-size:15px; }
+  .gsub{
+    font-size:8.5px; font-weight:600; letter-spacing:0.22em;
+    text-transform:uppercase; color:var(--fainter);
+    margin:4px 0 2px;
+  }
+  .bar{ display:grid; grid-template-columns:minmax(0,180px) 1fr 48px; align-items:center; gap:12px; }
   .bar .blab{
-    font-size:12px; font-weight:500; color:var(--faint);
+    font-size:11.5px; font-weight:500; color:var(--faint);
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     text-align:right;
   }
   .bar.top .blab{ color:var(--paper); font-weight:600; }
-  .bar .btrack{ height:14px; background:rgba(252,251,249,.06); position:relative; }
+  .bar .btrack{ height:12px; background:rgba(252,251,249,.06); position:relative; }
   .bar .bfill{
     position:absolute; inset:0 auto 0 0; width:0%;
     background:var(--red);
@@ -156,7 +213,7 @@
   .bar.grey .bfill{ background:rgba(252,251,249,.28); }
   .bar .bnum{
     font-family:var(--serif); font-optical-sizing:auto;
-    font-size:18px; font-weight:540; color:var(--paper);
+    font-size:17px; font-weight:540; color:var(--paper);
     text-align:left; line-height:1;
   }
   .bar .bnum.zero{ color:var(--fainter); }
@@ -167,8 +224,37 @@
     color:var(--fainter);
   }
 
+  /* ---------- Q&A panel ---------- */
+  .panel.qa{ border-top-color:var(--green); }
+  .qlist{
+    flex:1; min-height:0; overflow-y:auto;
+    display:flex; flex-direction:column; gap:8px;
+    padding-right:6px;
+    scrollbar-width:thin; scrollbar-color:rgba(252,251,249,.2) transparent;
+  }
+  .qitem{
+    border:1px solid var(--hairline);
+    border-left:2px solid var(--green-soft);
+    padding:9px 12px;
+    cursor:pointer;
+    transition:opacity .2s, border-color .2s;
+  }
+  .qitem .qwho{
+    font-size:9.5px; font-weight:600; letter-spacing:0.16em;
+    text-transform:uppercase; color:var(--green-soft);
+  }
+  .qitem .qwho .qco{ color:var(--fainter); letter-spacing:0.1em; }
+  .qitem .qtxt{
+    font-family:var(--serif); font-optical-sizing:auto;
+    font-size:14.5px; font-weight:440; line-height:1.35;
+    color:var(--paper); margin-top:4px;
+  }
+  .qitem.answered{ opacity:.28; border-left-color:var(--fainter); }
+  .qitem.answered .qwho{ color:var(--fainter); }
+  .qitem:hover{ border-color:var(--faint); }
+
   /* ---------- focus mode ---------- */
-  body.focus .grid{ display:block; margin-top:16px; }
+  body.focus .grid{ display:block; margin-top:14px; }
   body.focus .panel{ display:none; }
   body.focus .panel.focused{
     display:flex; height:100%;
@@ -176,15 +262,24 @@
   }
   body.focus .panel.focused h2{ font-size:42px; margin-bottom:24px; }
   body.focus .panel.focused .pk{ font-size:12px; }
-  body.focus .panel.focused .bars{ gap:14px; }
-  body.focus .panel.focused .bar{ grid-template-columns:minmax(0,420px) 1fr 110px; gap:24px; }
-  body.focus .panel.focused .bar .blab{ font-size:22px; }
-  body.focus .panel.focused .bar .btrack{ height:34px; }
-  body.focus .panel.focused .bar .bnum{ font-size:56px; }
+  body.focus .panel.focused .bars{ gap:12px; }
+  body.focus .panel.focused .bars.split{ gap:60px; }
+  body.focus .panel.focused .gsub{ font-size:12px; margin:10px 0 4px; }
+  body.focus .panel.focused .ggroup{ gap:12px; }
+  body.focus .panel.focused .bar,
+  body.focus .panel.focused .bars.split .bar{ grid-template-columns:minmax(0,320px) 1fr 90px; gap:22px; }
+  body.focus .panel.focused .bar .blab,
+  body.focus .panel.focused .bars.split .bar .blab{ font-size:20px; }
+  body.focus .panel.focused .bar .btrack{ height:30px; }
+  body.focus .panel.focused .bar .bnum,
+  body.focus .panel.focused .bars.split .bar .bnum{ font-size:44px; }
   body.focus .panel.focused .empty{ font-size:24px; }
+  body.focus .panel.focused .qitem{ padding:14px 20px; }
+  body.focus .panel.focused .qitem .qwho{ font-size:13px; }
+  body.focus .panel.focused .qitem .qtxt{ font-size:26px; margin-top:8px; }
 
   footer{
-    margin-top:14px;
+    margin-top:12px;
     display:flex; justify-content:space-between; align-items:baseline;
     font-size:10.5px; letter-spacing:0.06em; color:var(--fainter);
   }
@@ -202,12 +297,19 @@
     <div class="line"></div>
   </header>
 
+  <div class="control">
+    <span class="clab">Attendee gate</span>
+    <div class="gatechips" id="gateChips"></div>
+    <button class="opennext" id="openNext">Open next →</button>
+    <span class="cstate" id="gateState">gate: connecting…</span>
+  </div>
+
   <div class="strip" id="strip"></div>
   <div class="grid" id="grid"></div>
 
   <footer>
     <span>Ready to Raise? — Fundraising &amp; STO Readiness in Malaysia · Token-X Accelerator</span>
-    <span class="keys">Press <b>0–5</b> to focus a checkpoint · <b>Esc</b> for the grid</span>
+    <span class="keys">Press <b>0–4</b> to focus a checkpoint · <b>Q</b> for Q&amp;A · <b>Esc</b> for the grid</span>
   </footer>
 </div>
 
@@ -220,59 +322,65 @@
   try { sb = window.supabase.createClient(SUPA_URL, SUPA_KEY, { auth:{ persistSession:false, autoRefreshToken:false } }); }
   catch(e){ console.warn("supabase unavailable", e); }
 
-  /* ---------- catalog (mirrors index.html) ---------- */
+  var MAX_CP = 4;
+
+  /* ---------- catalog (mirrors index.html answer shapes) ---------- */
+  var OPTS = {
+    cp0: [
+      ["lt500k","< RM500k"],
+      ["500k-3m","RM500k – 3M"],
+      ["3-10m","RM3 – 10M"],
+      ["gt10m","> RM10M"],
+      ["not-raising","Not raising right now"]
+    ],
+    inst: [
+      ["equity","Equity — a share"],
+      ["debt","Debt — repay with interest"],
+      ["token","A token"],
+      ["notraise","Not looking to raise"],
+      ["unsure","Not sure yet"]
+    ],
+    rails: [
+      ["ecf","ECF"],
+      ["tcf","TCF"],
+      ["debtnotes","Debt & notes"],
+      ["vc","VC / angels"],
+      ["grants","Grants"],
+      ["offshore","Labuan / offshore"],
+      ["none","None yet","grey"]
+    ],
+    cp2: [
+      ["fundraising","Fundraising — security","red"],
+      ["asset","Asset-linked — wrapper first","grey"],
+      ["product","Product territory","green"],
+      ["grey","Grey zone","grey"]
+    ],
+    cp3: [
+      ["asset","Asset & legal wrapper"],
+      ["identity","Identity — KYC & AML"],
+      ["settlement","Settlement — money leg"],
+      ["custody","Custody — incl. self-custody"],
+      ["partner","Partner for all of it","grey"]
+    ],
+    cp4: [
+      ["launch","Launch-worthy (7–10)","green"],
+      ["borderline","Borderline (4–6)","grey"],
+      ["notyet","Adds nothing yet (0–3)","red"]
+    ]
+  };
+
+  /* panels 0–4 = checkpoints; panel 5 = Q&A */
   var PANELS = [
-    { cp:"cp0", pk:"Warm-up · CP0", h:"Raising in the next <em>12 months</em>",
-      field:"raise",
-      opts:[
-        ["lt500k","< RM500k"],
-        ["500k-3m","RM500k – 3M"],
-        ["3-10m","RM3 – 10M"],
-        ["gt10m","> RM10M"],
-        ["not-raising","Token IS the product"]
-      ]},
-    { cp:"cp1", pk:"Checkpoint 1", h:"What are you <em>selling</em> to funders?",
-      field:"choice",
-      opts:[
-        ["equity","Equity — a share"],
-        ["debt","Debt — a promise to repay"],
-        ["token","A token or product"],
-        ["unsure","Not sure yet"]
-      ]},
-    { cp:"cp2", pk:"Checkpoint 2", h:"Which <em>rail</em> fits today?",
-      field:"choice",
-      opts:[
-        ["ecf","ECF"],
-        ["tcf","TCF"],
-        ["debt","Debt & notes"],
-        ["pks","PKS@Bursa"],
-        ["vc","VC / grants first"],
-        ["none","Not raising"]
-      ]},
-    { cp:"cp3", pk:"Checkpoint 3", h:"The perimeter <em>verdict</em>",
-      field:"verdict",
-      opts:[
-        ["security","Security territory", "red"],
-        ["likely","Likely a security", "red"],
-        ["regime","Another regime", "green"],
-        ["outside","Likely outside", "green"]
-      ]},
-    { cp:"cp4", pk:"Checkpoint 4", h:"The <em>weakest</em> layer",
-      field:"choice",
-      opts:[
-        ["asset","Asset & legal wrapper"],
-        ["identity","Identity — KYC & AML"],
-        ["settlement","Settlement — money leg"],
-        ["custody","Custody & transfer"],
-        ["partner","Partner for all of it"]
-      ]},
-    { cp:"cp5", pk:"Checkpoint 5", h:"Is tokenisation <em>worth it?</em>",
-      field:"verdict",
-      opts:[
-        ["worth","Worth it (7–10)", "green"],
-        ["borderline","Borderline (4–6)", "grey"],
-        ["traditional","Traditional wins (0–3)", "red"]
-      ]}
+    { pk:"Warm-up · CP0", h:"Raising in the next <em>12 months</em>",
+      groups:[ { src:"cp0" } ] },
+    { pk:"Checkpoint 1", h:"Your raise — <em>instrument &amp; rails</em>", split:true,
+      groups:[ { label:"Instrument", src:"inst" }, { label:"Rails considering · multi", src:"rails" } ] },
+    { pk:"Checkpoint 2", h:"The perimeter <em>verdict</em>",
+      groups:[ { src:"cp2" } ] },
+    { pk:"Checkpoint 3", h:"Weakest <em>layers</em> · up to 2",
+      groups:[ { src:"cp3" } ] },
+    { pk:"Checkpoint 4", h:"Launching a token — <em>worth it?</em>",
+      groups:[ { src:"cp4" } ] }
   ];
 
   /* ---------- static scaffolding ---------- */
@@ -281,60 +389,169 @@
     return '<div class="panel" id="panel-' + i + '">' +
       '<div class="phead"><div class="pk">' + p.pk + '</div><div class="key">' + i + '</div></div>' +
       "<h2>" + p.h + "</h2>" +
-      '<div class="bars" id="bars-' + i + '"></div>' +
+      '<div class="bars' + (p.split ? " split" : "") + '" id="bars-' + i + '"></div>' +
     "</div>";
-  }).join("");
+  }).join("") +
+  '<div class="panel qa" id="panel-5">' +
+    '<div class="phead"><div class="pk">Live Q&amp;A · <span id="qcount">0</span> question(s)</div><div class="key">Q</div></div>' +
+    '<h2>From the <em>room</em> — tap to mark answered</h2>' +
+    '<div class="qlist" id="qlist"><div class="empty">No questions yet — the floor is quiet.</div></div>' +
+  "</div>";
 
+  function esc(s){ return ("" + (s == null ? "" : s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+  /* ---------- gate (session_state) ---------- */
+  var gate = null; // last known open_checkpoint
+  var gateChipsEl = document.getElementById("gateChips");
+  var gateStateEl = document.getElementById("gateState");
+  var openNextBtn = document.getElementById("openNext");
+
+  function renderGate(){
+    var html = "";
+    for(var i=0;i<=MAX_CP;i++){
+      var lit = gate !== null && i <= gate;
+      var now = gate !== null && i === gate;
+      html += '<button data-cp="' + i + '" class="' + (lit ? "lit" : "") + (now ? " now" : "") + '">CP' + i + "</button>";
+    }
+    gateChipsEl.innerHTML = html;
+    gateChipsEl.querySelectorAll("button").forEach(function(b){
+      b.addEventListener("click", function(){ setGate(parseInt(b.getAttribute("data-cp"), 10)); });
+    });
+    openNextBtn.disabled = gate === null || gate >= MAX_CP;
+    gateStateEl.innerHTML = gate === null
+      ? "gate: connecting…"
+      : "room is open through <b>CP" + gate + "</b>" + (gate >= MAX_CP ? " — all open" : " · next: CP" + (gate+1));
+  }
+  function setGate(n){
+    if(!sb) return;
+    sb.from("session_state").update({ open_checkpoint:n }).eq("id", 1).then(function(res){
+      if(res.error){ console.warn("gate update failed", res.error); return; }
+      gate = n; renderGate();
+    }, function(err){ console.warn("gate update error", err); });
+  }
+  openNextBtn.addEventListener("click", function(){
+    if(gate !== null && gate < MAX_CP) setGate(gate + 1);
+  });
+  renderGate();
+
+  /* ---------- stats strip ---------- */
   function stripHTML(agg){
-    function top(i){
+    function top(src, opts){
       var t = null;
-      PANELS[i].opts.forEach(function(o){
-        var c = agg.counts[i][o[0]] || 0;
+      opts.forEach(function(o){
+        var c = agg.c[src][o[0]] || 0;
         if(c > 0 && (!t || c > t.c)) t = { n:o[1], c:c };
       });
       return t ? t.n : "—";
     }
-    var c3 = agg.counts[3], c5 = agg.counts[5];
-    var sec = (c3.security||0) + (c3.likely||0);
-    var reg = c3.regime||0, out = c3.outside||0;
+    var c2 = agg.c.cp2, c4 = agg.c.cp4;
     return (
       '<div class="stat hero"><div class="slab">Registered</div><div class="sval">' + agg.registered + ' <span class="unit">founders</span></div></div>' +
-      '<div class="stat"><div class="slab">Top instrument</div><div class="sval">' + top(1) + "</div></div>" +
-      '<div class="stat"><div class="slab">Top rail</div><div class="sval">' + top(2) + "</div></div>" +
-      '<div class="stat"><div class="slab">Perimeter split</div><div class="sval"><span class="seg">' + sec + '<small>sec</small>' + reg + '<small>regime</small>' + out + '<small>outside</small></span></div></div>' +
-      '<div class="stat"><div class="slab">Worth-it split</div><div class="sval"><span class="seg">' + (c5.worth||0) + '<small>yes</small>' + (c5.borderline||0) + '<small>mid</small>' + (c5.traditional||0) + '<small>trad</small></span></div></div>'
+      '<div class="stat"><div class="slab">Completed routes</div><div class="sval">' + agg.completed + ' <span class="unit">of ' + agg.registered + '</span></div></div>' +
+      '<div class="stat"><div class="slab">Top instrument</div><div class="sval">' + top("inst", OPTS.inst) + "</div></div>" +
+      '<div class="stat"><div class="slab">Perimeter split</div><div class="sval"><span class="seg">' +
+        (c2.fundraising||0) + '<small>sec</small>' + (c2.asset||0) + '<small>asset</small>' +
+        (c2.product||0) + '<small>prod</small>' + (c2.grey||0) + '<small>grey</small></span></div></div>' +
+      '<div class="stat"><div class="slab">Token worth it?</div><div class="sval"><span class="seg">' +
+        (c4.launch||0) + '<small>yes</small>' + (c4.borderline||0) + '<small>mid</small>' + (c4.notyet||0) + '<small>not yet</small></span></div></div>'
     );
+  }
+
+  function barsHTML(src, opts, agg){
+    var counts = agg.c[src];
+    var max = 0, topKey = null;
+    opts.forEach(function(o){
+      var c = counts[o[0]] || 0;
+      if(c > max){ max = c; topKey = o[0]; }
+    });
+    return opts.map(function(o){
+      var c = counts[o[0]] || 0;
+      var pct = max ? Math.round(c / max * 100) : 0;
+      var tone = o[2] ? " " + o[2] : "";
+      return '<div class="bar' + tone + (o[0] === topKey && c > 0 ? " top" : "") + '">' +
+        '<div class="blab">' + o[1] + "</div>" +
+        '<div class="btrack"><div class="bfill" data-w="' + pct + '"></div></div>' +
+        '<div class="bnum' + (c === 0 ? " zero" : "") + '">' + c + "</div>" +
+      "</div>";
+    }).join("");
   }
 
   function renderPanels(agg){
     PANELS.forEach(function(p, i){
       var box = document.getElementById("bars-" + i);
-      var counts = agg.counts[i];
-      var totalAnswered = 0, max = 0, topKey = null;
-      p.opts.forEach(function(o){
-        var c = counts[o[0]] || 0;
-        totalAnswered += c;
-        if(c > max){ max = c; topKey = o[0]; }
+      var any = false;
+      p.groups.forEach(function(g){
+        var counts = agg.c[g.src];
+        for(var k in counts){ if(counts[k] > 0){ any = true; break; } }
       });
-      if(totalAnswered === 0){
+      if(!any){
         box.innerHTML = '<div class="empty">Waiting for the room…</div>';
         return;
       }
-      box.innerHTML = p.opts.map(function(o){
-        var c = counts[o[0]] || 0;
-        var pct = max ? Math.round(c / max * 100) : 0;
-        var tone = o[2] ? " " + o[2] : "";
-        return '<div class="bar' + tone + (o[0] === topKey && c > 0 ? " top" : "") + '">' +
-          '<div class="blab">' + o[1] + "</div>" +
-          '<div class="btrack"><div class="bfill" data-w="' + pct + '"></div></div>' +
-          '<div class="bnum' + (c === 0 ? " zero" : "") + '">' + c + "</div>" +
-        "</div>";
+      box.innerHTML = p.groups.map(function(g){
+        var inner = (g.label ? '<div class="gsub">' + g.label + "</div>" : "") + barsHTML(g.src, OPTS[g.src], agg);
+        return p.split ? '<div class="ggroup">' + inner + "</div>" : inner;
       }).join("");
-      // animate after paint
       requestAnimationFrame(function(){
         box.querySelectorAll(".bfill").forEach(function(f){
           f.style.width = f.getAttribute("data-w") + "%";
         });
+      });
+    });
+  }
+
+  /* ---------- aggregation ---------- */
+  function aggregate(rows){
+    var agg = { registered:0, completed:0,
+      c:{ cp0:{}, inst:{}, rails:{}, cp2:{}, cp3:{}, cp4:{} } };
+    function bump(src, key){
+      if(key == null) return;
+      agg.c[src][key] = (agg.c[src][key] || 0) + 1;
+    }
+    (rows || []).forEach(function(r){
+      var a = r.answer || {};
+      switch(r.checkpoint){
+        case "cp0": agg.registered++; bump("cp0", a.raise); break;
+        case "cp1":
+          bump("inst", a.instrument);
+          (a.rails || []).forEach(function(k){ bump("rails", k); });
+          break;
+        case "cp2": bump("cp2", a.verdict); break;
+        case "cp3": (a.layers || []).forEach(function(k){ bump("cp3", k); });
+          break;
+        case "cp4": bump("cp4", a.verdict); break;
+        case "cp5": agg.completed++; break;
+      }
+    });
+    return agg;
+  }
+
+  /* ---------- Q&A feed ---------- */
+  var questions = [];
+  function renderQA(){
+    var box = document.getElementById("qlist");
+    document.getElementById("qcount").textContent = questions.filter(function(q){ return !q.answered; }).length;
+    if(!questions.length){
+      box.innerHTML = '<div class="empty">No questions yet — the floor is quiet.</div>';
+      return;
+    }
+    box.innerHTML = questions.map(function(q){
+      return '<div class="qitem' + (q.answered ? " answered" : "") + '" data-id="' + esc(q.id) + '">' +
+        '<div class="qwho">' + esc(q.name || "Anonymous") + (q.company ? ' <span class="qco">· ' + esc(q.company) + "</span>" : "") + "</div>" +
+        '<div class="qtxt">' + esc(q.text) + "</div>" +
+      "</div>";
+    }).join("");
+    box.querySelectorAll(".qitem").forEach(function(el){
+      el.addEventListener("click", function(){
+        var id = el.getAttribute("data-id");
+        var q = null;
+        questions.forEach(function(x){ if("" + x.id === id) q = x; });
+        if(!q) return;
+        var next = !q.answered;
+        q.answered = next; renderQA(); // optimistic
+        if(sb) sb.from("questions").update({ answered:next }).eq("id", q.id).then(function(res){
+          if(res.error){ console.warn("mark answered failed", res.error); q.answered = !next; renderQA(); }
+        }, function(){ q.answered = !next; renderQA(); });
       });
     });
   }
@@ -344,37 +561,30 @@
   var liveLbl = document.getElementById("liveLbl");
   var lastGood = 0;
 
-  function aggregate(rows){
-    var agg = { registered:0, counts:[{},{},{},{},{},{}] };
-    (rows || []).forEach(function(r){
-      var idx = { cp0:0, cp1:1, cp2:2, cp3:3, cp4:4, cp5:5 }[r.checkpoint];
-      if(idx == null || !r.answer) return;
-      if(idx === 0) agg.registered++;
-      var key = r.answer[PANELS[idx].field];
-      if(key == null) return;
-      agg.counts[idx][key] = (agg.counts[idx][key] || 0) + 1;
-    });
-    return agg;
-  }
-
   function poll(){
     if(!sb) return;
+    // answers → tallies
     sb.from("answers").select("device_id,checkpoint,answer").then(function(res){
-      if(res.error){
-        console.warn("poll failed", res.error);
-        markStale();
-        return;
-      }
+      if(res.error){ console.warn("poll failed", res.error); markStale(); return; }
       lastGood = Date.now();
       liveDot.classList.remove("stale");
       var agg = aggregate(res.data);
       liveLbl.textContent = "Live · " + agg.registered + " in";
       document.getElementById("strip").innerHTML = stripHTML(agg);
       renderPanels(agg);
-    }, function(err){
-      console.warn("poll error", err);
-      markStale();
-    });
+    }, function(err){ console.warn("poll error", err); markStale(); });
+    // gate → control strip
+    sb.from("session_state").select("open_checkpoint").eq("id", 1).single().then(function(res){
+      if(!res.error && res.data){ gate = res.data.open_checkpoint; renderGate(); }
+    }, function(){});
+    // questions → Q&A feed (newest first)
+    sb.from("questions").select("id,created_at,name,company,text,answered")
+      .order("created_at", { ascending:false })
+      .then(function(res){
+        if(res.error){ console.warn("questions poll failed", res.error); return; }
+        questions = res.data || [];
+        renderQA();
+      }, function(){});
   }
   function markStale(){
     liveDot.classList.add("stale");
@@ -388,18 +598,22 @@
   setInterval(poll, 4000);
 
   /* ---------- keyboard: focus a panel ---------- */
+  function focusPanel(i){
+    document.body.classList.add("focus");
+    for(var j=0;j<=5;j++){
+      document.getElementById("panel-" + j).classList.toggle("focused", j === i);
+    }
+  }
   document.addEventListener("keydown", function(e){
-    if(e.key >= "0" && e.key <= "5"){
-      var i = parseInt(e.key, 10);
-      document.body.classList.add("focus");
-      PANELS.forEach(function(_, j){
-        document.getElementById("panel-" + j).classList.toggle("focused", j === i);
-      });
+    if(e.key >= "0" && e.key <= "4"){
+      focusPanel(parseInt(e.key, 10));
+    } else if(e.key === "q" || e.key === "Q"){
+      focusPanel(5);
     } else if(e.key === "Escape"){
       document.body.classList.remove("focus");
-      PANELS.forEach(function(_, j){
+      for(var j=0;j<=5;j++){
         document.getElementById("panel-" + j).classList.remove("focused");
-      });
+      }
     }
   });
 

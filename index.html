@@ -40,7 +40,7 @@
   .shell{
     max-width:430px;
     margin:0 auto;
-    padding:0 22px 64px;
+    padding:0 22px 110px;
     min-height:100vh;
     display:flex; flex-direction:column;
   }
@@ -99,7 +99,16 @@
   .route-seg.done{ background:var(--red); }
 
   /* ---------- step frame ---------- */
-  .step{ padding-top:26px; flex:1; display:flex; flex-direction:column; }
+  .step{ padding-top:22px; flex:1; display:flex; flex-direction:column; }
+  .backlink{
+    align-self:flex-start;
+    background:none; border:none; cursor:pointer;
+    font-family:var(--sans);
+    font-size:10.5px; font-weight:600; letter-spacing:0.18em;
+    text-transform:uppercase; color:var(--body);
+    padding:4px 0; margin-bottom:14px;
+  }
+  .backlink:active{ color:var(--red-dark); }
   .kicker{
     display:flex; align-items:center; gap:11px;
     font-size:10px; font-weight:600;
@@ -187,6 +196,10 @@
   }
   .chip.sel .cname{ color:var(--red-dark); }
   .chip.sel .cname .tag{ color:var(--red); }
+  .pickhint{
+    margin-top:12px;
+    font-size:11px; color:#9a968e; letter-spacing:0.04em; text-align:center;
+  }
 
   /* ---------- buttons ---------- */
   .actions{ margin-top:26px; }
@@ -279,7 +292,6 @@
     line-height:1.22; margin-top:10px;
     color:#fff;
   }
-  .verdict.good h2{ color:#fff; }
   .verdict h2 .vaccent{ color:var(--red-tint); }
   .verdict.good h2 .vaccent{ color:#a8e6c4; }
   .verdict p{
@@ -290,6 +302,90 @@
     font-family:var(--serif); font-size:13px; font-style:italic;
     color:rgba(252,251,249,.6); margin-top:14px;
   }
+
+  /* ---------- waiting (presenter gate) ---------- */
+  .waitbox{
+    margin-top:30px;
+    border:1px dashed #d8d5cf;
+    padding:34px 24px 30px;
+    text-align:center;
+  }
+  .waitbox .bignod{ font-size:34px; line-height:1; }
+  .waitbox .wtitle{
+    font-family:var(--serif); font-optical-sizing:auto;
+    font-size:22px; font-weight:540; letter-spacing:-0.01em;
+    line-height:1.25; color:var(--navy);
+    margin-top:14px;
+  }
+  .waitbox .wtitle em{ font-style:italic; color:var(--red); }
+  .waitbox .wsub{
+    margin-top:10px; font-size:13px; line-height:1.55; color:var(--body);
+  }
+  .waitdots{ display:flex; gap:8px; justify-content:center; margin-top:22px; }
+  .waitdots span{
+    width:7px; height:7px; border-radius:50%; background:var(--red);
+    animation:wpulse 1.3s ease-in-out infinite;
+  }
+  .waitdots span:nth-child(2){ animation-delay:.22s; }
+  .waitdots span:nth-child(3){ animation-delay:.44s; }
+  @keyframes wpulse{ 0%,100%{opacity:.15} 50%{opacity:.9} }
+
+  /* ---------- Q&A fab + sheet ---------- */
+  .qa-fab{
+    position:fixed; right:16px; bottom:calc(16px + env(safe-area-inset-bottom));
+    z-index:60;
+    display:none;
+    font-family:var(--sans);
+    font-size:10.5px; font-weight:600; letter-spacing:0.16em;
+    text-transform:uppercase;
+    background:var(--navy); color:var(--paper);
+    border:none; border-radius:999px;
+    padding:13px 18px;
+    cursor:pointer;
+    box-shadow:0 4px 16px rgba(26,24,71,.28);
+  }
+  .qa-fab.show{ display:block; }
+  .qa-fab .q{ color:var(--red-tint); margin-right:6px; font-family:var(--serif); font-style:italic; text-transform:none; font-size:13px; letter-spacing:0; }
+  .qa-veil{
+    position:fixed; inset:0; z-index:70;
+    background:rgba(26,24,71,.45);
+    display:none;
+  }
+  .qa-veil.show{ display:block; }
+  .qa-sheet{
+    position:fixed; left:0; right:0; bottom:0; z-index:71;
+    background:var(--paper);
+    border-top:2px solid var(--red);
+    padding:22px 22px calc(22px + env(safe-area-inset-bottom));
+    max-width:430px; margin:0 auto;
+    transform:translateY(105%);
+    transition:transform .28s cubic-bezier(.22,.9,.35,1);
+  }
+  .qa-veil.show .qa-sheet{ transform:none; }
+  .qa-sheet .qk{
+    font-size:10px; font-weight:600; letter-spacing:0.26em;
+    text-transform:uppercase; color:var(--navy);
+    display:flex; align-items:center; gap:11px;
+  }
+  .qa-sheet .qk::before{ content:""; width:26px; height:2px; background:var(--red); }
+  .qa-sheet textarea{
+    width:100%; margin-top:14px;
+    font-family:var(--sans); font-size:16px; color:var(--navy);
+    background:#fff; border:1px solid var(--hairline);
+    padding:13px 14px; min-height:96px; resize:vertical;
+    outline:none; border-radius:0;
+    -webkit-appearance:none; appearance:none;
+  }
+  .qa-sheet textarea:focus{ border-color:var(--navy); }
+  .qa-sheet .qhint{ font-size:11px; color:#9a968e; margin-top:8px; }
+  .qa-sheet .qrow{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
+  .qa-sent{
+    display:none;
+    margin-top:14px; padding:12px 14px;
+    background:var(--green-tint); border:1px solid #bfe4cf;
+    font-size:12.5px; color:#0a6e38; text-align:center;
+  }
+  .qa-sent.show{ display:block; }
 
   /* ---------- final route card ---------- */
   .cardwrap{ margin-top:24px; }
@@ -418,6 +514,20 @@
     <main id="app"></main>
   </div>
 
+  <button class="qa-fab" id="qaFab" type="button"><span class="q">?</span>Ask a question</button>
+  <div class="qa-veil" id="qaVeil">
+    <div class="qa-sheet">
+      <div class="qk">Ask Nicholas a question</div>
+      <textarea id="qaText" placeholder="Type it here — it lands on the presenter screen, with your name on it." maxlength="500"></textarea>
+      <div class="qhint">Asked as you — questions go to the live Q&amp;A feed.</div>
+      <div class="qa-sent" id="qaSent">Sent — it's in the Q&amp;A queue. 👌</div>
+      <div class="qrow">
+        <button class="btn ghost" id="qaCancel" style="margin-top:0">Close</button>
+        <button class="btn primary" id="qaSend">Send it</button>
+      </div>
+    </div>
+  </div>
+
 <script>
 (function(){
   "use strict";
@@ -426,7 +536,19 @@
   var SUPA_URL = "https://hhqlzcvwalwuxrrolevv.supabase.co";
   var SUPA_KEY = "sb_publishable_oNq7GfsgbZKELDhQbaRz_g_ctOO0v0p";
   var sb = null;
-  try { sb = window.supabase.createClient(SUPA_URL, SUPA_KEY, { auth:{ persistSession:false, autoRefreshToken:false } }); }
+  try {
+    // fetch proxy: identical to native fetch, but lets `window.__rrOffline = true`
+    // simulate a dead network (used to test the fail-open gate + offline queue)
+    var _realFetch = window.fetch ? window.fetch.bind(window) : undefined;
+    var _fetchProxy = _realFetch ? function(){
+      if(window.__rrOffline) return Promise.reject(new TypeError("Simulated offline"));
+      return _realFetch.apply(null, arguments);
+    } : undefined;
+    sb = window.supabase.createClient(SUPA_URL, SUPA_KEY, {
+      auth:{ persistSession:false, autoRefreshToken:false },
+      global: _fetchProxy ? { fetch:_fetchProxy } : {}
+    });
+  }
   catch(e){ console.warn("supabase client unavailable", e); }
 
   /* ================= device id ================= */
@@ -442,19 +564,25 @@
   var DEVICE = deviceId();
 
   /* ================= state ================= */
-  var DEFAULT = { screen:"register", lead:{}, answers:{}, cp3:{i:0,q:{}}, cp5:{i:0,pts:[]} };
+  var DEFAULT = {
+    screen:"register", lead:{}, answers:{},
+    cp1:{ instrument:null, rails:[] },
+    cp2:{ i:0, q:{} },
+    cp3:{ layers:[] },
+    cp4:{ i:0, pts:[] }
+  };
   function loadState(){
     try{
-      var s = JSON.parse(localStorage.getItem("rr_state_v1"));
+      var s = JSON.parse(localStorage.getItem("rr_state_v2"));
       if(s && s.screen) return s;
     }catch(e){}
     return JSON.parse(JSON.stringify(DEFAULT));
   }
   var S = loadState();
-  function save(){ localStorage.setItem("rr_state_v1", JSON.stringify(S)); }
+  function save(){ localStorage.setItem("rr_state_v2", JSON.stringify(S)); }
 
   /* ================= offline queue ================= */
-  var QKEY = "rr_queue_v1";
+  var QKEY = "rr_queue_v2";
   function loadQ(){ try{ return JSON.parse(localStorage.getItem(QKEY)) || []; }catch(e){ return []; } }
   function saveQ(q){ localStorage.setItem(QKEY, JSON.stringify(q)); }
   function setDot(){
@@ -497,6 +625,13 @@
           return false;
         }, function(){ return false; });
       }
+      if(job.t === "q"){
+        return sb.from("questions").insert(job.p).then(function(res){
+          if(!res.error) return true;
+          console.warn("question insert failed", res.error);
+          return false;
+        }, function(){ return false; });
+      }
       return sb.from("answers").upsert(job.p, { onConflict:"device_id,checkpoint" }).then(function(res){
         if(!res.error) return true;
         console.warn("answer upsert failed", res.error);
@@ -513,124 +648,177 @@
     enqueue({ t:"ans", p:{ device_id:DEVICE, checkpoint:cp, answer:obj } });
   }
 
+  /* ================= presenter gate ================= */
+  /* session_state (single row id=1) holds the highest checkpoint Nicholas has
+     opened. Steps beyond it wait. FAIL-OPEN: any fetch failure => allow. */
+  var GATE = { open:null }; // null = unknown => open
+  var GATE_NEED = { cp1a:1, cp1b:1, cp2:2, cp3:3, cp4:4 };
+  function gateClosed(need){
+    return GATE.open !== null && GATE.open < need;
+  }
+  function fetchGate(cb){
+    if(!sb){ GATE.open = null; if(cb) cb(); return; }
+    try{
+      sb.from("session_state").select("open_checkpoint").eq("id", 1).single().then(function(res){
+        GATE.open = (res.error || !res.data) ? null : res.data.open_checkpoint;
+        if(cb) cb();
+      }, function(){ GATE.open = null; if(cb) cb(); });
+    }catch(e){ GATE.open = null; if(cb) cb(); }
+  }
+  var WAIT_T = null, WAIT_FN = null;
+  function clearWait(){
+    if(WAIT_T){ clearInterval(WAIT_T); WAIT_T = null; }
+    if(WAIT_FN){
+      document.removeEventListener("visibilitychange", WAIT_FN);
+      window.removeEventListener("focus", WAIT_FN);
+      WAIT_FN = null;
+    }
+  }
+
+  function nav(screen){
+    S.screen = screen; save(); render();
+    // refresh the gate in the background; correct course if we ran ahead
+    fetchGate(function(){
+      var need = GATE_NEED[S.screen];
+      if(need != null && gateClosed(need)) render();
+    });
+  }
+
   /* ================= content ================= */
-  var CP1 = [
-    { k:"equity", n:"A share of the business", tag:"Equity", sub:"Investors own a slice of the company — they win when you win." },
-    { k:"debt",   n:"A promise to repay", tag:"Debt", sub:"You owe the money back — with interest, on a schedule." },
-    { k:"token",  n:"A token or product", tag:"Token", sub:"Buyers get a digital unit — what it does decides the law, not the label." },
-    { k:"unsure", n:"Not sure yet", tag:"—", sub:"Honest answer. The next two hours are for exactly this." }
+  var INSTRUMENTS = [
+    { k:"equity",   s:"Equity",      n:"A share of the business", tag:"Equity", sub:"Investors own a slice of the company — they win when you win." },
+    { k:"debt",     s:"Debt",        n:"A promise to repay", tag:"Debt", sub:"You owe the money back — with interest, on a schedule." },
+    { k:"token",    s:"Token",       n:"A token", tag:"Token", sub:"Buyers get a digital unit — what it does decides the law, not the label." },
+    { k:"notraise", s:"Not raising", n:"Not looking to raise", tag:"—", sub:"Here to understand the landscape — that counts too." },
+    { k:"unsure",   s:"Not sure",    n:"Not sure yet", tag:"—", sub:"Honest answer. The next two hours are for exactly this." }
   ];
-  var CP2 = [
-    { k:"ecf",  n:"Equity crowdfunding (ECF)", tag:"ECF", sub:"Up to RM20m lifetime — sell shares to the crowd on a regulated platform." },
-    { k:"tcf",  n:"Token crowdfunding (TCF)", tag:"TCF", sub:"Raise up to 20× shareholders' funds — the token IS the security." },
-    { k:"debt", n:"Debt & notes", tag:"Soon", sub:"Launching early next year — borrow from the crowd, repay with interest." },
-    { k:"pks",  n:"PKS@Bursa", tag:"Pre-IPO", sub:"The pre-IPO runway — a listed market sized for SMEs." },
-    { k:"vc",   n:"VC or grants first", tag:"Private", sub:"Close the private round now; keep the public rails in reserve." },
-    { k:"none", n:"Not raising — token is my product", tag:"Utility", sub:"You're selling a product, not an investment. Keep it that way." }
+  var RAILS = [
+    { k:"ecf",       s:"ECF",             n:"Equity crowdfunding (ECF)", sub:"Sell shares to the crowd on a regulated platform — up to RM20m lifetime." },
+    { k:"tcf",       s:"TCF",             n:"Token crowdfunding (TCF)", sub:"A regulated public token raise — up to 20× shareholders' funds, RM100m ceiling." },
+    { k:"debtnotes", s:"Debt & notes",    n:"Debt & notes", sub:"Borrow and repay with interest — P2P financing or private notes." },
+    { k:"vc",        s:"VC / angels",     n:"VC / angels", sub:"Private conviction capital — term sheets, board seats, 10× expectations." },
+    { k:"grants",    s:"Grants",          n:"Grants", sub:"Non-dilutive — Cradle, MDEC and friends fund milestones, not equity." },
+    { k:"offshore",  s:"Labuan/offshore", n:"Labuan / offshore", sub:"Fusang, LFSA or further afield — AMLA still follows you home." },
+    { k:"none",      s:"None yet",        n:"None yet", sub:"Still mapping the landscape — that's exactly what today is for." }
   ];
-  var CP3Q = [
-    "Are you raising money from the Malaysian public?",
-    "Will the token be used to FUND the business (pre-sale, treasury sale, any raise)?",
-    "Do buyers expect profit mainly from YOUR team's efforts?",
-    "Is the underlying asset already regulated (shares, bonds, payments, deposits)?"
+  var CP2Q = [
+    "Is the token's main job to raise money to BUILD or GROW the project?",
+    "Does your token give access to something that ALREADY works today?",
+    "Will buyers' money be pooled to fund the business?",
+    "Is the token backed by / linked to a real-world asset or an existing instrument (shares, debt, gold, property)?"
   ];
-  var CP4 = [
-    { k:"asset",      n:"Asset & legal wrapper", sub:"What exactly does the token represent — and can a court agree?" },
-    { k:"identity",   n:"Identity — KYC & AML", sub:"Who is allowed to buy, and how do you prove you checked?" },
-    { k:"settlement", n:"Settlement — the money leg", sub:"How does the cash actually move, clear and settle?" },
-    { k:"custody",    n:"Custody & transfer compliance", sub:"Who holds the asset, and how does it change hands lawfully?" },
-    { k:"partner",    n:"We'd partner for all of it", sub:"Rent the regulated rails — keep your team on the business." }
+  var LAYERS = [
+    { k:"asset",      s:"Asset & wrapper", n:"Asset & legal wrapper", sub:"What exactly does the token represent — and can a court agree?" },
+    { k:"identity",   s:"Identity — KYC",  n:"Identity — KYC & AML", sub:"Who is allowed to buy, and how do you prove you checked — at every hop?" },
+    { k:"settlement", s:"Settlement",      n:"Settlement — the money leg", sub:"How does the cash actually move, clear and settle?" },
+    { k:"custody",    s:"Custody",         n:"Custody — held or self-held", sub:"Custodian (DAC) vs self-custody — who bears the key risk?" },
+    { k:"partner",    s:"Partner for all", n:"We'd partner for all of it", sub:"Rent the regulated rails — keep your team on the business." }
   ];
-  var CP5S = [
-    "I need to reach many small investors I can't reach today",
-    "My asset genuinely gains from fractional ownership or programmability",
-    "A real secondary market for this could exist",
-    "I have (or can rent) the compliance and tech capacity",
-    "I have an engaged community with real utility for a token"
+  var CP4S = [
+    "The token does a job my product can't do without it",
+    "I have (or am building) a community that would actually hold and use it",
+    "Fractionalising or programmability genuinely changes my asset's economics",
+    "I can fund the compliance + tech stack (or rent it from the ecosystem)",
+    "A real secondary market for this token could exist"
   ];
   var WARMUP = [
     { k:"lt500k", n:"< RM500k" },
     { k:"500k-3m", n:"RM500k – 3M" },
     { k:"3-10m",  n:"RM3 – 10M" },
     { k:"gt10m",  n:"> RM10M" },
-    { k:"not-raising", n:"Not raising — the token IS my product" }
+    { k:"not-raising", n:"Not raising right now" }
   ];
 
-  function cp3Verdict(q){
-    if(q.q1 || q.q2) return {
-      k:"security", good:false, word:"Security",
-      t:"Security territory — <span class='vaccent'>the SC's rules apply.</span>",
-      b:"In Malaysia, a token used for fundraising IS a security — regardless of what the whitepaper calls it. The good news: regulated rails exist (ECF/TCF)."
-    };
-    if(q.q3) return {
-      k:"likely", good:false, word:"Likely security",
-      t:"Likely a <span class='vaccent'>security.</span>",
-      b:"Buyers expecting profit from your team's efforts is the heart of the test. Get counsel to support your position before you sell anything."
-    };
-    if(q.q4) return {
-      k:"regime", good:true, word:"Other regime",
-      t:"Outside the SC, <span class='vaccent'>inside another regime.</span>",
-      b:"The asset's own regulator governs (Companies Act / BNM / KPDN). AMLA still applies."
-    };
-    return {
-      k:"outside", good:true, word:"Outside",
-      t:"Likely outside the <span class='vaccent'>securities perimeter.</span>",
-      b:"The asset's own rules + AMLA still apply. Grey areas are normal: document your position with counsel, then innovate ahead."
-    };
+  /* ---------- perimeter verdict (Malaysia-localised; pure) ---------- */
+  /* q = {q1..q4: bool}
+     q1 token's main job = raise money to build/grow
+     q2 token gives access to something that ALREADY works
+     q3 buyers' money pooled to fund the business
+     q4 backed by / linked to a real-world asset or existing instrument */
+  function perimeterVerdict(q){
+    var fundraising = !!q.q1 || (!q.q2 && !!q.q3);
+    if(fundraising) return "fundraising";
+    if(q.q4) return "asset";
+    if(q.q2 && !q.q1 && !q.q3) return "product";
+    return "grey";
   }
-  function cp5Verdict(total){
-    if(total >= 7) return { k:"worth", good:true, word:"Worth it",
-      t:"Tokenisation <span class='vaccent'>earns its keep.</span>",
-      b:"Design it properly — a regulated rail, real utility, and the compliance stack sized from day one." };
-    if(total >= 4) return { k:"borderline", good:false, word:"Borderline",
-      t:"Borderline — <span class='vaccent'>talk it through.</span>",
-      b:"A hybrid may fit: raise traditionally now, tokenise later once the case is undeniable." };
-    return { k:"traditional", good:false, word:"Traditional",
-      t:"The traditional route <span class='vaccent'>wins.</span>",
-      b:"Plain ECF, debt or product sales get you there cheaper and faster. Tokenise when the numbers say so — not before." };
+  var CP2V = {
+    fundraising: { good:false, word:"Security", cls:"vred",
+      t:"Fundraising use — <span class='vaccent'>in Malaysia, this is a security.</span>",
+      b:"Selling a token to BUILD the thing = fundraising = security — whatever the whitepaper calls it. Utility token → the TCF route. Instrument-linked → the underlying instrument's own rules (the digital twin). Plan the right 12 months." },
+    asset: { good:false, word:"Asset-linked", cls:"",
+      t:"Asset-linked — <span class='vaccent'>structure the wrapper first.</span>",
+      b:"The token never holds the asset — the wrapper does (SPV, trustee, licensed trust). The asset's own regime plus AMLA govern. Get the wrapper right before you mint anything." },
+    product: { good:true, word:"Product", cls:"vgreen",
+      t:"Product territory — <span class='vaccent'>likely outside the securities perimeter.</span>",
+      b:"Selling access to a thing that ALREADY works is a product. Consumer and contract law — plus AMLA — still apply. Keep fundraising features out and it stays that way." },
+    grey: { good:false, word:"Grey zone", cls:"",
+      t:"Grey zone — <span class='vaccent'>document your position.</span>",
+      b:"Your answers mix product and fundraising signals. Document your position with counsel, then innovate ahead — grey areas are normal at the frontier." }
+  };
+
+  /* ---------- worth-it verdict (the TOKEN itself; pure) ---------- */
+  function worthVerdict(total){
+    if(total >= 7) return "launch";
+    if(total >= 4) return "borderline";
+    return "notyet";
   }
+  var CP4V = {
+    launch: { good:true, word:"Launch-worthy", cls:"vgreen",
+      t:"The token <span class='vaccent'>earns its place.</span>",
+      b:"It does a real job, a community would hold it, and you can fund — or rent — the stack. Design it properly: wrapper, identity, settlement and custody from day one." },
+    borderline: { good:false, word:"Borderline", cls:"",
+      t:"Borderline — <span class='vaccent'>build the product first.</span>",
+      b:"Ship the thing the token would point at, grow the community, and launch the token when it has a job. Token later beats token first." },
+    notyet: { good:false, word:"Not yet", cls:"vred",
+      t:"The token adds <span class='vaccent'>nothing yet.</span>",
+      b:"Build without it. Nothing here needs a token today — revisit when the community, the economics or a real secondary market says otherwise." }
+  };
+
+  // exposed for automated table-testing of the verdict logic (+ gate debug)
+  window.RR = { perimeterVerdict: perimeterVerdict, worthVerdict: worthVerdict,
+    _gate: GATE, _fetchGate: fetchGate };
 
   function byKey(list, k){ for(var i=0;i<list.length;i++){ if(list[i].k===k) return list[i]; } return null; }
+  function shorts(list, keys){
+    return (keys || []).map(function(k){ var o = byKey(list, k); return o ? o.s : k; });
+  }
 
   function recommendation(){
     var a = S.answers;
-    var rail = (a.cp2 && a.cp2.choice) || "";
-    var perim = a.cp3 ? cp3Verdict(a.cp3).k : "";
-    var weak = (a.cp4 && a.cp4.choice) || "";
-    var worth = a.cp5 ? a.cp5.verdict : "";
+    var perim = a.cp2 ? a.cp2.verdict : "";
+    var rails = (a.cp1 && a.cp1.rails) || [];
+    var layers = (a.cp3 && a.cp3.layers) || [];
+    var worth = a.cp4 ? a.cp4.verdict : "";
 
     var perimSentence = {
-      security: "You're inside the SC perimeter — build on a regulated rail from day one.",
-      likely:   "You're likely inside the perimeter — get counsel on side before anything is sold.",
-      regime:   "The SC steps back, but the asset's own regulator steps in — map that regime early.",
-      outside:  "You're likely outside the perimeter — document that position with counsel, then move fast."
+      fundraising: "You're inside the securities perimeter — pick the instrument's regulated rail and plan the real timeline.",
+      asset:       "Structure the legal wrapper before anything else — the asset's own regime plus AMLA govern.",
+      product:     "You're likely in product territory — keep fundraising features out and let the product do the talking.",
+      grey:        "You're in the grey zone — document your position with counsel, then innovate ahead."
     }[perim] || "Map your perimeter position with counsel first.";
 
-    var railSentence = {
-      ecf:  "ECF can carry you to RM20m lifetime.",
-      tcf:  "TCF scales with your balance sheet — up to 20× shareholders' funds.",
-      debt: "Debt rails open early next year, so line the paperwork up now.",
-      pks:  "PKS@Bursa gives you a listed pre-IPO runway.",
-      vc:   "Close the private round first and keep the regulated rails in reserve.",
-      none: "Your token is the product — keep every fundraising feature out of it."
-    }[rail] || "Pick your rail once the instrument is settled.";
+    var railNames = shorts(RAILS, rails.filter(function(k){ return k !== "none"; }));
+    var railSentence = railNames.length
+      ? "You're weighing " + railNames.join(" + ") + " — line up what each rail demands before you need it."
+      : "No rail picked yet — leave today with a shortlist of two.";
 
-    var weakItem = byKey(CP4, weak);
-    var weakClause = weakItem && weak !== "partner"
-      ? "Shore up your weakest layer — " + weakItem.n.toLowerCase() + " — before launch"
+    var layerNames = shorts(LAYERS, layers.filter(function(k){ return k !== "partner"; }));
+    var weakClause = layerNames.length
+      ? "Shore up your weakest layer" + (layerNames.length > 1 ? "s" : "") + " — " + layerNames.join(" and ") + " — before launch"
       : "Partner for the full stack and keep your team on the business";
 
     var worthClause = {
-      worth:      "<b>tokenisation earns its keep — design it properly.</b>",
-      borderline: "<b>run the hybrid: raise traditionally now, tokenise later.</b>",
-      traditional:"<b>take the traditional route — it gets you there cheaper and faster.</b>"
+      launch:     "<b>the token earns its place — design it properly.</b>",
+      borderline: "<b>build the product first — token later.</b>",
+      notyet:     "<b>build without the token for now.</b>"
     }[worth] || "<b>run the numbers before you commit.</b>";
 
     return perimSentence + " " + railSentence + " " + weakClause + ", and " + worthClause;
   }
 
   /* ================= progress ================= */
-  var ORDER = ["cp0","cp1","cp2","cp3","cp4","cp5"];
+  var ORDER = ["cp0","cp1","cp2","cp3","cp4"];
   function doneCount(){
     var n = 0;
     for(var i=0;i<ORDER.length;i++){ if(S.answers[ORDER[i]]) n++; }
@@ -642,24 +830,34 @@
     if(S.screen === "register"){ wrap.style.display = "none"; return; }
     wrap.style.display = "";
     var done = doneCount();
-    document.getElementById("pcount").textContent = done + " / 6";
+    document.getElementById("pcount").textContent = done + " / 5";
     var html = "";
-    for(var i=0;i<6;i++){
+    for(var i=0;i<5;i++){
       var cls = i < done ? "route-node done" : (i === done ? "route-node now" : "route-node");
       html += '<div class="' + cls + '"></div>';
-      if(i < 5) html += '<div class="route-seg' + (i < done - 1 ? " done" : "") + '"></div>';
+      if(i < 4) html += '<div class="route-seg' + (i < done - 1 ? " done" : "") + '"></div>';
     }
     line.innerHTML = html;
   }
 
-  /* ================= rendering ================= */
+  /* ================= rendering helpers ================= */
   var app = document.getElementById("app");
   function esc(s){ return ("" + (s == null ? "" : s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 
-  function chipHTML(list, selected, withTag){
+  var PREV = { warmup:"register", cp1a:"warmup", cp1b:"cp1a", cp2:"cp1b", cp3:"cp2", cp4:"cp3", card:"cp4" };
+
+  function backHTML(){ return '<button type="button" class="backlink" id="backBtn">&#8592; Back</button>'; }
+  function bindBack(fn){
+    var b = document.getElementById("backBtn");
+    if(b) b.addEventListener("click", fn);
+  }
+
+  function chipHTML(list, selectedArr, withTag){
+    var selected = selectedArr || [];
     var h = '<div class="chips">';
     list.forEach(function(o){
-      h += '<button type="button" class="chip' + (selected===o.k ? " sel" : "") + '" data-k="' + o.k + '">' +
+      var isSel = selected.indexOf(o.k) >= 0;
+      h += '<button type="button" class="chip' + (isSel ? " sel" : "") + '" data-k="' + o.k + '">' +
         '<span class="cname">' + esc(o.n) + (withTag && o.tag ? '<span class="tag">' + esc(o.tag) + "</span>" : "") + "</span>" +
         (o.sub ? '<span class="csub">' + esc(o.sub) + "</span>" : "") +
         "</button>";
@@ -670,12 +868,14 @@
   function chipStep(opts){
     app.innerHTML =
       '<div class="step">' +
-        '<div class="kicker">' + opts.kicker + ' <span class="cp">· ' + opts.cp.toUpperCase() + "</span></div>" +
+        (opts.back ? backHTML() : "") +
+        '<div class="kicker">' + opts.kicker + ' <span class="cp">· ' + opts.cp + "</span></div>" +
         '<h1 class="title">' + opts.title + "</h1>" +
         (opts.lede ? '<p class="lede">' + opts.lede + "</p>" : "") +
-        chipHTML(opts.list, opts.selected, opts.tags) +
+        chipHTML(opts.list, opts.selected ? [opts.selected] : [], opts.tags) +
         '<div class="actions"><button class="btn primary" id="cont" ' + (opts.selected ? "" : "disabled") + ">" + (opts.cta || "Lock it in") + "</button></div>" +
       "</div>";
+    bindBack(opts.back);
     var sel = opts.selected || null;
     app.querySelectorAll(".chip").forEach(function(ch){
       ch.addEventListener("click", function(){
@@ -690,9 +890,117 @@
     });
   }
 
+  /* multi-select chips: opts.max (0 = unlimited), opts.exclusive = [keys that clear everything else] */
+  function chipStepMulti(opts){
+    var sel = (opts.selected || []).slice();
+    app.innerHTML =
+      '<div class="step">' +
+        (opts.back ? backHTML() : "") +
+        '<div class="kicker">' + opts.kicker + ' <span class="cp">· ' + opts.cp + "</span></div>" +
+        '<h1 class="title">' + opts.title + "</h1>" +
+        (opts.lede ? '<p class="lede">' + opts.lede + "</p>" : "") +
+        chipHTML(opts.list, sel, opts.tags) +
+        (opts.pickhint ? '<p class="pickhint">' + opts.pickhint + "</p>" : "") +
+        '<div class="actions"><button class="btn primary" id="cont" ' + (sel.length ? "" : "disabled") + ">" + (opts.cta || "Lock it in") + "</button></div>" +
+      "</div>";
+    bindBack(opts.back);
+    function paint(){
+      app.querySelectorAll(".chip").forEach(function(x){
+        x.classList.toggle("sel", sel.indexOf(x.getAttribute("data-k")) >= 0);
+      });
+      document.getElementById("cont").disabled = !sel.length;
+    }
+    app.querySelectorAll(".chip").forEach(function(ch){
+      ch.addEventListener("click", function(){
+        var k = ch.getAttribute("data-k");
+        var i = sel.indexOf(k);
+        if(i >= 0){ sel.splice(i, 1); }
+        else if(opts.exclusive && opts.exclusive.indexOf(k) >= 0){ sel = [k]; }
+        else {
+          sel = sel.filter(function(x){ return !(opts.exclusive && opts.exclusive.indexOf(x) >= 0); });
+          if(opts.max && sel.length >= opts.max) sel.shift(); // replace the oldest pick
+          sel.push(k);
+        }
+        paint();
+      });
+    });
+    document.getElementById("cont").addEventListener("click", function(){
+      if(sel.length) opts.onDone(sel.slice());
+    });
+  }
+
+  /* ---------- waiting room (gated) ---------- */
+  function renderWaiting(need){
+    app.innerHTML =
+      '<div class="step">' +
+        backHTML() +
+        '<div class="kicker">Checkpoint ' + need + ' <span class="cp">· Hold</span></div>' +
+        '<div class="waitbox">' +
+          '<div class="bignod">👆</div>' +
+          '<div class="wtitle">Nicholas will open this one — <em>eyes up front.</em></div>' +
+          '<div class="wsub">This checkpoint unlocks when the session gets there. Keep the page open — it moves by itself.</div>' +
+          '<div class="waitdots"><span></span><span></span><span></span></div>' +
+        "</div>" +
+      "</div>";
+    bindBack(function(){ clearWait(); nav(PREV[S.screen] || "warmup"); });
+    clearWait();
+    var check = function(){
+      fetchGate(function(){
+        if(!gateClosed(need)){ clearWait(); render(); }
+      });
+    };
+    WAIT_T = setInterval(check, 5000);
+    // phones get locked / tabbed away — timers are throttled while hidden,
+    // so also re-check the moment the page becomes visible/focused again
+    WAIT_FN = check;
+    document.addEventListener("visibilitychange", WAIT_FN);
+    window.addEventListener("focus", WAIT_FN);
+    check();
+  }
+
+  /* ---------- Q&A fab + sheet ---------- */
+  var qaFab = document.getElementById("qaFab");
+  var qaVeil = document.getElementById("qaVeil");
+  var qaText = document.getElementById("qaText");
+  var qaSent = document.getElementById("qaSent");
+  function updateFab(){
+    qaFab.classList.toggle("show", S.screen !== "register" && !!(S.lead && S.lead.name));
+  }
+  qaFab.addEventListener("click", function(){
+    qaSent.classList.remove("show");
+    qaVeil.classList.add("show");
+    setTimeout(function(){ try{ qaText.focus(); }catch(e){} }, 250);
+  });
+  document.getElementById("qaCancel").addEventListener("click", function(){
+    qaVeil.classList.remove("show");
+  });
+  qaVeil.addEventListener("click", function(e){
+    if(e.target === qaVeil) qaVeil.classList.remove("show");
+  });
+  document.getElementById("qaSend").addEventListener("click", function(){
+    var text = qaText.value.trim();
+    if(!text) return;
+    enqueue({ t:"q", p:{
+      device_id: DEVICE,
+      name: S.lead.name || "Anonymous",
+      company: S.lead.company || "",
+      text: text,
+      answered: false
+    }});
+    qaText.value = "";
+    qaSent.classList.add("show");
+    setTimeout(function(){ qaVeil.classList.remove("show"); }, 1400);
+  });
+
+  /* ================= main render ================= */
   function render(){
-    renderProgress(); setDot();
+    clearWait();
+    renderProgress(); setDot(); updateFab();
     window.scrollTo(0,0);
+
+    var need = GATE_NEED[S.screen];
+    if(need != null && gateClosed(need)){ renderWaiting(need); return; }
+
     switch(S.screen){
 
       case "register": {
@@ -701,7 +1009,7 @@
             '<div class="hero-logo"><img src="pitchin_logo.svg" alt="pitchIN"></div>' +
             '<div class="kicker">Token-X Accelerator</div>' +
             '<h1 class="title">Build your <em>Raise Route</em></h1>' +
-            '<p class="lede">Answer 6 quick checkpoints through the workshop. Your personalised route — and pitchIN’s follow-up — at the end.</p>' +
+            '<p class="lede">Five checkpoints through the workshop — your personalised route, and pitchIN’s follow-up, at the end.</p>' +
             '<div class="form">' +
               '<div class="field" id="f-name"><label>Name</label><input id="in-name" type="text" autocomplete="name" value="' + esc(S.lead.name) + '"><div class="errmsg">Your name, so the card is yours.</div></div>' +
               '<div class="field" id="f-company"><label>Company</label><input id="in-company" type="text" autocomplete="organization" value="' + esc(S.lead.company) + '"><div class="errmsg">Company or project name.</div></div>' +
@@ -709,7 +1017,6 @@
               '<div class="field"><label>Role <span class="opt">· optional</span></label><input id="in-role" type="text" value="' + esc(S.lead.role) + '"></div>' +
             "</div>" +
             '<div class="actions"><button class="btn primary" id="reg">Start my route</button></div>' +
-            '<p class="hint">No app, no sign-up — this page is the whole thing.</p>' +
           "</div>";
         document.getElementById("reg").addEventListener("click", function(){
           var name = document.getElementById("in-name").value.trim();
@@ -729,14 +1036,15 @@
           mark("email", !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email));
           if(!ok) return;
           S.lead = { name:name, company:company, email:email, role:role };
-          S.screen = "warmup"; save(); render();
+          nav("warmup");
         });
         break;
       }
 
       case "warmup": {
         chipStep({
-          kicker:"Warm-up", cp:"cp0",
+          kicker:"Warm-up", cp:"CP0",
+          back:function(){ nav("register"); },
           title:"What are you hoping to <em>raise</em> in the next 12 months?",
           list: WARMUP, tags:false,
           selected: S.answers.cp0 && S.answers.cp0.raise,
@@ -744,64 +1052,78 @@
           onDone: function(k){
             enqueue({ t:"lead", p:{ device_id:DEVICE, name:S.lead.name, company:S.lead.company, email:S.lead.email, role:S.lead.role || null } });
             saveAnswer("cp0", { raise:k, name:S.lead.name, company:S.lead.company });
-            S.screen = "cp1"; save(); render();
+            nav("cp1a");
           }
         });
         break;
       }
 
-      case "cp1": {
+      case "cp1a": {
         chipStep({
-          kicker:"Checkpoint 1", cp:"cp1",
-          title:"What is your company actually <em>selling</em> to funders?",
-          list: CP1, tags:true,
-          selected: S.answers.cp1 && S.answers.cp1.choice,
+          kicker:"Checkpoint 1", cp:"Your raise",
+          back:function(){ nav("warmup"); },
+          title:"What would you actually <em>sell</em> to funders?",
+          list: INSTRUMENTS, tags:true,
+          selected: S.cp1.instrument || (S.answers.cp1 && S.answers.cp1.instrument),
+          cta:"Next — the rails",
           onDone: function(k){
-            saveAnswer("cp1", { choice:k });
-            S.screen = "cp2"; save(); render();
+            S.cp1.instrument = k; save();
+            nav("cp1b");
+          }
+        });
+        break;
+      }
+
+      case "cp1b": {
+        chipStepMulti({
+          kicker:"Checkpoint 1", cp:"Your raise",
+          back:function(){ nav("cp1a"); },
+          title:"Which rails are you <em>considering?</em>",
+          lede:"Pick all that apply — this is a landscape question, not a commitment.",
+          list: RAILS, tags:false,
+          exclusive:["none"],
+          selected: (S.cp1.rails && S.cp1.rails.length ? S.cp1.rails : (S.answers.cp1 && S.answers.cp1.rails)) || [],
+          pickhint:"Multi-select — tap every rail on your shortlist.",
+          onDone: function(sel){
+            S.cp1.rails = sel; save();
+            saveAnswer("cp1", { instrument:S.cp1.instrument, rails:sel });
+            nav("cp2");
           }
         });
         break;
       }
 
       case "cp2": {
-        chipStep({
-          kicker:"Checkpoint 2", cp:"cp2",
-          title:"Which <em>rail</em> fits your raise today?",
-          list: CP2, tags:true,
-          selected: S.answers.cp2 && S.answers.cp2.choice,
-          onDone: function(k){
-            saveAnswer("cp2", { choice:k });
-            S.screen = "cp3"; save(); render();
-          }
-        });
-        break;
-      }
-
-      case "cp3": {
-        var i = S.cp3.i;
+        var i = S.cp2.i;
         if(i < 4){
           var dots = "";
           for(var d=0; d<4; d++) dots += '<div class="qdot' + (d < i ? " done" : "") + '"></div>';
           app.innerHTML =
             '<div class="step">' +
-              '<div class="kicker">Checkpoint 3 <span class="cp">· The perimeter self-test</span></div>' +
+              backHTML() +
+              '<div class="kicker">Checkpoint 2 <span class="cp">· The perimeter self-test</span></div>' +
               '<div class="counter">Question ' + (i+1) + " of 4</div>" +
-              '<div class="qtext">' + esc(CP3Q[i]) + "</div>" +
+              '<div class="qtext">' + esc(CP2Q[i]) + "</div>" +
               '<div class="yn"><button data-v="1">Yes</button><button data-v="0">No</button></div>' +
               '<div class="qdots">' + dots + "</div>" +
             "</div>";
+          bindBack(function(){
+            if(i > 0){ S.cp2.i = i - 1; save(); render(); }
+            else nav("cp1b");
+          });
           app.querySelectorAll(".yn button").forEach(function(b){
             b.addEventListener("click", function(){
-              S.cp3.q["q" + (i+1)] = b.getAttribute("data-v") === "1";
-              S.cp3.i = i + 1; save(); render();
+              S.cp2.q["q" + (i+1)] = b.getAttribute("data-v") === "1";
+              S.cp2.i = i + 1; save(); render();
             });
           });
         } else {
-          var v = cp3Verdict(S.cp3.q);
+          var vk = perimeterVerdict(S.cp2.q);
+          var v = CP2V[vk];
           app.innerHTML =
             '<div class="step">' +
-              '<div class="kicker">Checkpoint 3 <span class="cp">· Verdict</span></div>' +
+              backHTML() +
+              '<div class="kicker">Checkpoint 2 <span class="cp">· Verdict</span></div>' +
               '<div class="verdict' + (v.good ? " good" : "") + '">' +
                 '<div class="vkicker">Your perimeter verdict</div>' +
                 "<h2>" + v.t + "</h2>" +
@@ -812,42 +1134,48 @@
                 '<button class="btn ghost" id="redo">Retake the test</button>' +
               "</div>" +
             "</div>";
+          bindBack(function(){ S.cp2.i = 3; save(); render(); });
           document.getElementById("cont").addEventListener("click", function(){
-            saveAnswer("cp3", { q1:!!S.cp3.q.q1, q2:!!S.cp3.q.q2, q3:!!S.cp3.q.q3, q4:!!S.cp3.q.q4, verdict:v.k });
-            S.screen = "cp4"; save(); render();
+            saveAnswer("cp2", { q1:!!S.cp2.q.q1, q2:!!S.cp2.q.q2, q3:!!S.cp2.q.q3, q4:!!S.cp2.q.q4, verdict:vk });
+            nav("cp3");
           });
           document.getElementById("redo").addEventListener("click", function(){
-            S.cp3 = { i:0, q:{} }; save(); render();
+            S.cp2 = { i:0, q:{} }; save(); render();
           });
         }
         break;
       }
 
-      case "cp4": {
-        chipStep({
-          kicker:"Checkpoint 4", cp:"cp4",
-          title:"Which layer is your <em>weakest?</em>",
-          lede:"Every tokenised raise stands on four layers. Founders always know the answer.",
-          list: CP4, tags:false,
-          selected: S.answers.cp4 && S.answers.cp4.choice,
-          onDone: function(k){
-            saveAnswer("cp4", { choice:k });
-            S.screen = "cp5"; save(); render();
+      case "cp3": {
+        chipStepMulti({
+          kicker:"Checkpoint 3", cp:"Build readiness",
+          back:function(){ nav("cp2"); },
+          title:"Where is your stack <em>weakest?</em>",
+          lede:"Every token launch stands on these layers. Founders always know the answer.",
+          list: LAYERS, tags:false,
+          max:2, exclusive:["partner"],
+          selected: (S.cp3.layers && S.cp3.layers.length ? S.cp3.layers : (S.answers.cp3 && S.answers.cp3.layers)) || [],
+          pickhint:"Pick up to 2 — or “partner for all of it”.",
+          onDone: function(sel){
+            S.cp3.layers = sel; save();
+            saveAnswer("cp3", { layers:sel });
+            nav("cp4");
           }
         });
         break;
       }
 
-      case "cp5": {
-        var si = S.cp5.i;
+      case "cp4": {
+        var si = S.cp4.i;
         if(si < 5){
           var sdots = "";
           for(var sd=0; sd<5; sd++) sdots += '<div class="qdot' + (sd < si ? " done" : "") + '"></div>';
           app.innerHTML =
             '<div class="step">' +
-              '<div class="kicker">Checkpoint 5 <span class="cp">· The worth-it scorecard</span></div>' +
+              backHTML() +
+              '<div class="kicker">Checkpoint 4 <span class="cp">· Is launching a token worth it?</span></div>' +
               '<div class="counter">Statement ' + (si+1) + " of 5</div>" +
-              '<div class="qtext">“' + esc(CP5S[si]) + '”</div>' +
+              '<div class="qtext">“' + esc(CP4S[si]) + '”</div>' +
               '<div class="rate">' +
                 '<button data-p="2">Agree</button>' +
                 '<button data-p="1">Neutral</button>' +
@@ -855,22 +1183,28 @@
               "</div>" +
               '<div class="qdots">' + sdots + "</div>" +
             "</div>";
+          bindBack(function(){
+            if(si > 0){ S.cp4.i = si - 1; save(); render(); }
+            else nav("cp3");
+          });
           app.querySelectorAll(".rate button").forEach(function(b){
             b.addEventListener("click", function(){
-              S.cp5.pts[si] = parseInt(b.getAttribute("data-p"), 10);
-              S.cp5.i = si + 1; save(); render();
+              S.cp4.pts[si] = parseInt(b.getAttribute("data-p"), 10);
+              S.cp4.i = si + 1; save(); render();
             });
           });
         } else {
-          var total = S.cp5.pts.reduce(function(a,b){ return a + (b||0); }, 0);
-          var v5 = cp5Verdict(total);
+          var total = S.cp4.pts.reduce(function(a,b){ return a + (b||0); }, 0);
+          var wk = worthVerdict(total);
+          var v4 = CP4V[wk];
           app.innerHTML =
             '<div class="step">' +
-              '<div class="kicker">Checkpoint 5 <span class="cp">· Verdict</span></div>' +
-              '<div class="verdict' + (v5.good ? " good" : "") + '">' +
-                '<div class="vkicker">Is tokenisation worth it for you?</div>' +
-                "<h2>" + v5.t + "</h2>" +
-                "<p>" + v5.b + "</p>" +
+              backHTML() +
+              '<div class="kicker">Checkpoint 4 <span class="cp">· Verdict</span></div>' +
+              '<div class="verdict' + (v4.good ? " good" : "") + '">' +
+                '<div class="vkicker">Is launching a token worth it — for you?</div>' +
+                "<h2>" + v4.t + "</h2>" +
+                "<p>" + v4.b + "</p>" +
                 '<div class="score">Your score: ' + total + " / 10</div>" +
               "</div>" +
               '<div class="actions">' +
@@ -878,12 +1212,13 @@
                 '<button class="btn ghost" id="redo">Redo the scorecard</button>' +
               "</div>" +
             "</div>";
+          bindBack(function(){ S.cp4.i = 4; save(); render(); });
           document.getElementById("cont").addEventListener("click", function(){
-            saveAnswer("cp5", { scores:S.cp5.pts, total:total, verdict:v5.k, complete:true });
-            S.screen = "card"; save(); render();
+            saveAnswer("cp4", { scores:S.cp4.pts, total:total, verdict:wk, complete:true });
+            nav("card");
           });
           document.getElementById("redo").addEventListener("click", function(){
-            S.cp5 = { i:0, pts:[] }; save(); render();
+            S.cp4 = { i:0, pts:[] }; save(); render();
           });
         }
         break;
@@ -891,13 +1226,15 @@
 
       case "card": {
         var a = S.answers;
-        var inst = byKey(CP1, a.cp1 && a.cp1.choice);
-        var rail = byKey(CP2, a.cp2 && a.cp2.choice);
-        var weak = byKey(CP4, a.cp4 && a.cp4.choice);
-        var pv = a.cp3 ? cp3Verdict(a.cp3) : null;
-        var wv = a.cp5 ? cp5Verdict(a.cp5.total) : null;
+        if(!a.cp5) saveAnswer("cp5", { finale:true }); // completion flag for the room map
+        var inst = byKey(INSTRUMENTS, a.cp1 && a.cp1.instrument);
+        var railTxt = shorts(RAILS, (a.cp1 && a.cp1.rails) || []).join(" · ") || "—";
+        var layerTxt = shorts(LAYERS, (a.cp3 && a.cp3.layers) || []).join(" · ") || "—";
+        var pv = a.cp2 ? CP2V[a.cp2.verdict] : null;
+        var wv = a.cp4 ? CP4V[a.cp4.verdict] : null;
         app.innerHTML =
           '<div class="step">' +
+            backHTML() +
             '<div class="kicker">Your Raise Route <span class="cp">· Complete</span></div>' +
             '<h1 class="title">Route <em>confirmed.</em></h1>' +
             '<div class="cardwrap"><div class="route-card" id="routeCard">' +
@@ -908,11 +1245,11 @@
                 '<div class="co">' + esc(S.lead.company || "") + "</div>" +
               "</div>" +
               '<div class="rc-route">' +
-                rcStop("Instrument", inst ? inst.n : "—", "") +
-                rcStop("Rail", rail ? rail.n : "—", "") +
-                rcStop("Perimeter", pv ? pv.word : "—", pv ? (pv.good ? "vgreen" : "vred") : "") +
-                rcStop("Weakest layer", weak ? weak.n : "—", "") +
-                rcStop("Worth it?", wv ? wv.word : "—", wv ? (wv.good ? "vgreen" : "vred") : "") +
+                rcStop("Instrument", inst ? inst.s : "—", "") +
+                rcStop("Rails considered", railTxt, "") +
+                rcStop("Perimeter", pv ? pv.word : "—", pv ? pv.cls : "") +
+                rcStop("Weakest layers", layerTxt, "") +
+                rcStop("Token worth it?", wv ? wv.word : "—", wv ? wv.cls : "") +
               "</div>" +
               '<div class="rc-rec">' + recommendation() + "</div>" +
               '<div class="rc-foot"><span>pitchIN — the private fundraising platform</span><span class="talk">Talk to us: <span class="u">pitchin.my</span></span></div>' +
@@ -924,6 +1261,7 @@
             "</div>" +
             '<p class="donote" id="doneNote" style="display:none">All set — <b>we’ll be in touch.</b><br>Enjoy the rest of the session.</p>' +
           "</div>";
+        bindBack(function(){ nav("cp4"); });
         document.getElementById("saveImg").addEventListener("click", saveCardImage);
         document.getElementById("done").addEventListener("click", function(){
           document.getElementById("doneNote").style.display = "";
@@ -975,6 +1313,10 @@
   /* ================= boot ================= */
   render();
   flush();
+  fetchGate(function(){
+    var need = GATE_NEED[S.screen];
+    if(need != null && gateClosed(need)) render();
+  });
 })();
 </script>
 </body>
