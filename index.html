@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FCFBF9">
+<title>Raise Route · Ready to Raise? — pitchIN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  :root{
+    --red:       #BF2026;
+    --red-dark:  #7D1F23;
+    --red-tint:  #FEE2E3;
+    --red-faint: #fff2f2;
+    --navy:      #1A1847;
+    --green:     #0A994A;
+    --green-tint:#e6f4ec;
+    --paper:     #FCFBF9;
+    --ink:       #333333;
+    --body:      #6a6a6a;
+    --hairline:  #e7e7e7;
+    --serif: "Fraunces", Georgia, serif;
+    --sans:  "Inter", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    background:var(--paper);
+    font-family:var(--sans);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    min-height:100vh;
+  }
+
+  .shell{
+    max-width:430px;
+    margin:0 auto;
+    padding:0 22px 64px;
+    min-height:100vh;
+    display:flex; flex-direction:column;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{ padding-top:calc(18px + env(safe-area-inset-top)); }
+  .masthead .row{
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .wordmark img{ display:block; height:19px; width:auto; }
+  .hero-logo{ margin:2px 0 24px; }
+  .hero-logo img{ display:block; height:56px; width:auto; }
+  .masthead .section{
+    font-size:9px; font-weight:600;
+    letter-spacing:0.24em; text-transform:uppercase;
+    color:var(--body);
+  }
+  .masthead .line{ height:1px; background:var(--hairline); margin-top:12px; }
+
+  /* ---------- sync dot ---------- */
+  .sync{
+    position:fixed; top:calc(10px + env(safe-area-inset-top)); right:10px;
+    width:7px; height:7px; border-radius:50%;
+    background:var(--green); opacity:.75; z-index:50;
+    transition:background .3s;
+  }
+  .sync.pending{ background:#E18437; animation:pulse 1.4s ease-in-out infinite; }
+  .sync.offline{ background:#b6b3ac; }
+  @keyframes pulse{ 0%,100%{opacity:.9} 50%{opacity:.3} }
+
+  /* ---------- progress: your raise route ---------- */
+  .progress{ margin:18px 0 6px; }
+  .progress .plabel{
+    font-size:9px; font-weight:600; letter-spacing:0.26em;
+    text-transform:uppercase; color:var(--body);
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom:10px;
+  }
+  .progress .plabel b{ color:var(--red); font-weight:600; }
+  .route-line{
+    display:flex; align-items:center;
+  }
+  .route-node{
+    width:9px; height:9px; border-radius:50%;
+    border:1.5px solid #d8d5cf; background:var(--paper);
+    flex:none; transition:all .3s;
+  }
+  .route-node.done{ background:var(--red); border-color:var(--red); }
+  .route-node.now{
+    border-color:var(--red); background:var(--paper);
+    box-shadow:0 0 0 3.5px var(--red-tint);
+  }
+  .route-seg{
+    flex:1; height:1.5px; background:#d8d5cf; transition:background .3s;
+  }
+  .route-seg.done{ background:var(--red); }
+
+  /* ---------- step frame ---------- */
+  .step{ padding-top:26px; flex:1; display:flex; flex-direction:column; }
+  .kicker{
+    display:flex; align-items:center; gap:11px;
+    font-size:10px; font-weight:600;
+    letter-spacing:0.26em; text-transform:uppercase;
+    color:var(--navy);
+  }
+  .kicker::before{
+    content:""; display:block;
+    width:26px; height:2px; background:var(--red); flex:none;
+  }
+  .kicker .cp{ color:var(--body); font-weight:500; }
+  h1.title{
+    font-family:var(--serif);
+    font-optical-sizing:auto;
+    font-size:30px; font-weight:540;
+    letter-spacing:-0.015em; line-height:1.12;
+    color:var(--navy);
+    margin:14px 0 0;
+  }
+  h1.title em{ font-style:italic; font-weight:440; color:var(--red); }
+  .lede{
+    margin-top:10px;
+    font-size:14px; line-height:1.55; color:var(--body);
+  }
+  .lede em{ font-family:var(--serif); font-style:italic; color:var(--ink); }
+
+  /* ---------- form ---------- */
+  .form{ margin-top:24px; }
+  .field{ margin-bottom:16px; }
+  .field label{
+    display:block;
+    font-size:9.5px; font-weight:600; letter-spacing:0.2em;
+    text-transform:uppercase; color:var(--body);
+    margin-bottom:6px;
+  }
+  .field label .opt{ color:#b6b3ac; letter-spacing:0.12em; }
+  .field input{
+    width:100%;
+    font-family:var(--sans); font-size:16px; color:var(--navy);
+    background:#fff;
+    border:1px solid var(--hairline); border-radius:0;
+    padding:13px 14px;
+    outline:none;
+    transition:border-color .2s;
+    -webkit-appearance:none; appearance:none;
+  }
+  .field input:focus{ border-color:var(--navy); }
+  .field input.err{ border-color:var(--red); background:var(--red-faint); }
+  .field .errmsg{
+    display:none;
+    font-size:11.5px; color:var(--red-dark); margin-top:5px;
+  }
+  .field.show-err .errmsg{ display:block; }
+
+  /* ---------- chips ---------- */
+  .chips{ margin-top:22px; display:flex; flex-direction:column; gap:10px; }
+  .chip{
+    text-align:left;
+    background:#fff;
+    border:1px solid var(--hairline);
+    border-left:2px solid var(--hairline);
+    padding:14px 16px;
+    cursor:pointer;
+    font-family:var(--sans);
+    width:100%;
+    transition:border-color .15s, background .15s;
+    display:block;
+  }
+  .chip .cname{
+    font-size:14.5px; font-weight:500; color:var(--navy);
+    letter-spacing:0.003em; line-height:1.35;
+    display:flex; align-items:baseline; gap:8px;
+  }
+  .chip .cname .tag{
+    margin-left:auto; flex:none;
+    font-size:8.5px; font-weight:600; letter-spacing:0.16em;
+    text-transform:uppercase; color:var(--body);
+  }
+  .chip .csub{
+    font-size:12px; color:var(--body); line-height:1.45; margin-top:4px;
+  }
+  .chip.sel{
+    border-color:var(--red); border-left:2px solid var(--red);
+    background:var(--red-faint);
+  }
+  .chip.sel .cname{ color:var(--red-dark); }
+  .chip.sel .cname .tag{ color:var(--red); }
+
+  /* ---------- buttons ---------- */
+  .actions{ margin-top:26px; }
+  .btn{
+    display:block; width:100%;
+    font-family:var(--sans);
+    font-size:12px; font-weight:600;
+    letter-spacing:0.2em; text-transform:uppercase;
+    padding:16px 18px;
+    cursor:pointer;
+    border:none; border-radius:0;
+    transition:opacity .2s, background .2s;
+  }
+  .btn.primary{ background:var(--navy); color:var(--paper); }
+  .btn.primary:disabled{ opacity:.25; cursor:default; }
+  .btn.ghost{
+    background:transparent; color:var(--body);
+    border:1px solid var(--hairline);
+    margin-top:10px;
+  }
+  .hint{
+    text-align:center; font-size:11px; color:#9a968e;
+    margin-top:14px; letter-spacing:0.02em;
+  }
+
+  /* ---------- yes / no ---------- */
+  .counter{
+    font-size:9.5px; font-weight:600; letter-spacing:0.24em;
+    text-transform:uppercase; color:#9a968e;
+    margin-top:26px;
+  }
+  .qtext{
+    font-family:var(--serif); font-optical-sizing:auto;
+    font-size:23px; font-weight:520; letter-spacing:-0.01em;
+    line-height:1.25; color:var(--navy);
+    margin-top:10px; min-height:86px;
+  }
+  .yn{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px;
+    margin-top:26px;
+  }
+  .yn button{
+    font-family:var(--sans);
+    font-size:13px; font-weight:600;
+    letter-spacing:0.18em; text-transform:uppercase;
+    padding:20px 10px;
+    background:#fff; color:var(--navy);
+    border:1px solid var(--hairline);
+    cursor:pointer;
+    transition:all .15s;
+  }
+  .yn button:active{ border-color:var(--red); background:var(--red-faint); color:var(--red-dark); }
+  .qdots{ display:flex; gap:6px; margin-top:22px; }
+  .qdot{ width:6px; height:6px; border-radius:50%; background:#ddd9d2; }
+  .qdot.done{ background:var(--red); }
+
+  /* ---------- rate 3-way ---------- */
+  .rate{
+    display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;
+    margin-top:26px;
+  }
+  .rate button{
+    font-family:var(--sans);
+    font-size:11px; font-weight:600;
+    letter-spacing:0.14em; text-transform:uppercase;
+    padding:18px 4px;
+    background:#fff; color:var(--navy);
+    border:1px solid var(--hairline);
+    cursor:pointer;
+    transition:all .15s;
+  }
+  .rate button:active{ border-color:var(--red); background:var(--red-faint); color:var(--red-dark); }
+
+  /* ---------- verdict card ---------- */
+  .verdict{
+    margin-top:26px;
+    background:var(--navy);
+    border-left:3px solid var(--red);
+    padding:24px 22px 22px;
+    color:var(--paper);
+  }
+  .verdict.good{ border-left-color:var(--green); }
+  .verdict .vkicker{
+    font-size:9px; font-weight:600; letter-spacing:0.28em;
+    text-transform:uppercase; color:rgba(252,251,249,.55);
+  }
+  .verdict h2{
+    font-family:var(--serif); font-optical-sizing:auto;
+    font-size:21px; font-weight:540; letter-spacing:-0.01em;
+    line-height:1.22; margin-top:10px;
+    color:#fff;
+  }
+  .verdict.good h2{ color:#fff; }
+  .verdict h2 .vaccent{ color:var(--red-tint); }
+  .verdict.good h2 .vaccent{ color:#a8e6c4; }
+  .verdict p{
+    margin-top:12px;
+    font-size:13px; line-height:1.6; color:rgba(252,251,249,.78);
+  }
+  .verdict .score{
+    font-family:var(--serif); font-size:13px; font-style:italic;
+    color:rgba(252,251,249,.6); margin-top:14px;
+  }
+
+  /* ---------- final route card ---------- */
+  .cardwrap{ margin-top:24px; }
+  .route-card{
+    background:#fff;
+    border:1px solid var(--hairline);
+    box-shadow:0 1px 2px rgba(26,24,71,.06), 0 16px 40px -18px rgba(26,24,71,.22);
+  }
+  .rc-head{
+    background:var(--navy);
+    padding:16px 20px 14px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .rc-head .wm img{ display:block; height:34px; width:auto; }
+  .rc-head .lbl{
+    font-size:8.5px; font-weight:600; letter-spacing:0.28em;
+    text-transform:uppercase; color:rgba(252,251,249,.55);
+  }
+  .rc-id{
+    padding:20px 20px 16px;
+    border-bottom:1px dashed #d8d5cf;
+    position:relative;
+  }
+  .rc-id::before,.rc-id::after{
+    content:""; position:absolute; bottom:-7px;
+    width:14px; height:14px; border-radius:50%;
+    background:var(--paper); border:1px solid var(--hairline);
+  }
+  .rc-id::before{ left:-8px; }
+  .rc-id::after{ right:-8px; }
+  .rc-id .pass{
+    font-size:8.5px; font-weight:600; letter-spacing:0.26em;
+    text-transform:uppercase; color:var(--red);
+  }
+  .rc-id .nm{
+    font-family:var(--serif); font-optical-sizing:auto;
+    font-size:24px; font-weight:540; letter-spacing:-0.01em;
+    color:var(--navy); margin-top:6px; line-height:1.15;
+  }
+  .rc-id .co{ font-size:12.5px; color:var(--body); margin-top:3px; }
+  .rc-route{ padding:18px 20px 6px; }
+  .rc-stop{
+    display:flex; gap:14px;
+    position:relative;
+    padding-bottom:16px;
+  }
+  .rc-stop .marker{
+    width:9px; display:flex; flex-direction:column; align-items:center; flex:none;
+    padding-top:4px;
+  }
+  .rc-stop .dot{
+    width:8px; height:8px; border-radius:50%;
+    background:var(--red); flex:none;
+  }
+  .rc-stop .stem{
+    width:1.5px; flex:1; background:#e3e0da; margin-top:4px;
+  }
+  .rc-stop:last-child .stem{ display:none; }
+  .rc-stop .slab{
+    font-size:8.5px; font-weight:600; letter-spacing:0.2em;
+    text-transform:uppercase; color:#9a968e;
+  }
+  .rc-stop .sval{
+    font-size:14px; font-weight:600; color:var(--navy);
+    margin-top:2px; line-height:1.3;
+  }
+  .rc-stop .sval.vgreen{ color:var(--green); }
+  .rc-stop .sval.vred{ color:var(--red); }
+  .rc-rec{
+    margin:6px 20px 0;
+    padding:14px 0 18px;
+    border-top:1px solid var(--hairline);
+    font-family:var(--serif); font-optical-sizing:auto;
+    font-style:italic; font-size:14.5px; font-weight:440;
+    line-height:1.55; color:var(--ink);
+  }
+  .rc-rec b{ font-style:normal; font-weight:560; color:var(--red); }
+  .rc-foot{
+    padding:13px 20px 15px;
+    border-top:1px solid var(--hairline);
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-size:10px; color:var(--body); letter-spacing:0.03em;
+  }
+  .rc-foot .talk{ color:var(--navy); font-weight:600; }
+  .rc-foot .talk .u{ color:var(--red); }
+
+  .savehint{
+    display:none;
+    margin-top:12px; padding:12px 14px;
+    background:var(--red-faint); border:1px solid var(--red-tint);
+    font-size:12px; color:var(--red-dark); line-height:1.5; text-align:center;
+  }
+  .savehint.show{ display:block; }
+
+  .donote{
+    margin-top:22px; text-align:center;
+    font-family:var(--serif); font-style:italic;
+    font-size:14px; color:var(--body); line-height:1.6;
+  }
+  .donote b{ font-style:normal; font-weight:560; color:var(--navy); }
+
+  /* fade-in per step */
+  .step{ animation:rise .35s ease both; }
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(8px); }
+    to{ opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+  <div class="sync" id="syncDot" title="Sync status"></div>
+  <div class="shell">
+    <header class="masthead">
+      <div class="row">
+        <div class="wordmark"><img src="pitchin_logo_text.svg" alt="pitchIN"></div>
+        <div class="section">Ready to Raise?</div>
+      </div>
+      <div class="line"></div>
+    </header>
+
+    <div class="progress" id="progress" style="display:none">
+      <div class="plabel"><span>Your <b>Raise Route</b></span><span id="pcount"></span></div>
+      <div class="route-line" id="routeLine"></div>
+    </div>
+
+    <main id="app"></main>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ================= config ================= */
+  var SUPA_URL = "https://hhqlzcvwalwuxrrolevv.supabase.co";
+  var SUPA_KEY = "sb_publishable_oNq7GfsgbZKELDhQbaRz_g_ctOO0v0p";
+  var sb = null;
+  try { sb = window.supabase.createClient(SUPA_URL, SUPA_KEY, { auth:{ persistSession:false, autoRefreshToken:false } }); }
+  catch(e){ console.warn("supabase client unavailable", e); }
+
+  /* ================= device id ================= */
+  function deviceId(){
+    var id = localStorage.getItem("rr_device_id");
+    if(!id){
+      id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+         : "d-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+      localStorage.setItem("rr_device_id", id);
+    }
+    return id;
+  }
+  var DEVICE = deviceId();
+
+  /* ================= state ================= */
+  var DEFAULT = { screen:"register", lead:{}, answers:{}, cp3:{i:0,q:{}}, cp5:{i:0,pts:[]} };
+  function loadState(){
+    try{
+      var s = JSON.parse(localStorage.getItem("rr_state_v1"));
+      if(s && s.screen) return s;
+    }catch(e){}
+    return JSON.parse(JSON.stringify(DEFAULT));
+  }
+  var S = loadState();
+  function save(){ localStorage.setItem("rr_state_v1", JSON.stringify(S)); }
+
+  /* ================= offline queue ================= */
+  var QKEY = "rr_queue_v1";
+  function loadQ(){ try{ return JSON.parse(localStorage.getItem(QKEY)) || []; }catch(e){ return []; } }
+  function saveQ(q){ localStorage.setItem(QKEY, JSON.stringify(q)); }
+  function setDot(){
+    var d = document.getElementById("syncDot");
+    var q = loadQ();
+    if(!navigator.onLine){ d.className = "sync offline"; d.title = "Offline — answers saved on this phone"; }
+    else if(q.length){ d.className = "sync pending"; d.title = "Syncing…"; }
+    else { d.className = "sync"; d.title = "Synced"; }
+  }
+  function enqueue(job){
+    var q = loadQ(); q.push(job); saveQ(q); setDot(); flush();
+  }
+  var flushing = false;
+  function flush(){
+    if(flushing || !sb) return;
+    var q = loadQ();
+    if(!q.length){ setDot(); return; }
+    flushing = true;
+    (function next(){
+      var q2 = loadQ();
+      if(!q2.length){ flushing = false; setDot(); return; }
+      sendJob(q2[0]).then(function(ok){
+        if(ok){
+          var q3 = loadQ(); q3.shift(); saveQ(q3);
+          next();
+        } else {
+          flushing = false; setDot();
+        }
+      });
+    })();
+  }
+  function sendJob(job){
+    try{
+      if(job.t === "lead"){
+        return sb.from("leads").insert(job.p).then(function(res){
+          if(!res.error) return true;
+          var m = ("" + (res.error.message||"")).toLowerCase();
+          if(res.error.code === "23505" || m.indexOf("duplicate") >= 0) return true; // already registered
+          console.warn("lead insert failed", res.error);
+          return false;
+        }, function(){ return false; });
+      }
+      return sb.from("answers").upsert(job.p, { onConflict:"device_id,checkpoint" }).then(function(res){
+        if(!res.error) return true;
+        console.warn("answer upsert failed", res.error);
+        return false;
+      }, function(){ return false; });
+    }catch(e){ return Promise.resolve(false); }
+  }
+  window.addEventListener("online", function(){ setDot(); flush(); });
+  window.addEventListener("offline", setDot);
+  setInterval(flush, 30000);
+
+  function saveAnswer(cp, obj){
+    S.answers[cp] = obj; save();
+    enqueue({ t:"ans", p:{ device_id:DEVICE, checkpoint:cp, answer:obj } });
+  }
+
+  /* ================= content ================= */
+  var CP1 = [
+    { k:"equity", n:"A share of the business", tag:"Equity", sub:"Investors own a slice of the company — they win when you win." },
+    { k:"debt",   n:"A promise to repay", tag:"Debt", sub:"You owe the money back — with interest, on a schedule." },
+    { k:"token",  n:"A token or product", tag:"Token", sub:"Buyers get a digital unit — what it does decides the law, not the label." },
+    { k:"unsure", n:"Not sure yet", tag:"—", sub:"Honest answer. The next two hours are for exactly this." }
+  ];
+  var CP2 = [
+    { k:"ecf",  n:"Equity crowdfunding (ECF)", tag:"ECF", sub:"Up to RM20m lifetime — sell shares to the crowd on a regulated platform." },
+    { k:"tcf",  n:"Token crowdfunding (TCF)", tag:"TCF", sub:"Raise up to 20× shareholders' funds — the token IS the security." },
+    { k:"debt", n:"Debt & notes", tag:"Soon", sub:"Launching early next year — borrow from the crowd, repay with interest." },
+    { k:"pks",  n:"PKS@Bursa", tag:"Pre-IPO", sub:"The pre-IPO runway — a listed market sized for SMEs." },
+    { k:"vc",   n:"VC or grants first", tag:"Private", sub:"Close the private round now; keep the public rails in reserve." },
+    { k:"none", n:"Not raising — token is my product", tag:"Utility", sub:"You're selling a product, not an investment. Keep it that way." }
+  ];
+  var CP3Q = [
+    "Are you raising money from the Malaysian public?",
+    "Will the token be used to FUND the business (pre-sale, treasury sale, any raise)?",
+    "Do buyers expect profit mainly from YOUR team's efforts?",
+    "Is the underlying asset already regulated (shares, bonds, payments, deposits)?"
+  ];
+  var CP4 = [
+    { k:"asset",      n:"Asset & legal wrapper", sub:"What exactly does the token represent — and can a court agree?" },
+    { k:"identity",   n:"Identity — KYC & AML", sub:"Who is allowed to buy, and how do you prove you checked?" },
+    { k:"settlement", n:"Settlement — the money leg", sub:"How does the cash actually move, clear and settle?" },
+    { k:"custody",    n:"Custody & transfer compliance", sub:"Who holds the asset, and how does it change hands lawfully?" },
+    { k:"partner",    n:"We'd partner for all of it", sub:"Rent the regulated rails — keep your team on the business." }
+  ];
+  var CP5S = [
+    "I need to reach many small investors I can't reach today",
+    "My asset genuinely gains from fractional ownership or programmability",
+    "A real secondary market for this could exist",
+    "I have (or can rent) the compliance and tech capacity",
+    "I have an engaged community with real utility for a token"
+  ];
+  var WARMUP = [
+    { k:"lt500k", n:"< RM500k" },
+    { k:"500k-3m", n:"RM500k – 3M" },
+    { k:"3-10m",  n:"RM3 – 10M" },
+    { k:"gt10m",  n:"> RM10M" },
+    { k:"not-raising", n:"Not raising — the token IS my product" }
+  ];
+
+  function cp3Verdict(q){
+    if(q.q1 || q.q2) return {
+      k:"security", good:false, word:"Security",
+      t:"Security territory — <span class='vaccent'>the SC's rules apply.</span>",
+      b:"In Malaysia, a token used for fundraising IS a security — regardless of what the whitepaper calls it. The good news: regulated rails exist (ECF/TCF)."
+    };
+    if(q.q3) return {
+      k:"likely", good:false, word:"Likely security",
+      t:"Likely a <span class='vaccent'>security.</span>",
+      b:"Buyers expecting profit from your team's efforts is the heart of the test. Get counsel to support your position before you sell anything."
+    };
+    if(q.q4) return {
+      k:"regime", good:true, word:"Other regime",
+      t:"Outside the SC, <span class='vaccent'>inside another regime.</span>",
+      b:"The asset's own regulator governs (Companies Act / BNM / KPDN). AMLA still applies."
+    };
+    return {
+      k:"outside", good:true, word:"Outside",
+      t:"Likely outside the <span class='vaccent'>securities perimeter.</span>",
+      b:"The asset's own rules + AMLA still apply. Grey areas are normal: document your position with counsel, then innovate ahead."
+    };
+  }
+  function cp5Verdict(total){
+    if(total >= 7) return { k:"worth", good:true, word:"Worth it",
+      t:"Tokenisation <span class='vaccent'>earns its keep.</span>",
+      b:"Design it properly — a regulated rail, real utility, and the compliance stack sized from day one." };
+    if(total >= 4) return { k:"borderline", good:false, word:"Borderline",
+      t:"Borderline — <span class='vaccent'>talk it through.</span>",
+      b:"A hybrid may fit: raise traditionally now, tokenise later once the case is undeniable." };
+    return { k:"traditional", good:false, word:"Traditional",
+      t:"The traditional route <span class='vaccent'>wins.</span>",
+      b:"Plain ECF, debt or product sales get you there cheaper and faster. Tokenise when the numbers say so — not before." };
+  }
+
+  function byKey(list, k){ for(var i=0;i<list.length;i++){ if(list[i].k===k) return list[i]; } return null; }
+
+  function recommendation(){
+    var a = S.answers;
+    var rail = (a.cp2 && a.cp2.choice) || "";
+    var perim = a.cp3 ? cp3Verdict(a.cp3).k : "";
+    var weak = (a.cp4 && a.cp4.choice) || "";
+    var worth = a.cp5 ? a.cp5.verdict : "";
+
+    var perimSentence = {
+      security: "You're inside the SC perimeter — build on a regulated rail from day one.",
+      likely:   "You're likely inside the perimeter — get counsel on side before anything is sold.",
+      regime:   "The SC steps back, but the asset's own regulator steps in — map that regime early.",
+      outside:  "You're likely outside the perimeter — document that position with counsel, then move fast."
+    }[perim] || "Map your perimeter position with counsel first.";
+
+    var railSentence = {
+      ecf:  "ECF can carry you to RM20m lifetime.",
+      tcf:  "TCF scales with your balance sheet — up to 20× shareholders' funds.",
+      debt: "Debt rails open early next year, so line the paperwork up now.",
+      pks:  "PKS@Bursa gives you a listed pre-IPO runway.",
+      vc:   "Close the private round first and keep the regulated rails in reserve.",
+      none: "Your token is the product — keep every fundraising feature out of it."
+    }[rail] || "Pick your rail once the instrument is settled.";
+
+    var weakItem = byKey(CP4, weak);
+    var weakClause = weakItem && weak !== "partner"
+      ? "Shore up your weakest layer — " + weakItem.n.toLowerCase() + " — before launch"
+      : "Partner for the full stack and keep your team on the business";
+
+    var worthClause = {
+      worth:      "<b>tokenisation earns its keep — design it properly.</b>",
+      borderline: "<b>run the hybrid: raise traditionally now, tokenise later.</b>",
+      traditional:"<b>take the traditional route — it gets you there cheaper and faster.</b>"
+    }[worth] || "<b>run the numbers before you commit.</b>";
+
+    return perimSentence + " " + railSentence + " " + weakClause + ", and " + worthClause;
+  }
+
+  /* ================= progress ================= */
+  var ORDER = ["cp0","cp1","cp2","cp3","cp4","cp5"];
+  function doneCount(){
+    var n = 0;
+    for(var i=0;i<ORDER.length;i++){ if(S.answers[ORDER[i]]) n++; }
+    return n;
+  }
+  function renderProgress(){
+    var wrap = document.getElementById("progress");
+    var line = document.getElementById("routeLine");
+    if(S.screen === "register"){ wrap.style.display = "none"; return; }
+    wrap.style.display = "";
+    var done = doneCount();
+    document.getElementById("pcount").textContent = done + " / 6";
+    var html = "";
+    for(var i=0;i<6;i++){
+      var cls = i < done ? "route-node done" : (i === done ? "route-node now" : "route-node");
+      html += '<div class="' + cls + '"></div>';
+      if(i < 5) html += '<div class="route-seg' + (i < done - 1 ? " done" : "") + '"></div>';
+    }
+    line.innerHTML = html;
+  }
+
+  /* ================= rendering ================= */
+  var app = document.getElementById("app");
+  function esc(s){ return ("" + (s == null ? "" : s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+  function chipHTML(list, selected, withTag){
+    var h = '<div class="chips">';
+    list.forEach(function(o){
+      h += '<button type="button" class="chip' + (selected===o.k ? " sel" : "") + '" data-k="' + o.k + '">' +
+        '<span class="cname">' + esc(o.n) + (withTag && o.tag ? '<span class="tag">' + esc(o.tag) + "</span>" : "") + "</span>" +
+        (o.sub ? '<span class="csub">' + esc(o.sub) + "</span>" : "") +
+        "</button>";
+    });
+    return h + "</div>";
+  }
+
+  function chipStep(opts){
+    app.innerHTML =
+      '<div class="step">' +
+        '<div class="kicker">' + opts.kicker + ' <span class="cp">· ' + opts.cp.toUpperCase() + "</span></div>" +
+        '<h1 class="title">' + opts.title + "</h1>" +
+        (opts.lede ? '<p class="lede">' + opts.lede + "</p>" : "") +
+        chipHTML(opts.list, opts.selected, opts.tags) +
+        '<div class="actions"><button class="btn primary" id="cont" ' + (opts.selected ? "" : "disabled") + ">" + (opts.cta || "Lock it in") + "</button></div>" +
+      "</div>";
+    var sel = opts.selected || null;
+    app.querySelectorAll(".chip").forEach(function(ch){
+      ch.addEventListener("click", function(){
+        sel = ch.getAttribute("data-k");
+        app.querySelectorAll(".chip").forEach(function(x){ x.classList.remove("sel"); });
+        ch.classList.add("sel");
+        document.getElementById("cont").disabled = false;
+      });
+    });
+    document.getElementById("cont").addEventListener("click", function(){
+      if(sel) opts.onDone(sel);
+    });
+  }
+
+  function render(){
+    renderProgress(); setDot();
+    window.scrollTo(0,0);
+    switch(S.screen){
+
+      case "register": {
+        app.innerHTML =
+          '<div class="step">' +
+            '<div class="hero-logo"><img src="pitchin_logo.svg" alt="pitchIN"></div>' +
+            '<div class="kicker">Token-X Accelerator</div>' +
+            '<h1 class="title">Build your <em>Raise Route</em></h1>' +
+            '<p class="lede">Answer 6 quick checkpoints through the workshop. Your personalised route — and pitchIN’s follow-up — at the end.</p>' +
+            '<div class="form">' +
+              '<div class="field" id="f-name"><label>Name</label><input id="in-name" type="text" autocomplete="name" value="' + esc(S.lead.name) + '"><div class="errmsg">Your name, so the card is yours.</div></div>' +
+              '<div class="field" id="f-company"><label>Company</label><input id="in-company" type="text" autocomplete="organization" value="' + esc(S.lead.company) + '"><div class="errmsg">Company or project name.</div></div>' +
+              '<div class="field" id="f-email"><label>Email</label><input id="in-email" type="email" inputmode="email" autocomplete="email" value="' + esc(S.lead.email) + '"><div class="errmsg">A valid email — that’s where the follow-up goes.</div></div>' +
+              '<div class="field"><label>Role <span class="opt">· optional</span></label><input id="in-role" type="text" value="' + esc(S.lead.role) + '"></div>' +
+            "</div>" +
+            '<div class="actions"><button class="btn primary" id="reg">Start my route</button></div>' +
+            '<p class="hint">No app, no sign-up — this page is the whole thing.</p>' +
+          "</div>";
+        document.getElementById("reg").addEventListener("click", function(){
+          var name = document.getElementById("in-name").value.trim();
+          var company = document.getElementById("in-company").value.trim();
+          var email = document.getElementById("in-email").value.trim();
+          var role = document.getElementById("in-role").value.trim();
+          var ok = true;
+          function mark(id, bad){
+            var f = document.getElementById("f-" + id);
+            var inp = document.getElementById("in-" + id);
+            f.classList.toggle("show-err", bad);
+            inp.classList.toggle("err", bad);
+            if(bad) ok = false;
+          }
+          mark("name", !name);
+          mark("company", !company);
+          mark("email", !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email));
+          if(!ok) return;
+          S.lead = { name:name, company:company, email:email, role:role };
+          S.screen = "warmup"; save(); render();
+        });
+        break;
+      }
+
+      case "warmup": {
+        chipStep({
+          kicker:"Warm-up", cp:"cp0",
+          title:"What are you hoping to <em>raise</em> in the next 12 months?",
+          list: WARMUP, tags:false,
+          selected: S.answers.cp0 && S.answers.cp0.raise,
+          cta:"That’s my number",
+          onDone: function(k){
+            enqueue({ t:"lead", p:{ device_id:DEVICE, name:S.lead.name, company:S.lead.company, email:S.lead.email, role:S.lead.role || null } });
+            saveAnswer("cp0", { raise:k, name:S.lead.name, company:S.lead.company });
+            S.screen = "cp1"; save(); render();
+          }
+        });
+        break;
+      }
+
+      case "cp1": {
+        chipStep({
+          kicker:"Checkpoint 1", cp:"cp1",
+          title:"What is your company actually <em>selling</em> to funders?",
+          list: CP1, tags:true,
+          selected: S.answers.cp1 && S.answers.cp1.choice,
+          onDone: function(k){
+            saveAnswer("cp1", { choice:k });
+            S.screen = "cp2"; save(); render();
+          }
+        });
+        break;
+      }
+
+      case "cp2": {
+        chipStep({
+          kicker:"Checkpoint 2", cp:"cp2",
+          title:"Which <em>rail</em> fits your raise today?",
+          list: CP2, tags:true,
+          selected: S.answers.cp2 && S.answers.cp2.choice,
+          onDone: function(k){
+            saveAnswer("cp2", { choice:k });
+            S.screen = "cp3"; save(); render();
+          }
+        });
+        break;
+      }
+
+      case "cp3": {
+        var i = S.cp3.i;
+        if(i < 4){
+          var dots = "";
+          for(var d=0; d<4; d++) dots += '<div class="qdot' + (d < i ? " done" : "") + '"></div>';
+          app.innerHTML =
+            '<div class="step">' +
+              '<div class="kicker">Checkpoint 3 <span class="cp">· The perimeter self-test</span></div>' +
+              '<div class="counter">Question ' + (i+1) + " of 4</div>" +
+              '<div class="qtext">' + esc(CP3Q[i]) + "</div>" +
+              '<div class="yn"><button data-v="1">Yes</button><button data-v="0">No</button></div>' +
+              '<div class="qdots">' + dots + "</div>" +
+            "</div>";
+          app.querySelectorAll(".yn button").forEach(function(b){
+            b.addEventListener("click", function(){
+              S.cp3.q["q" + (i+1)] = b.getAttribute("data-v") === "1";
+              S.cp3.i = i + 1; save(); render();
+            });
+          });
+        } else {
+          var v = cp3Verdict(S.cp3.q);
+          app.innerHTML =
+            '<div class="step">' +
+              '<div class="kicker">Checkpoint 3 <span class="cp">· Verdict</span></div>' +
+              '<div class="verdict' + (v.good ? " good" : "") + '">' +
+                '<div class="vkicker">Your perimeter verdict</div>' +
+                "<h2>" + v.t + "</h2>" +
+                "<p>" + v.b + "</p>" +
+              "</div>" +
+              '<div class="actions">' +
+                '<button class="btn primary" id="cont">Next checkpoint</button>' +
+                '<button class="btn ghost" id="redo">Retake the test</button>' +
+              "</div>" +
+            "</div>";
+          document.getElementById("cont").addEventListener("click", function(){
+            saveAnswer("cp3", { q1:!!S.cp3.q.q1, q2:!!S.cp3.q.q2, q3:!!S.cp3.q.q3, q4:!!S.cp3.q.q4, verdict:v.k });
+            S.screen = "cp4"; save(); render();
+          });
+          document.getElementById("redo").addEventListener("click", function(){
+            S.cp3 = { i:0, q:{} }; save(); render();
+          });
+        }
+        break;
+      }
+
+      case "cp4": {
+        chipStep({
+          kicker:"Checkpoint 4", cp:"cp4",
+          title:"Which layer is your <em>weakest?</em>",
+          lede:"Every tokenised raise stands on four layers. Founders always know the answer.",
+          list: CP4, tags:false,
+          selected: S.answers.cp4 && S.answers.cp4.choice,
+          onDone: function(k){
+            saveAnswer("cp4", { choice:k });
+            S.screen = "cp5"; save(); render();
+          }
+        });
+        break;
+      }
+
+      case "cp5": {
+        var si = S.cp5.i;
+        if(si < 5){
+          var sdots = "";
+          for(var sd=0; sd<5; sd++) sdots += '<div class="qdot' + (sd < si ? " done" : "") + '"></div>';
+          app.innerHTML =
+            '<div class="step">' +
+              '<div class="kicker">Checkpoint 5 <span class="cp">· The worth-it scorecard</span></div>' +
+              '<div class="counter">Statement ' + (si+1) + " of 5</div>" +
+              '<div class="qtext">“' + esc(CP5S[si]) + '”</div>' +
+              '<div class="rate">' +
+                '<button data-p="2">Agree</button>' +
+                '<button data-p="1">Neutral</button>' +
+                '<button data-p="0">Disagree</button>' +
+              "</div>" +
+              '<div class="qdots">' + sdots + "</div>" +
+            "</div>";
+          app.querySelectorAll(".rate button").forEach(function(b){
+            b.addEventListener("click", function(){
+              S.cp5.pts[si] = parseInt(b.getAttribute("data-p"), 10);
+              S.cp5.i = si + 1; save(); render();
+            });
+          });
+        } else {
+          var total = S.cp5.pts.reduce(function(a,b){ return a + (b||0); }, 0);
+          var v5 = cp5Verdict(total);
+          app.innerHTML =
+            '<div class="step">' +
+              '<div class="kicker">Checkpoint 5 <span class="cp">· Verdict</span></div>' +
+              '<div class="verdict' + (v5.good ? " good" : "") + '">' +
+                '<div class="vkicker">Is tokenisation worth it for you?</div>' +
+                "<h2>" + v5.t + "</h2>" +
+                "<p>" + v5.b + "</p>" +
+                '<div class="score">Your score: ' + total + " / 10</div>" +
+              "</div>" +
+              '<div class="actions">' +
+                '<button class="btn primary" id="cont">Build my Raise Route</button>' +
+                '<button class="btn ghost" id="redo">Redo the scorecard</button>' +
+              "</div>" +
+            "</div>";
+          document.getElementById("cont").addEventListener("click", function(){
+            saveAnswer("cp5", { scores:S.cp5.pts, total:total, verdict:v5.k, complete:true });
+            S.screen = "card"; save(); render();
+          });
+          document.getElementById("redo").addEventListener("click", function(){
+            S.cp5 = { i:0, pts:[] }; save(); render();
+          });
+        }
+        break;
+      }
+
+      case "card": {
+        var a = S.answers;
+        var inst = byKey(CP1, a.cp1 && a.cp1.choice);
+        var rail = byKey(CP2, a.cp2 && a.cp2.choice);
+        var weak = byKey(CP4, a.cp4 && a.cp4.choice);
+        var pv = a.cp3 ? cp3Verdict(a.cp3) : null;
+        var wv = a.cp5 ? cp5Verdict(a.cp5.total) : null;
+        app.innerHTML =
+          '<div class="step">' +
+            '<div class="kicker">Your Raise Route <span class="cp">· Complete</span></div>' +
+            '<h1 class="title">Route <em>confirmed.</em></h1>' +
+            '<div class="cardwrap"><div class="route-card" id="routeCard">' +
+              '<div class="rc-head"><div class="wm"><img src="pitchin_logo_white.svg" alt="pitchIN"></div><div class="lbl">Raise Route · Boarding card</div></div>' +
+              '<div class="rc-id">' +
+                '<div class="pass">Ready to Raise? · Token-X Accelerator</div>' +
+                '<div class="nm">' + esc(S.lead.name || "Founder") + "</div>" +
+                '<div class="co">' + esc(S.lead.company || "") + "</div>" +
+              "</div>" +
+              '<div class="rc-route">' +
+                rcStop("Instrument", inst ? inst.n : "—", "") +
+                rcStop("Rail", rail ? rail.n : "—", "") +
+                rcStop("Perimeter", pv ? pv.word : "—", pv ? (pv.good ? "vgreen" : "vred") : "") +
+                rcStop("Weakest layer", weak ? weak.n : "—", "") +
+                rcStop("Worth it?", wv ? wv.word : "—", wv ? (wv.good ? "vgreen" : "vred") : "") +
+              "</div>" +
+              '<div class="rc-rec">' + recommendation() + "</div>" +
+              '<div class="rc-foot"><span>pitchIN — the private fundraising platform</span><span class="talk">Talk to us: <span class="u">pitchin.my</span></span></div>' +
+            "</div></div>" +
+            '<div class="savehint" id="saveHint">Couldn’t render the image on this phone — just screenshot this card. It’s yours.</div>' +
+            '<div class="actions">' +
+              '<button class="btn primary" id="saveImg">Save as image</button>' +
+              '<button class="btn ghost" id="done">Done</button>' +
+            "</div>" +
+            '<p class="donote" id="doneNote" style="display:none">All set — <b>we’ll be in touch.</b><br>Enjoy the rest of the session.</p>' +
+          "</div>";
+        document.getElementById("saveImg").addEventListener("click", saveCardImage);
+        document.getElementById("done").addEventListener("click", function(){
+          document.getElementById("doneNote").style.display = "";
+          document.getElementById("done").style.display = "none";
+        });
+        break;
+      }
+    }
+  }
+
+  function rcStop(lab, val, cls){
+    return '<div class="rc-stop">' +
+      '<div class="marker"><div class="dot"></div><div class="stem"></div></div>' +
+      '<div><div class="slab">' + lab + '</div><div class="sval ' + cls + '">' + esc(val) + "</div></div>" +
+    "</div>";
+  }
+
+  /* ---------- save card as image ---------- */
+  function saveCardImage(){
+    var btn = document.getElementById("saveImg");
+    btn.disabled = true; btn.textContent = "Rendering…";
+    function fail(){
+      btn.disabled = false; btn.textContent = "Save as image";
+      document.getElementById("saveHint").classList.add("show");
+    }
+    function go(){
+      try{
+        window.html2canvas(document.getElementById("routeCard"), {
+          backgroundColor:"#FCFBF9", scale:2, useCORS:true
+        }).then(function(canvas){
+          try{
+            var link = document.createElement("a");
+            link.download = "raise-route-" + (S.lead.name||"card").toLowerCase().replace(/[^a-z0-9]+/g,"-") + ".png";
+            link.href = canvas.toDataURL("image/png");
+            document.body.appendChild(link); link.click(); link.remove();
+            btn.disabled = false; btn.textContent = "Saved ✓";
+            setTimeout(function(){ btn.textContent = "Save as image"; }, 2500);
+          }catch(e){ fail(); }
+        }, fail);
+      }catch(e){ fail(); }
+    }
+    if(window.html2canvas) return go();
+    var s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+    s.onload = go; s.onerror = fail;
+    document.head.appendChild(s);
+  }
+
+  /* ================= boot ================= */
+  render();
+  flush();
+})();
+</script>
+</body>
+</html>
