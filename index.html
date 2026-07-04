@@ -496,6 +496,24 @@
   }
   .decklink:active{ opacity:.7; }
 
+  /* prominent end-screen calls-to-action */
+  .endlinks{ margin-top:22px; }
+  .biglink{
+    display:flex; align-items:center; justify-content:center;
+    width:100%; padding:17px 18px;
+    font-family:var(--sans); font-size:12.5px; font-weight:600;
+    letter-spacing:0.14em; text-transform:uppercase;
+    text-decoration:none; text-align:center;
+    border-radius:0; transition:opacity .2s, background .2s;
+  }
+  .biglink + .biglink{ margin-top:11px; }
+  .biglink.primary{ background:var(--navy); color:var(--paper); }
+  .biglink.secondary{
+    background:#fff; color:var(--navy);
+    border:1px solid var(--navy);
+  }
+  .biglink:active{ opacity:.75; }
+
   /* fade-in per step */
   .step{ animation:rise .35s ease both; }
   @keyframes rise{
@@ -772,9 +790,9 @@
     { k:"unsure",     n:"Don't know yet", sub:"Fair — it's a strategy question, and today is for it." }
   ];
   var COUNSEL = [
-    { k:"yes",  n:"Yes — engaged", sub:"Rare and valuable — keep them close." },
-    { k:"know", n:"Know someone — not engaged", sub:"A name in the phone is a start — a retainer is better." },
-    { k:"no",   n:"No — I'd need a referral", sub:"Most of the room is with you — ask us, we know who's done it." }
+    { k:"have",   n:"I've got someone", sub:"Rare and valuable — keep them close." },
+    { k:"noneed", n:"Don't think I need it", sub:"Fair — just know the perimeter shifts fast out here." },
+    { k:"refer",  n:"I'd love a referral", sub:"Most of the room is with you — ask us, we know who's done it." }
   ];
 
   /* ---------- perimeter verdict (Malaysia-localised; pure) ---------- */
@@ -1289,7 +1307,7 @@
         chipStep({
           kicker:"Checkpoint 3", cp:"Build readiness · 3 of 3",
           back:function(){ nav("cp3b"); },
-          title:"Do you have legal counsel who’s done <em>digital-asset</em> work?",
+          title:"Legal counsel who’s done <em>digital-asset</em> work — where do you stand?",
           list: COUNSEL, tags:false,
           selected: S.answers.cp3 && S.answers.cp3.counsel,
           cta:"Lock it in",
@@ -1400,7 +1418,10 @@
               '<button class="btn primary" id="saveImg">Save as image</button>' +
               '<button class="btn ghost" id="done">Done</button>' +
             "</div>" +
-            '<a class="decklink" href="deck.html" target="_blank" rel="noopener">View today’s slides →</a>' +
+            '<div class="endlinks">' +
+              '<a class="biglink primary" href="https://ncih.github.io/raise-route/deck.html" target="_blank" rel="noopener">View today’s slides →</a>' +
+              '<a class="biglink secondary" href="https://humancard.me/profile/nicholas" target="_blank" rel="noopener">Get Nicholas’s contact →</a>' +
+            "</div>" +
             '<p class="donote" id="doneNote" style="display:none">All set — <b>we’ll be in touch.</b><br>Enjoy the rest of the session.</p>' +
           "</div>";
         bindBack(function(){ nav("cp4"); });
