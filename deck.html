@@ -120,6 +120,149 @@ svg {
     z-index: 1000;
 }
 
+/* Q&A from the room — floating trigger + full-screen overlay */
+.qa-fab {
+    position: fixed;
+    left: 26px;
+    bottom: 24px;
+    z-index: 1400;
+    display: none;
+    align-items: center;
+    gap: 11px;
+    padding: 13px 20px 13px 17px;
+    border: 1px solid var(--navy);
+    border-radius: 999px;
+    background: var(--navy);
+    color: var(--paper);
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    box-shadow: 0 8px 26px rgba(26, 24, 71, 0.28);
+    transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+.qa-fab.show { display: inline-flex; }
+.qa-fab:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(26, 24, 71, 0.34); }
+.qa-fab .qa-dot {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--red);
+    flex: 0 0 auto;
+}
+.qa-fab .qa-dot::after {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 2px solid var(--red);
+    animation: qa-pulse 2s ease-out infinite;
+}
+@keyframes qa-pulse {
+    0%   { opacity: 0.7; transform: scale(0.7); }
+    70%  { opacity: 0;   transform: scale(1.6); }
+    100% { opacity: 0;   transform: scale(1.6); }
+}
+.qa-fab .qa-count {
+    font-family: var(--serif);
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-size: 16px;
+    min-width: 20px;
+    text-align: center;
+}
+
+.qa-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    display: none;
+    flex-direction: column;
+    background: rgba(252, 251, 249, 0.985);
+    color: var(--navy);
+    padding: 68px 96px 72px;
+    overflow-y: auto;
+}
+.qa-overlay.open { display: flex; }
+.qa-overlay .qa-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 22px;
+    margin-bottom: 20px;
+}
+.qa-overlay .qa-title {
+    font-family: var(--sans);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--navy);
+}
+.qa-overlay .qa-title em {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--red);
+}
+.qa-close {
+    border: 1px solid var(--navy);
+    background: transparent;
+    color: var(--navy);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    flex: 0 0 auto;
+    transition: background 0.14s ease, color 0.14s ease;
+}
+.qa-close:hover { background: var(--navy); color: var(--paper); }
+.qa-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 1600px;
+}
+.qa-list li {
+    border-bottom: 1px solid var(--hairline);
+    padding: 34px 6px;
+    cursor: pointer;
+    transition: opacity 0.16s ease, padding-left 0.16s ease;
+}
+.qa-list li:hover { padding-left: 22px; opacity: 0.6; }
+.qa-list li.answering { opacity: 0; }
+.qa-list .qa-q {
+    font-family: var(--serif);
+    font-optical-sizing: auto;
+    font-weight: 480;
+    font-size: 46px;
+    line-height: 1.24;
+    color: var(--navy);
+    margin: 0 0 14px;
+}
+.qa-list .qa-who {
+    font-family: var(--sans);
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: var(--ink-3, #8a8a90);
+}
+.qa-list .qa-who b { color: var(--red); font-weight: 600; }
+.qa-hint {
+    font-family: var(--sans);
+    font-size: 15px;
+    color: var(--ink-3, #8a8a90);
+    letter-spacing: 0.04em;
+    margin-top: 26px;
+}
+
 /* 7. Print one fixed-size slide per page */
 @media print {
     html,
@@ -434,7 +577,7 @@ p.lede b{ font-weight:600; color:var(--navy); }
 .fork .seg{ margin-left:auto; padding-left:28px; font-size:15px; font-weight:600;
   letter-spacing:0.2em; text-transform:uppercase; color:var(--body); white-space:nowrap; }
 
-/* ---------- mirror (digital twin, slide 12) ---------- */
+/* ---------- mirror (digital twin, slide 17) ---------- */
 .mirror{ margin-top:52px; display:grid; grid-template-columns:1fr 150px 1fr; align-items:stretch; }
 .mirror .card li.wrapper{ color:var(--red-dark); font-weight:500; }
 .mirror .card li.wrapper::before{ content:"+"; color:var(--red); font-weight:600; }
@@ -447,7 +590,7 @@ p.lede b{ font-weight:600; color:var(--navy); }
 .equals .word{ font-size:13px; font-weight:600; letter-spacing:0.24em;
   text-transform:uppercase; color:var(--body); text-align:center; line-height:1.7; }
 
-/* ---------- vs duel (slide 48) ---------- */
+/* ---------- vs duel (slide 53) ---------- */
 .duel{ display:grid; grid-template-columns:1fr 130px 1fr; margin-top:52px; align-items:stretch; }
 .duel .side{ border:1px solid var(--hairline); background:#fff; padding:38px 42px; }
 .duel .side.win{ border-top:3px solid var(--green); }
@@ -461,7 +604,7 @@ p.lede b{ font-weight:600; color:var(--navy); }
 .duel .fact{ margin-top:16px; font-size:24px; color:var(--body); line-height:1.5; }
 .duel .fact b{ color:var(--navy); font-weight:600; }
 
-/* ---------- layer bands (slide 39) ---------- */
+/* ---------- layer bands (slide 43) ---------- */
 .layers{ margin-top:50px; display:flex; flex-direction:column; gap:18px; }
 .layer{ display:grid; grid-template-columns:340px 1fr; align-items:center;
   border:1px solid var(--hairline); background:#fff; padding:26px 36px; border-left:4px solid var(--navy); }
@@ -475,7 +618,7 @@ p.lede b{ font-weight:600; color:var(--navy); }
 .layer p{ font-size:25px; color:var(--ink); line-height:1.45; }
 .layer p b{ font-weight:600; color:var(--navy); }
 
-/* ---------- checklist (slide 54) ---------- */
+/* ---------- checklist (slide 63) ---------- */
 .checklist{ margin-top:44px; display:grid; grid-template-columns:1fr 1fr; column-gap:64px; }
 .checklist .chk{ display:flex; align-items:baseline; gap:22px; padding:19px 4px;
   border-bottom:1px solid var(--hairline); }
@@ -484,7 +627,7 @@ p.lede b{ font-weight:600; color:var(--navy); }
 .checklist .chk p{ font-size:25px; color:var(--ink); line-height:1.4; }
 .checklist .chk p b{ font-weight:600; color:var(--navy); }
 
-/* ---------- montage tiles (slide 55) ---------- */
+/* ---------- montage tiles (slide 64) ---------- */
 .tiles{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:48px; }
 .tile{ border:1px solid var(--hairline); background:#fff; padding:28px 30px 24px;
   border-top:3px solid var(--red); }
@@ -600,6 +743,7 @@ body.editing .slide.active{ outline:none; }
 
 <div class="deck-viewport">
 <main class="deck-stage" id="deckStage" aria-label="Ready to Raise? presentation">
+
 
 
 
@@ -817,13 +961,13 @@ body.editing .slide.active{ outline:none; }
     <div class="escalator reveal r3" style="grid-template-columns:repeat(7,1fr); gap:16px; margin-top:40px; height:430px;">
       <div class="esc"><div class="bar" style="min-height:165px;"><div class="step-no">1</div><h4>Bootstrapping</h4><div class="band">Your own money + early revenue — where everyone starts</div></div></div>
       <div class="esc"><div class="bar" style="min-height:209px;"><div class="step-no">2</div><h4>Grants</h4><div class="band"><b>Cradle CIP · MDEC</b> — non-dilutive, milestone-gated</div></div></div>
-      <div class="esc"><div class="bar" style="min-height:253px;"><div class="step-no">3</div><h4>Angels</h4><div class="band"><b>MBAN</b> networks · pre-seed: &lt;RM1M at RM1–2M valuations</div></div></div>
-      <div class="esc"><div class="bar" style="min-height:297px;"><div class="step-no">4</div><h4>VC</h4><div class="band"><b>Gobi RM1–10M</b> · MTDC / VentureTECH RM3–10M</div></div></div>
+      <div class="esc"><div class="bar" style="min-height:253px; border-top-color:var(--red); background:var(--red-faint);"><div class="step-no">3</div><h4>Angels</h4><div class="band"><b>MBAN</b> networks · pre-seed: &lt;RM1M at RM1–2M valuations. <b>Most of this room is here.</b></div></div></div>
+      <div class="esc"><div class="bar" style="min-height:297px; border-top-color:var(--red); background:var(--red-faint);"><div class="step-no">4</div><h4>VC</h4><div class="band"><b>Gobi RM1–10M</b> · MTDC / VentureTECH RM3–10M. <b>— and here.</b></div></div></div>
       <div class="esc"><div class="bar" style="min-height:341px;"><div class="step-no">5</div><h4>ECF · TCF · P2P</h4><div class="band">The crowd: seed → Series A, RM1–10M. <b>Today lives here.</b></div></div></div>
       <div class="esc"><div class="bar" style="min-height:385px;"><div class="step-no">6</div><h4>Private equity</h4><div class="band">Series B+: RM10M+ at RM100M+ valuations</div></div></div>
       <div class="esc"><div class="bar" style="min-height:430px;"><div class="step-no">7</div><h4>LEAP · ACE · Main</h4><div class="band">Public markets: RM100M+ at RM500M+ valuations</div></div></div>
     </div>
-    <p class="footnote reveal r4">Bands are typical Malaysian ranges — <span class="nb">where you get on depends on what you’re selling.</span></p>
+    <p class="footnote reveal r4">Most of this room is on <b>steps 3–4</b> — today is about the rails that take you up the <span class="nb">next one.</span></p>
   </div>
   <div class="colophon">
     <div class="line"></div>
@@ -975,40 +1119,37 @@ body.editing .slide.active{ outline:none; }
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
-      <div class="section">The Digital Twin Principle</div>
+      <div class="section">The Funding Landscape</div>
     </div>
     <div class="line"></div>
   </div>
   <div class="stage">
-    <div class="kicker reveal r1">The digital twin principle</div>
-    <h2 class="head reveal r2">Tokenised equity is <em>still</em> equity.</h2>
-    <p class="lede reveal r2">Regulation follows <em>the instrument</em> — not the technology.</p>
-    <div class="mirror reveal r3">
-      <div class="card acc-navy">
-        <div class="card-kicker">The instrument you know</div>
-        <h3>Traditional shares</h3>
-        <ul>
-          <li>Companies Act</li>
-          <li>SC fundraising frameworks</li>
-          <li>Shareholder rights</li>
-        </ul>
+    <div class="kicker reveal r1">Case · PolicyStreet — the escalator, ridden</div>
+    <h2 class="head reveal r2">The escalator, <em>ridden.</em></h2>
+    <p class="lede reveal r2">Started with the crowd on pitchIN in 2020 — now closing a sovereign-backed Series C.</p>
+    <div class="stats reveal r3" style="grid-template-columns:repeat(4,1fr); gap:30px; margin-top:48px;">
+      <div class="stat navy">
+        <div class="num" style="font-size:88px;">RM7.8M</div>
+        <div class="lbl">ECF · pitchIN · 2020</div>
+        <div class="sub" style="font-size:21px;">Then Malaysia’s largest-ever ECF raise · 274 investors, with KK Fund + Spiral · &gt;500% of target.</div>
       </div>
-      <div class="equals">
-        <div class="glyph">=</div>
-        <div class="word">Same<br>instrument</div>
+      <div class="stat">
+        <div class="num" style="font-size:88px;">RM25M</div>
+        <div class="lbl">Series A · 2021</div>
+        <div class="sub" style="font-size:21px;">Led by Altara Ventures — with Auspac, Gobi and Mah Sing’s Leong family.</div>
       </div>
-      <div class="card acc-red">
-        <div class="card-kicker">The instrument, on new rails</div>
-        <h3>Tokenised shares</h3>
-        <ul>
-          <li>Companies Act</li>
-          <li>SC fundraising frameworks</li>
-          <li>Shareholder rights</li>
-          <li class="wrapper">A token wrapper <span class="tag">Only addition</span></li>
-        </ul>
+      <div class="stat navy">
+        <div class="num" style="font-size:88px;">RM67M</div>
+        <div class="lbl">Series B · 2023</div>
+        <div class="sub" style="font-size:21px;">US$15.3M, led by <b>Khazanah Nasional</b> — the first sovereign in.</div>
+      </div>
+      <div class="stat">
+        <div class="num" style="font-size:88px;">US$21M<em>+</em></div>
+        <div class="lbl">Series C · first close · 2026</div>
+        <div class="sub" style="font-size:21px;">Led by <b>Cool Japan Fund</b> (Japan’s SWF) — Malaysia’s largest-ever insurtech round, <b>still open.</b></div>
       </div>
     </div>
-    <p class="footnote reveal r4">Written into law: the <b>Prescription Amendment Order 2025</b> (in force 9 Jan 2025) — tokenised shares and bonds are <span class="nb">securities, full stop.</span></p>
+    <p class="footnote reveal r4">Profitable today, two sovereign backers, 10M+ customers — <b>started with the crowd on pitchIN.</b></p>
   </div>
   <div class="colophon">
     <div class="line"></div>
@@ -1027,36 +1168,38 @@ body.editing .slide.active{ outline:none; }
     <div class="line"></div>
   </div>
   <div class="stage">
-    <div class="kicker reveal r1">The regulated rails, on one map</div>
-    <h2 class="head reveal r2">Five rails — and who <em>runs</em> them.</h2>
-    <div class="reveal r3" style="display:grid; grid-template-columns:repeat(5,1fr); gap:22px; margin-top:52px;">
-      <div class="card acc-navy" style="padding:28px 26px 24px;">
-        <div class="card-kicker">Equity</div>
-        <h3 style="font-size:30px;">ECF</h3>
-        <p class="plain" style="font-size:19.5px;">Sell shares to the crowd. <b>RM20M lifetime</b> cap. SC-registered platforms — pitchIN is the largest.</p>
+    <div class="kicker reveal r1">Three instrument families</div>
+    <h2 class="head reveal r2">What you sell decides the <em>rail.</em></h2>
+    <div class="grid3 reveal r3" style="margin-top:44px;">
+      <div class="card acc-navy">
+        <div class="card-kicker">Equity · sell a share</div>
+        <h3>You give up <em>ownership</em></h3>
+        <ul>
+          <li><b>Angels · MBAN</b> — private, early, relationship-led</li>
+          <li><b>VC</b> — institutional, 10× story, board seats</li>
+          <li><b>ECF</b> — the crowd · <b>RM20M lifetime</b> cap · SC-registered platforms</li>
+        </ul>
       </div>
-      <div class="card acc-red" style="padding:28px 26px 24px;">
-        <div class="card-kicker">Token</div>
-        <h3 style="font-size:30px;">TCF</h3>
-        <p class="plain" style="font-size:19.5px;">Raise with a token. <b>20× shareholders’ funds</b>, RM100M cap. Two IEO operators: <b>pitchIN + KLDX</b>.</p>
+      <div class="card acc-orange">
+        <div class="card-kicker">Debt · promise to repay</div>
+        <h3>You keep ownership, owe <em>money</em></h3>
+        <ul>
+          <li><b>Banks</b> — cash flow + collateral, no dilution</li>
+          <li><b>P2P</b> — SC-registered financing platforms</li>
+          <li><b>Private notes</b> · licensed moneylenders</li>
+        </ul>
       </div>
-      <div class="card acc-orange" style="padding:28px 26px 24px;">
-        <div class="card-kicker">Debt</div>
-        <h3 style="font-size:30px;">P2P notes</h3>
-        <p class="plain" style="font-size:19.5px;">Repayable financing on SC-registered P2P platforms.</p>
-      </div>
-      <div class="card acc-green" style="padding:28px 26px 24px;">
-        <div class="card-kicker">Offshore</div>
-        <h3 style="font-size:30px;">Labuan</h3>
-        <p class="plain" style="font-size:19.5px;">The LFSA lane — <b>Fusang</b> exchange and members. AMLA still follows you.</p>
-      </div>
-      <div class="card acc-teal" style="padding:28px 26px 24px;">
-        <div class="card-kicker">Liquidity</div>
-        <h3 style="font-size:30px;">PSTX · DAX</h3>
-        <p class="plain" style="font-size:19.5px;">The exit rails — PSTX for private shares, DAX listings for tokens.</p>
+      <div class="card acc-red">
+        <div class="card-kicker">Utility token · sell access</div>
+        <h3>Buyers want the <em>thing</em></h3>
+        <ul>
+          <li><b>TCF onshore</b> — 2 IEO operators (<b>pitchIN + KLDX</b>) · 20× shareholders’ funds · RM100M cap</li>
+          <li><b>Offshore</b> — Labuan/Fusang · Dubai/EU</li>
+          <li>Wherever you go, <b>AMLA still follows you</b></li>
+        </ul>
       </div>
     </div>
-    <p class="footnote reveal r4">The rail you pick decides your <b>regulator, your investors and your timeline</b> — not just your paperwork.</p>
+    <p class="footnote reveal r4">And when holders want out: <b>PSTX</b> for private shares, <b>DAX</b> listings for tokens. The rail you pick decides your <span class="nb">regulator, your investors and your timeline.</span></p>
   </div>
   <div class="colophon">
     <div class="line"></div>
@@ -1103,7 +1246,6 @@ body.editing .slide.active{ outline:none; }
     <div class="row"><span>Segment 01 — The Funding Landscape</span><span class="folio">14 <span>/ 66</span></span></div>
   </div>
 </section>
-
 
 
 
@@ -1183,6 +1325,53 @@ body.editing .slide.active{ outline:none; }
     <div class="line"></div>
   </div>
   <div class="stage">
+    <div class="kicker reveal r1">The digital twin principle</div>
+    <h2 class="head reveal r2">Tokenised equity is <em>still</em> equity.</h2>
+    <p class="lede reveal r2">Regulation follows <em>the instrument</em> — not the technology.</p>
+    <div class="mirror reveal r3">
+      <div class="card acc-navy">
+        <div class="card-kicker">The instrument you know</div>
+        <h3>Traditional shares</h3>
+        <ul>
+          <li>Companies Act</li>
+          <li>SC fundraising frameworks</li>
+          <li>Shareholder rights</li>
+        </ul>
+      </div>
+      <div class="equals">
+        <div class="glyph">=</div>
+        <div class="word">Same<br>instrument</div>
+      </div>
+      <div class="card acc-red">
+        <div class="card-kicker">The instrument, on new rails</div>
+        <h3>Tokenised shares</h3>
+        <ul>
+          <li>Companies Act</li>
+          <li>SC fundraising frameworks</li>
+          <li>Shareholder rights</li>
+          <li class="wrapper">A token wrapper <span class="tag">Only addition</span></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footnote reveal r4">Written into law: the <b>Prescription Amendment Order 2025</b> (in force 9 Jan 2025) — tokenised shares and bonds are <span class="nb">securities, full stop.</span></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">17 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s18">
+  <div class="ghost">18</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
     <div class="kicker reveal r1">Jargon decoder</div>
     <h2 class="head reveal r2">Five acronyms. One <em>question</em>: who vets the deal?</h2>
     <div class="ref reveal r3">
@@ -1196,13 +1385,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">17 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">18 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s18">
-  <div class="ghost">18</div>
+<section class="slide" id="s19">
+  <div class="ghost">19</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1237,13 +1426,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">18 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">19 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s19">
-  <div class="ghost">19</div>
+<section class="slide" id="s20">
+  <div class="ghost">20</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1270,35 +1459,6 @@ body.editing .slide.active{ outline:none; }
         <div class="lbl">SC-registered IEO operators</div>
         <div class="sub">pitchIN and KLDX. That’s the whole list.</div>
       </div>
-    </div>
-  </div>
-  <div class="colophon">
-    <div class="line"></div>
-    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">19 <span>/ 66</span></span></div>
-  </div>
-</section>
-
-
-<section class="slide" id="s20">
-  <div class="ghost">20</div>
-  <div class="masthead">
-    <div class="row">
-      <div class="wm" role="img" aria-label="pitchIN"></div>
-      <div class="section">Raising Capital with Tokens</div>
-    </div>
-    <div class="line"></div>
-  </div>
-  <div class="stage">
-    <div class="kicker reveal r1">Reference · photograph this one</div>
-    <h2 class="head reveal r2" style="font-size:72px;">TCF issuer <em>eligibility</em></h2>
-    <div class="ref compact reveal r3" style="margin-top:32px;">
-      <div class="rrow"><div class="rlab">Entity</div><div class="rval">Malaysia-incorporated <b>Sdn Bhd or LLP</b> — not an EPC or listed PLC</div></div>
-      <div class="rrow"><div class="rlab">Operations</div><div class="rval">Main operations <b>in Malaysia</b></div></div>
-      <div class="rrow"><div class="rlab">Directors</div><div class="rval">At least <b>2 resident directors</b></div></div>
-      <div class="rrow"><div class="rlab">Skin in the game</div><div class="rval"><b>≥50% of equity</b> held by directors + senior management</div></div>
-      <div class="rrow"><div class="rlab">Capital</div><div class="rval"><b>RM500k paid-up</b> + RM500k shareholders’ funds, maintained</div></div>
-      <div class="rrow"><div class="rlab">Project</div><div class="rval">A real need — addresses a market need or improves efficiency</div></div>
-      <div class="rrow"><div class="rlab">Exclusivity</div><div class="rval"><span class="warn">No concurrent ECF / P2P raise</span> while the TCF runs</div></div>
     </div>
   </div>
   <div class="colophon">
@@ -1361,6 +1521,77 @@ body.editing .slide.active{ outline:none; }
     <div class="line"></div>
   </div>
   <div class="stage">
+    <div class="kicker reveal r1">If you want a tokenised raise · who to speak to</div>
+    <h2 class="head reveal r2">Tokenised raise? Here’s who you <em>talk</em> to.</h2>
+    <div class="grid2 reveal r3" style="margin-top:40px;">
+      <div class="card acc-navy">
+        <div class="card-kicker">Private round · a small, sophisticated circle</div>
+        <h3>You can do this <em>yourselves</em> — with counsel</h3>
+        <ul>
+          <li>Issue tokenised shares as a <b>corporate exercise</b> — no platform required</li>
+          <li>Check the <b>SSM / Companies Act</b> requirements — the register of members stays the legal truth</li>
+          <li>Instrument terms live in the <b>constitution &amp; agreements</b></li>
+          <li><b>Sophisticated investors only</b> — no public promotion</li>
+        </ul>
+      </div>
+      <div class="card acc-red">
+        <div class="card-kicker">Going to the masses · a public raise</div>
+        <h3>You need a <em>registered</em> rail</h3>
+        <ul>
+          <li><b>SC-registered crowdfunding platforms</b> that support tokenisation — pitchIN — for equity twins</li>
+          <li>The <b>IEO operators</b> (pitchIN · KLDX) for utility tokens</li>
+          <li>The rail brings the trustee, the KYC crowd and the compliance rails with it</li>
+        </ul>
+      </div>
+    </div>
+    <p class="footnote reveal r4">The moment you invite the public, the rail stops being <span class="nb">optional.</span></p>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">22 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s23">
+  <div class="ghost">23</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
+    <div class="kicker reveal r1">Only for the TCF door · the onshore utility-token bar — photograph this one</div>
+    <h2 class="head reveal r2" style="font-size:72px;">TCF issuer <em>eligibility</em></h2>
+    <div class="ref compact reveal r3" style="margin-top:32px;">
+      <div class="rrow"><div class="rlab">Entity</div><div class="rval">Malaysia-incorporated <b>Sdn Bhd or LLP</b> — not an EPC or listed PLC</div></div>
+      <div class="rrow"><div class="rlab">Operations</div><div class="rval">Main operations <b>in Malaysia</b></div></div>
+      <div class="rrow"><div class="rlab">Directors</div><div class="rval">At least <b>2 resident directors</b></div></div>
+      <div class="rrow"><div class="rlab">Skin in the game</div><div class="rval"><b>≥50% of equity</b> held by directors + senior management</div></div>
+      <div class="rrow"><div class="rlab">Capital</div><div class="rval"><b>RM500k paid-up</b> + RM500k shareholders’ funds, maintained</div></div>
+      <div class="rrow"><div class="rlab">Project</div><div class="rval">A real need — addresses a market need or improves efficiency</div></div>
+      <div class="rrow"><div class="rlab">Exclusivity</div><div class="rval"><span class="warn">No concurrent ECF / P2P raise</span> while the TCF runs</div></div>
+    </div>
+  </div>
+  <div class="colophon">
+    <div class="line"></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">23 <span>/ 66</span></span></div>
+  </div>
+</section>
+
+
+<section class="slide" id="s24">
+  <div class="ghost">24</div>
+  <div class="masthead">
+    <div class="row">
+      <div class="wm" role="img" aria-label="pitchIN"></div>
+      <div class="section">Raising Capital with Tokens</div>
+    </div>
+    <div class="line"></div>
+  </div>
+  <div class="stage">
     <div class="kicker reveal r1">The map · photograph this one</div>
     <h2 class="head reveal r2" style="font-size:68px;">“I want to launch a token” — your <em>options</em>.</h2>
     <div class="omap reveal r3">
@@ -1388,43 +1619,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">22 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">24 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s23">
-  <div class="ghost">23</div>
-  <div class="masthead">
-    <div class="row">
-      <div class="wm" role="img" aria-label="pitchIN"></div>
-      <div class="section">Raising Capital with Tokens</div>
-    </div>
-    <div class="line"></div>
-  </div>
-  <div class="stage">
-    <div class="kicker reveal r1">The issuer journey, end to end</div>
-    <h2 class="head reveal r2" style="font-size:70px;">Application to <em>listing</em> — seven moves.</h2>
-    <ul class="points tight reveal r3" style="margin-top:30px;">
-      <li><b>1 · Apply</b> — application + whitepaper (we hand you the 10-section template)<span class="tail">Week 1</span></li>
-      <li><b>2 · pitchIN due diligence</b> — legal, financial, token design<span class="tail">Weeks</span></li>
-      <li><b>3 · SC review</b> — plan a <b>3–6 month</b> lead time<span class="tail orange">Months</span></li>
-      <li><b>4 · Hosted campaign</b> — all-or-nothing; investor funds sit in trust<span class="tail">4–12 wks</span></li>
-      <li><b>5 · Token issuance</b> — contract audit → mint → allocate<span class="tail">Close</span></li>
-      <li><b>6 · Drawdown</b> — milestone-batched funds + semi-annual investor updates<span class="tail green">Post-raise</span></li>
-      <li><b>7 · Optional DAX listing</b> — local or global, preferably regulated<span class="tail green">The arc</span></li>
-    </ul>
-    <p class="footnote reveal r4">Insider note: for the first deals, the SC gave final approval <b>deal-by-deal</b> — plan your timeline like you’re one of them.</p>
-  </div>
-  <div class="colophon">
-    <div class="line"></div>
-    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">23 <span>/ 66</span></span></div>
-  </div>
-</section>
-
-
-<section class="slide" id="s24">
-  <div class="ghost">24</div>
+<section class="slide" id="s25">
+  <div class="ghost">25</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1439,9 +1640,11 @@ body.editing .slide.active{ outline:none; }
       <div class="tl-lane t-navy">
         <div class="tl-head"><h3>Tokenised equity — the digital twin</h3><div class="tag">No extra SC review for the token</div></div>
         <div class="tl-steps">
-          <div class="tl-step"><h5>Normal campaign</h5><p>ECF process as usual — tokenised certs disclosed upfront</p></div>
-          <div class="tl-step"><h5>Close + allotment</h5><p>All-or-nothing close, shares allotted</p></div>
-          <div class="tl-step"><h5>Tokenise <em>after</em> close</h5><p>Share cert issued as a token — a corporate exercise</p></div>
+          <div class="tl-step"><h5>Disclosure document</h5><p>ECF disclosure — tokenised certs flagged upfront</p></div>
+          <div class="tl-step"><h5>Platform DD</h5><p>Legal · financial · structure</p></div>
+          <div class="tl-step"><h5>Campaign</h5><p>4–12 wks, funds in trust</p></div>
+          <div class="tl-step"><h5>Close + allotment</h5><p>All-or-nothing, shares allotted</p></div>
+          <div class="tl-step"><h5>Tokenise <em>after</em> close</h5><p>Cert issued as a token — a corporate exercise</p></div>
           <div class="tl-step"><h5>Asset servicing</h5><p>Registry, dividends, transfers</p></div>
         </div>
       </div>
@@ -1451,7 +1654,7 @@ body.editing .slide.active{ outline:none; }
           <div class="tl-step"><h5>Whitepaper</h5><p>10-section outline</p></div>
           <div class="tl-step"><h5>Platform DD</h5><p>Legal · financial · token design</p></div>
           <div class="tl-step"><h5><em>SC review</em></h5><p><b>3–6 months</b> — plan for it</p></div>
-          <div class="tl-step"><h5>Campaign</h5><p>4–12 weeks, funds in trust</p></div>
+          <div class="tl-step"><h5>Campaign</h5><p>4–12 wks, funds in trust</p></div>
           <div class="tl-step"><h5>Issuance</h5><p>Audit → mint → allocate</p></div>
           <div class="tl-step"><h5>DAX listing</h5><p>Optional — local or global</p></div>
         </div>
@@ -1461,13 +1664,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">24 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">25 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s25">
-  <div class="ghost">25</div>
+<section class="slide" id="s26">
+  <div class="ghost">26</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1488,13 +1691,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">25 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">26 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s26">
-  <div class="ghost">26</div>
+<section class="slide" id="s27">
+  <div class="ghost">27</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1526,13 +1729,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">26 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">27 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s27">
-  <div class="ghost">27</div>
+<section class="slide" id="s28">
+  <div class="ghost">28</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1564,13 +1767,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">27 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">28 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s28">
-  <div class="ghost">28</div>
+<section class="slide" id="s29">
+  <div class="ghost">29</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1606,14 +1809,14 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">28 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 02 — Raising Capital with Tokens</span><span class="folio">29 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
 
 
-<section class="slide divider" id="s29">
+<section class="slide divider" id="s30">
   <div class="ghost">03</div>
   <div class="masthead">
     <div class="row">
@@ -1632,13 +1835,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">29 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">30 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s30">
-  <div class="ghost">30</div>
+<section class="slide" id="s31">
+  <div class="ghost">31</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1676,13 +1879,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">30 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">31 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide statement" id="s31">
-  <div class="ghost">31</div>
+<section class="slide statement" id="s32">
+  <div class="ghost">32</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1697,13 +1900,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">31 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">32 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s32">
-  <div class="ghost">32</div>
+<section class="slide" id="s33">
+  <div class="ghost">33</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1723,13 +1926,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">32 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">33 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s33">
-  <div class="ghost">33</div>
+<section class="slide" id="s34">
+  <div class="ghost">34</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1750,13 +1953,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">33 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">34 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s34">
-  <div class="ghost">34</div>
+<section class="slide" id="s35">
+  <div class="ghost">35</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1788,13 +1991,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">34 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">35 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s35">
-  <div class="ghost">35</div>
+<section class="slide" id="s36">
+  <div class="ghost">36</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1844,13 +2047,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">35 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">36 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s36">
-  <div class="ghost">36</div>
+<section class="slide" id="s37">
+  <div class="ghost">37</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1885,13 +2088,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">36 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">37 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s37">
-  <div class="ghost">37</div>
+<section class="slide" id="s38">
+  <div class="ghost">38</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1911,13 +2114,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">37 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">38 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide statement" id="s38">
-  <div class="ghost">38</div>
+<section class="slide statement" id="s39">
+  <div class="ghost">39</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1932,13 +2135,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">38 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">39 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide checkpoint" id="s39">
-  <div class="ghost">39</div>
+<section class="slide checkpoint" id="s40">
+  <div class="ghost">40</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -1972,15 +2175,14 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">39 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 03 — The Regulator’s Lens</span><span class="folio">40 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
 
 
-
-<section class="slide divider" id="s40">
+<section class="slide divider" id="s41">
   <div class="ghost">04</div>
   <div class="masthead">
     <div class="row">
@@ -1999,13 +2201,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">40 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">41 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s41">
-  <div class="ghost">41</div>
+<section class="slide" id="s42">
+  <div class="ghost">42</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -2025,13 +2227,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">41 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">42 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s42">
-  <div class="ghost">42</div>
+<section class="slide" id="s43">
+  <div class="ghost">43</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -2063,13 +2265,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">42 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">43 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s43">
-  <div class="ghost">43</div>
+<section class="slide" id="s44">
+  <div class="ghost">44</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -2089,13 +2291,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">43 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">44 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s44">
-  <div class="ghost">44</div>
+<section class="slide" id="s45">
+  <div class="ghost">45</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -2104,39 +2306,41 @@ body.editing .slide.active{ outline:none; }
     <div class="line"></div>
   </div>
   <div class="stage">
-    <div class="kicker reveal r1">Layer 02 · Identity</div>
-    <h2 class="head reveal r2">Compliance can live <em>inside</em> the token.</h2>
-    <div class="grid2 reveal r3">
-      <div class="card acc-red">
-        <div class="card-kicker">Permissioned · ERC-3643</div>
-        <h3>Built for securities</h3>
-        <ul>
-          <li>KYC / AML enforced <b>in the token contract</b></li>
-          <li>Wallet whitelisting — only vetted holders</li>
-          <li>Programmable transfer restrictions — <b>cap-table control survives</b> tokenisation</li>
-        </ul>
+    <div class="kicker reveal r1">Layer 02 · Identity — the models</div>
+    <h2 class="head reveal r2" style="font-size:72px;">Identity: more than one way to <em>make it work</em>.</h2>
+    <div class="reveal r3" style="display:grid; grid-template-columns:repeat(4,1fr); gap:22px; margin-top:44px;">
+      <div class="card acc-red" style="padding:28px 26px 24px;">
+        <div class="card-kicker">Model 01 · Transfer-restricted</div>
+        <h3 style="font-size:27px;">In the contract <small style="font-size:17px; color:var(--body);">(ERC-3643)</small></h3>
+        <p class="plain" style="font-size:19px;">Whitelist enforced <b>in the token</b> — only vetted wallets ever receive it. Cap-table control survives · masses-ready · <b>heaviest build.</b> Enegra runs this.</p>
       </div>
-      <div class="card acc-navy">
-        <div class="card-kicker">Plain · ERC-20</div>
-        <h3>The compliance gap</h3>
-        <ul>
-          <li>Can gate the <b>primary</b> sale…</li>
-          <li>…but <b>NOT secondary transfers</b></li>
-          <li>Day two, your token is with strangers you never screened</li>
-        </ul>
+      <div class="card acc-navy" style="padding:28px 26px 24px;">
+        <div class="card-kicker">Model 02 · Claim-gated</div>
+        <h3 style="font-size:27px;">Gate the benefits</h3>
+        <p class="plain" style="font-size:19px;">Anyone may hold — but dividends / beneficial interest go <b>only to KYC’d holders.</b> Lighter build, plainer token · control at the <b>register</b>, not the token.</p>
+      </div>
+      <div class="card acc-green" style="padding:28px 26px 24px;">
+        <div class="card-kicker">Model 03 · Closed ecosystem</div>
+        <h3 style="font-size:27px;">Inside your walls</h3>
+        <p class="plain" style="font-size:19px;">Token moves <b>only inside your own platform</b> — KYC at the door, no external transfers. Simplest compliance · <b>no outside liquidity</b> by design.</p>
+      </div>
+      <div class="card acc-orange" style="padding:28px 26px 24px;">
+        <div class="card-kicker">Model 04 · Open, gated primary</div>
+        <h3 style="font-size:27px;">Screen at the sale only</h3>
+        <p class="plain" style="font-size:19px;">Plain ERC-20, screening only at the initial sale. Easiest to ship — but <b>day two your token is with strangers you never screened.</b> The gap.</p>
       </div>
     </div>
-    <p class="footnote reveal r4">Enegra runs on ERC-3643 — <b>the transfer restriction is the contract.</b></p>
+    <p class="footnote reveal r4">Find the model your asset, your buyers and your regulator <b>all accept</b> — then write it into the design, <span class="nb">not the FAQ.</span></p>
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">44 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">45 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s45">
-  <div class="ghost">45</div>
+<section class="slide" id="s46">
+  <div class="ghost">46</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -2156,13 +2360,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">45 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">46 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s46">
-  <div class="ghost">46</div>
+<section class="slide" id="s47">
+  <div class="ghost">47</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -2172,38 +2376,36 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="stage">
     <div class="kicker reveal r1">Layer 04 · Custody — the choice</div>
-    <h2 class="head reveal r2">Custodian — or <em>self-custody</em>?</h2>
+    <h2 class="head reveal r2">Custody decides <em>who’s allowed</em> to buy.</h2>
     <div class="grid2 reveal r3">
-      <div class="card acc-navy">
-        <div class="card-kicker">Licensed custodian · DAC</div>
-        <h3>Someone else holds the keys</h3>
-        <ul>
-          <li><b>SC segregation rules</b> — client assets ring-fenced</li>
-          <li>Recoverable if the holder loses access</li>
-          <li>Cost + counterparty: you trust the custodian’s ops</li>
-        </ul>
-      </div>
       <div class="card acc-red">
         <div class="card-kicker">Self-custody · the holder’s own wallet</div>
-        <h3>The holder bears key risk</h3>
+        <h3>Easier to <em>market</em></h3>
         <ul>
-          <li>TCF tokens are <b>withdrawable — including self-custodial</b></li>
-          <li>Withdrawals leave through <b>KYT-screened routes</b></li>
-          <li>Lost keys = lost tokens. No help desk on-chain</li>
+          <li><b style="color:var(--green);">PRO</b> — crypto-native buyers love it · no custodian fees or dependency · holders feel real ownership</li>
+          <li><b style="color:var(--red);">CON</b> — lost keys = lost tokens · mainstream + institutional <b>won’t touch it</b> · KYT still needed on every withdrawal</li>
+        </ul>
+      </div>
+      <div class="card acc-navy">
+        <div class="card-kicker">Custodial · rent a licensed DAC — or get your own licence</div>
+        <h3>Opens the <em>masses</em></h3>
+        <ul>
+          <li><b style="color:var(--green);">PRO</b> — unlocks the <b>masses + traditional institutions</b> (they require regulated custody) · recoverable access · <b>SC segregation</b> ring-fences client assets (it saved the KDX clients)</li>
+          <li><b style="color:var(--red);">CON</b> — cost + counterparty ops risk · the own-licence route is <b>slow &amp; capital-heavy</b></li>
         </ul>
       </div>
     </div>
-    <p class="footnote reveal r4">Decide <b>who bears key risk</b> — then write it into the offer documents, not the FAQ.</p>
+    <p class="footnote reveal r4">Custody isn’t plumbing — it’s a <b>distribution choice</b>: it decides who’s <span class="nb">ALLOWED to buy from you.</span></p>
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">46 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">47 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s47">
-  <div class="ghost">47</div>
+<section class="slide" id="s48">
+  <div class="ghost">48</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -2223,13 +2425,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">47 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">48 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s48">
-  <div class="ghost">48</div>
+<section class="slide" id="s49">
+  <div class="ghost">49</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -2251,13 +2453,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">48 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">49 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide checkpoint" id="s49">
-  <div class="ghost">49</div>
+<section class="slide checkpoint" id="s50">
+  <div class="ghost">50</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -2291,15 +2493,14 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">49 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 04 — Launching a Token</span><span class="folio">50 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
 
 
-
-<section class="slide divider" id="s50">
+<section class="slide divider" id="s51">
   <div class="ghost">05</div>
   <div class="masthead">
     <div class="row">
@@ -2318,13 +2519,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">50 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">51 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s51">
-  <div class="ghost">51</div>
+<section class="slide" id="s52">
+  <div class="ghost">52</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -2345,13 +2546,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">51 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">52 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s52">
-  <div class="ghost">52</div>
+<section class="slide" id="s53">
+  <div class="ghost">53</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -2379,13 +2580,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">52 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">53 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s53">
-  <div class="ghost">53</div>
+<section class="slide" id="s54">
+  <div class="ghost">54</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -2417,13 +2618,13 @@ body.editing .slide.active{ outline:none; }
   </div>
   <div class="colophon">
     <div class="line"></div>
-    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">53 <span>/ 66</span></span></div>
+    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">54 <span>/ 66</span></span></div>
   </div>
 </section>
 
 
-<section class="slide" id="s54">
-  <div class="ghost">54</div>
+<section class="slide" id="s55">
+  <div class="ghost">55</div>
   <div class="masthead">
     <div class="row">
       <div class="wm" role="img" aria-label="pitchIN"></div>
@@ -2440,34 +2641,6 @@ body.editing .slide.active{ outline:none; }
       <li><b>Blockchain Capital’s fund token traded at ~50% below NAV</b> — liquid in theory, discounted in practice.</li>
     </ul>
     <p class="footnote reveal r4">Tokenisation promises liquidity. <b>Liquidity comes from buyers — not from tokens.</b></p>
-  </div>
-  <div class="colophon">
-    <div class="line"></div>
-    <div class="row"><span>Segment 05 — Is It Actually Worth It?</span><span class="folio">54 <span>/ 66</span></span></div>
-  </div>
-</section>
-
-
-<section class="slide" id="s55">
-  <div class="ghost">55</div>
-  <div class="masthead">
-    <div class="row">
-      <div class="wm" role="img" aria-label="pitchIN"></div>
-      <div class="section">Is It Actually Worth It?</div>
-    </div>
-    <div class="line"></div>
-  </div>
-  <div class="stage">
-    <div class="kicker reveal r1">Reference · the worth-it scorecard</div>
-    <h2 class="head reveal r2" style="font-size:72px;">Five rows. Score <em>honestly</em>.</h2>
-    <div class="ref reveal r3" style="margin-top:32px;">
-      <div class="rrow"><div class="rlab">1 · Distribution</div><div class="rval">Do you need reach you <b>can’t get conventionally</b>?</div></div>
-      <div class="rrow"><div class="rlab">2 · Liquidity</div><div class="rval">Will a <b>real</b> secondary market exist — buyers, not hope?</div></div>
-      <div class="rrow"><div class="rlab">3 · Compliance</div><div class="rval">Is the budget there — fees, counsel, audits, reporting?</div></div>
-      <div class="rrow"><div class="rlab">4 · Capacity</div><div class="rval">Tech &amp; ops in-house — <b>or partners lined up</b>?</div></div>
-      <div class="rrow"><div class="rlab">5 · Community</div><div class="rval">Genuine utility, and a crowd that <b>wants</b> the token?</div></div>
-    </div>
-    <p class="footnote reveal r4">The app walks these five with you — <b>at the final checkpoint.</b></p>
   </div>
   <div class="colophon">
     <div class="line"></div>
@@ -2780,13 +2953,13 @@ body.editing .slide.active{ outline:none; }
       <div class="logo-full reveal r1" role="img" aria-label="pitchIN logo" style="margin-bottom:40px;"></div>
       <h2 class="reveal r2" style="font-family:var(--serif); font-optical-sizing:auto; font-size:96px; font-weight:540; letter-spacing:-0.02em; line-height:1.06; color:var(--navy);">Whichever route lit up — <em style="font-style:italic; font-weight:440; color:var(--red);">talk</em> to us.</h2>
       <p class="lede reveal r3" style="margin-top:34px;">pitchIN is the private fundraising platform — equity, token, debt, and the liquidity after. Bring your Raise Route card to the conversation.</p>
-      <p class="reveal r4" style="margin-top:44px; font-size:21px; color:var(--ink);"><b style="color:var(--navy);">Nicholas Chong</b><span style="color:#c5c1b9; margin:0 14px;">·</span>VP of Commercial &amp; Product, pitchIN<span style="color:#c5c1b9; margin:0 14px;">·</span><span style="font-family:var(--mono); font-size:17px; color:var(--teal);">pitchin.my</span></p>
+      <p class="reveal r4" style="margin-top:44px; font-size:21px; color:var(--ink);"><b style="color:var(--navy);">Nicholas Chong</b><span style="color:#c5c1b9; margin:0 14px;">·</span>VP of Commercial &amp; Product, pitchIN<span style="color:#c5c1b9; margin:0 14px;">·</span><span style="font-family:var(--mono); font-size:17px; color:var(--teal);">pitchin.my</span><span style="color:#c5c1b9; margin:0 14px;">·</span><span style="font-family:var(--mono); font-size:17px; color:var(--teal);">humancard.me/profile/nicholas</span></p>
     </div>
     <div class="qr-chip reveal r5" style="justify-self:end;">
       <img class="qr-img" alt="QR code — raise-route companion app" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUoAAAFKCAIAAAD0S4FSAAAGQklEQVR4nO3dQW7kNhBA0XGQSwS6UI6cCzVyDGU7QIJGPJwaUt/v7eWW5P5gLwrkx33f34Ci33bfADBF3pAlb8iSN2TJG7LkDVnyhix5Q5a8IUvekCVvyJI3ZMkbsuQNWfKGLHlDlrwhS96QJW/I+n3l4uuPP7+1vP7+a8vnvn+Tc3d15n9w5XnPfKJdb8PqDVnyhix5Q5a8IUvekCVvyJI3ZMkbsuQNWUtTa2dOgO2aalr5y7ve1dx82Jl/+fXFvpNWb8iSN2TJG7LkDVnyhix5Q5a8IUvekCVvyBqcWts1qbNrZ7L3n7vyvHOfO3ftE3dEux74nXzP6g1Z8oYseUOWvCFL3pAlb8iSN2TJG7LkDVnbptZ6ds2lvTd37Zn3zPes3pAlb8iSN2TJG7LkDVnyhix5Q5a8IUvekGVq7RfZtQPc3D2fuacd37N6Q5a8IUvekCVvyJI3ZMkbsuQNWfKGLHlD1rapta82e7QyW7brXe2ah9t1fugr9520ekOWvCFL3pAlb8iSN2TJG7LkDVnyhix5Q9bg1Nqu2aNd5s7T7F27y3XkXc2xekOWvCFL3pAlb8iSN2TJG7LkDVnyhix5Q9bS1Fpvb6on6p2nuXLPT3zeOVZvyJI3ZMkbsuQNWfKGLHlDlrwhS96QJW/I+rjv+4cv7u3FtTLzdOa5lnMzbbt2cVu5q112zdJZvSFL3pAlb8iSN2TJG7LkDVnyhix5Q5a8IWtpau2JU00rViaids2H7fLE6bFr03ue+1yrN2TJG7LkDVnyhix5Q5a8IUvekCVvyJI3ZC2dELprqmluIur9hFBv8mzXHN6uCbAzzb0NqzdkyRuy5A1Z8oYseUOWvCFL3pAlb8iSN2QNTq2duQfYrtmyJ86lreidD3s9cO9AqzdkyRuy5A1Z8oYseUOWvCFL3pAlb8iSN2QNTq2ded5ib9aqN4ll3vFnsXpDlrwhS96QJW/IkjdkyRuy5A1Z8oYseUPWx33fP3zx3NxSb+Jt5XPnZunOnNJ74l2tmPu2W70hS96QJW/IkjdkyRuy5A1Z8oYseUOWvCFraWptzhPn4c6ceFtx5nteceUm3t6zekOWvCFL3pAlb8iSN2TJG7LkDVnyhix5Q9a2E0J3/eVdp17usvK8K29j13s+8z94bborqzdkyRuy5A1Z8oYseUOWvCFL3pAlb8iSN2QNnhDaO09zzplnnq544oTfmd/2FVZvyJI3ZMkbsuQNWfKGLHlDlrwhS96QJW/IGtxr7YnTVHPzcHOzdCt7nj3xNNVdXmP/wbn3bPWGLHlDlrwhS96QJW/IkjdkyRuy5A1Z8oaswam1M/c8m/vcM2fa3pubtXrid+O1aUc0J4QCn+bHOWTJG7LkDVnyhix5Q5a8IUvekCVvyNq219p7Z+4QNve5Z86lfbUZr2vhPzg3s7jC6g1Z8oYseUOWvCFL3pAlb8iSN2TJG7LkDVmHTq3NmZsfmrv2zF3NzpwO3OU68k1avSFL3pAlb8iSN2TJG7LkDVnyhix5Q5a8Ievjvu/d9/AYc9NFZ56JeebucV9tHu5lag34Nz/OIUvekCVvyJI3ZMkbsuQNWfKGLHlD1tLU2plTPr2TSc98z7ueyKTd/2f1hix5Q5a8IUvekCVvyJI3ZMkbsuQNWfKGrMETQuf2xDrzJMcnzmk9cVpu17futWmPN3utAf/Bj3PIkjdkyRuy5A1Z8oYseUOWvCFL3pA1OLX23hNPkJyzcs9zM21zZ4Cu/OUzZ+musbexwuoNWfKGLHlDlrwhS96QJW/IkjdkyRuy5A1Z26bW+DW7bT1xr7Uz5w6vsbdhrzXg0/w4hyx5Q5a8IUvekCVvyJI3ZMkbsuQNWabWfpq5Pc/mrj1zemzX8+5irzXg0/w4hyx5Q5a8IUvekCVvyJI3ZMkbsuQNWdum1s7cT+uJc2m997xi7nmvB87SWb0hS96QJW/IkjdkyRuy5A1Z8oYseUOWvCFrcGrtibte7XqiXfulnflEZ1772jR3uMLqDVnyhix5Q5a8IUvekCVvyJI3ZMkbsuQNWR/3fe++B2CE1Ruy5A1Z8oYseUOWvCFL3pAlb8iSN2TJG7LkDVnyhix5Q5a8IUvekCVvyJI3ZMkbsuQNWfKGb1X/AEslJvPRrfBHAAAAAElFTkSuQmCC">
       <div class="txt">
         <div class="scan">Your Raise Route</div>
-        <div class="hint">ncih.github.io/raise-route<br>Card + slides + contact.</div>
+        <div class="hint">ncih.github.io/raise-route<br>Card + slides + my contact card.</div>
       </div>
     </div>
   </div>
@@ -2825,6 +2998,20 @@ body.editing .slide.active{ outline:none; }
 <div class="edit-hotzone" id="editHotzone"></div>
 <button class="edit-toggle" id="editToggle" title="Edit mode (E)">✏️</button>
 <div class="edit-banner" id="editBanner">Edit mode — click text to edit · Ctrl/Cmd+S to save · E to exit</div>
+
+<button class="qa-fab" id="qaFab" type="button" aria-label="Show questions from the room">
+  <span class="qa-dot" aria-hidden="true"></span>
+  <span>Questions</span>
+  <span class="qa-count" id="qaCount">0</span>
+</button>
+<div class="qa-overlay" id="qaOverlay" role="dialog" aria-modal="true" aria-label="Questions from the room">
+  <div class="qa-head">
+    <div class="qa-title">From the <em>room</em></div>
+    <button class="qa-close" id="qaClose" type="button" aria-label="Close (Esc)">×</button>
+  </div>
+  <ul class="qa-list" id="qaList"></ul>
+  <div class="qa-hint">Tap a question to mark it answered · Esc to return to the deck</div>
+</div>
 
 <script>
 /* ===========================================
@@ -2969,6 +3156,114 @@ document.addEventListener('keydown', (e) => {
 
 const deck = new SlidePresentation();
 window.deck = deck;   // exposed for scripted verification
+</script>
+
+<script>
+(function(){
+  "use strict";
+  var SUPA_URL = "https://hhqlzcvwalwuxrrolevv.supabase.co";
+  var SUPA_KEY = "sb_publishable_oNq7GfsgbZKELDhQbaRz_g_ctOO0v0p";
+  var REST = SUPA_URL + "/rest/v1/questions";
+  var HEADERS = { apikey: SUPA_KEY, Authorization: "Bearer " + SUPA_KEY };
+
+  var fab = document.getElementById("qaFab");
+  var count = document.getElementById("qaCount");
+  var overlay = document.getElementById("qaOverlay");
+  var listEl = document.getElementById("qaList");
+  var closeBtn = document.getElementById("qaClose");
+  if (!fab || !overlay || !listEl) return;
+
+  var questions = [];
+  var open = false;
+  var busy = {};
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+
+  function render(){
+    var n = questions.length;
+    count.textContent = String(n);
+    fab.classList.toggle("show", n > 0);
+    if (n === 0 && open) closeOverlay();
+    if (!open) return;
+    listEl.innerHTML = questions.map(function(q){
+      var who = [];
+      if (q.name) who.push("<b>" + esc(q.name) + "</b>");
+      if (q.company) who.push(esc(q.company));
+      var meta = who.length ? who.join(" · ") : "Anonymous";
+      return '<li data-id="' + esc(q.id) + '">' +
+        '<p class="qa-q">' + esc(q.text) + '</p>' +
+        '<div class="qa-who">' + meta + '</div>' +
+      '</li>';
+    }).join("");
+  }
+
+  function openOverlay(){
+    if (!questions.length) return;
+    open = true;
+    overlay.classList.add("open");
+    render();
+  }
+  function closeOverlay(){
+    open = false;
+    overlay.classList.remove("open");
+  }
+
+  function markAnswered(id, li){
+    if (busy[id]) return;
+    busy[id] = true;
+    if (li) li.classList.add("answering");
+    fetch(REST + "?id=eq." + encodeURIComponent(id), {
+      method: "PATCH",
+      headers: Object.assign({ "Content-Type": "application/json", Prefer: "return=minimal" }, HEADERS),
+      body: JSON.stringify({ answered: true })
+    }).then(function(res){
+      if (!res.ok) throw new Error("patch " + res.status);
+      questions = questions.filter(function(q){ return String(q.id) !== String(id); });
+      delete busy[id];
+      render();
+    }).catch(function(){
+      delete busy[id];
+      if (li) li.classList.remove("answering");
+    });
+  }
+
+  function poll(){
+    fetch(REST + "?select=id,created_at,name,company,text,answered&answered=eq.false&order=created_at.asc", {
+      headers: HEADERS
+    }).then(function(res){
+      if (!res.ok) throw new Error("get " + res.status);
+      return res.json();
+    }).then(function(rows){
+      questions = (rows || []).filter(function(q){ return !busy[q.id]; });
+      render();
+    }).catch(function(){ /* offline: leave state as-is, fail silent */ });
+  }
+
+  fab.addEventListener("click", openOverlay);
+  closeBtn.addEventListener("click", closeOverlay);
+  listEl.addEventListener("click", function(e){
+    var li = e.target.closest("li[data-id]");
+    if (li) markAnswered(li.getAttribute("data-id"), li);
+  });
+
+  document.addEventListener("keydown", function(e){
+    if (!open && !overlay.classList.contains("open")) return;
+    if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); closeOverlay(); return; }
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowUp" ||
+        e.key === "ArrowDown" || e.key === " " || e.key === "PageUp" ||
+        e.key === "PageDown" || e.key === "Home" || e.key === "End") {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true);
+
+  poll();
+  setInterval(poll, 4000);
+})();
 </script>
 
 </body>

@@ -388,7 +388,7 @@
   .qa-sent.show{ display:block; }
 
   /* ---------- final route card ---------- */
-  .cardwrap{ margin-top:24px; }
+  .cardwrap{ margin-top:24px; padding-bottom:96px; }
   .route-card{
     background:#fff;
     border:1px solid var(--hairline);
@@ -575,15 +575,22 @@
   /* ================= state ================= */
   var DEFAULT = {
     screen:"register", lead:{}, answers:{},
-    cp1:{ instrument:null, rails:[] },
+    cp0:{ raise:null, sector:null },
+    cp1:{ instrument:null, rails:[], timeline:null },
     cp2:{ i:0, q:{} },
-    cp3:{ layers:[] },
+    cp3:{ layers:[], approach:null },
     cp4:{ i:0, pts:[] }
   };
   function loadState(){
     try{
       var s = JSON.parse(localStorage.getItem("rr_state_v2"));
-      if(s && s.screen) return s;
+      if(s && s.screen){
+        // defensive defaults — older saved states predate these keys
+        if(!s.cp0) s.cp0 = { raise:null, sector:null };
+        if(!s.cp1) s.cp1 = { instrument:null, rails:[] };
+        if(!s.cp3) s.cp3 = { layers:[] };
+        return s;
+      }
     }catch(e){}
     return JSON.parse(JSON.stringify(DEFAULT));
   }
@@ -661,7 +668,7 @@
   /* session_state (single row id=1) holds the highest checkpoint Nicholas has
      opened. Steps beyond it wait. FAIL-OPEN: any fetch failure => allow. */
   var GATE = { open:null }; // null = unknown => open
-  var GATE_NEED = { cp1a:1, cp1b:1, cp2:2, cp3:3, cp4:4 };
+  var GATE_NEED = { cp1a:1, cp1b:1, cp1c:1, cp2:2, cp3:3, cp3b:3, cp3c:3, cp4:4 };
   function gateClosed(need){
     return GATE.open !== null && GATE.open < need;
   }
@@ -736,6 +743,38 @@
     { k:"3-10m",  n:"RM3 – 10M" },
     { k:"gt10m",  n:"> RM10M" },
     { k:"not-raising", n:"Not raising right now" }
+  ];
+  var SECTORS = [
+    { k:"tech",     n:"Tech / software", sub:"Code, platforms, SaaS — ships fast, scales faster." },
+    { k:"consumer", n:"Consumer — F&B, retail, brands", sub:"Real customers, real margins, real shelf space." },
+    { k:"services", n:"Services / B2B", sub:"You sell expertise or outcomes — businesses pay you." },
+    { k:"assets",   n:"Asset-heavy — property, energy, commodities", sub:"Big things that hold value — and eat capital." },
+    { k:"web3",     n:"Web3-native", sub:"The token isn't a feature — it's the point." },
+    { k:"other",    n:"Something else", sub:"Doesn't fit a box — the best ones rarely do." }
+  ];
+  var RAISED = [
+    { k:"no",        n:"Not yet — first raise", sub:"Everyone starts here. Today is a good day to start right." },
+    { k:"ff-angels", n:"Friends, family or angels", sub:"The believers' round — they backed you, not the deck." },
+    { k:"vc",        n:"VC / institutional", sub:"You've survived a term sheet — the scars are useful." },
+    { k:"crowd",     n:"Crowdfunding — ECF / P2P / token", sub:"You've raised from the crowd — you know the drill." },
+    { k:"grants",    n:"Grants only", sub:"Non-dilutive so far — you still own all of it." }
+  ];
+  var TIMELINES = [
+    { k:"3m",   n:"Within 3 months", sub:"Urgent — the rail you pick has to move at your speed." },
+    { k:"12m",  n:"3–12 months", sub:"Room to do it properly — most regulated raises live here." },
+    { k:"later",n:"12+ months out", sub:"Planning ahead — the founders who win usually are." },
+    { k:"none", n:"No timeline — exploring", sub:"No clock ticking — just mapping the terrain." }
+  ];
+  var APPROACHES = [
+    { k:"inhouse",    n:"Build it in-house", sub:"Full control, full cost — you own every layer and every bug." },
+    { k:"rent",       n:"Partner — rent licensed rails", sub:"Someone else holds the licence — you keep building the business." },
+    { k:"ownlicence", n:"Get our own licence(s)", sub:"The long road — months of applications, but the rails are yours." },
+    { k:"unsure",     n:"Don't know yet", sub:"Fair — it's a strategy question, and today is for it." }
+  ];
+  var COUNSEL = [
+    { k:"yes",  n:"Yes — engaged", sub:"Rare and valuable — keep them close." },
+    { k:"know", n:"Know someone — not engaged", sub:"A name in the phone is a start — a retainer is better." },
+    { k:"no",   n:"No — I'd need a referral", sub:"Most of the room is with you — ask us, we know who's done it." }
   ];
 
   /* ---------- perimeter verdict (Malaysia-localised; pure) ---------- */
@@ -853,7 +892,7 @@
   var app = document.getElementById("app");
   function esc(s){ return ("" + (s == null ? "" : s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 
-  var PREV = { warmup:"register", cp1a:"warmup", cp1b:"cp1a", cp2:"cp1b", cp3:"cp2", cp4:"cp3", card:"cp4" };
+  var PREV = { warmup:"register", cp0b:"warmup", cp0c:"cp0b", cp1a:"cp0c", cp1b:"cp1a", cp1c:"cp1b", cp2:"cp1c", cp3:"cp2", cp3b:"cp3", cp3c:"cp3b", cp4:"cp3c", card:"cp4" };
 
   function backHTML(){ return '<button type="button" class="backlink" id="backBtn">&#8592; Back</button>'; }
   function bindBack(fn){
@@ -1052,15 +1091,52 @@
 
       case "warmup": {
         chipStep({
-          kicker:"Warm-up", cp:"CP0",
+          kicker:"Warm-up", cp:"CP0 · 1 of 3",
           back:function(){ nav("register"); },
           title:"What are you hoping to <em>raise</em> in the next 12 months?",
           list: WARMUP, tags:false,
-          selected: S.answers.cp0 && S.answers.cp0.raise,
+          selected: S.cp0.raise || (S.answers.cp0 && S.answers.cp0.raise),
           cta:"That’s my number",
           onDone: function(k){
             enqueue({ t:"lead", p:{ device_id:DEVICE, name:S.lead.name, company:S.lead.company, email:S.lead.email, role:S.lead.role || null } });
-            saveAnswer("cp0", { raise:k, name:S.lead.name, company:S.lead.company });
+            S.cp0.raise = k; save();
+            nav("cp0b");
+          }
+        });
+        break;
+      }
+
+      case "cp0b": {
+        chipStep({
+          kicker:"Warm-up", cp:"CP0 · 2 of 3",
+          back:function(){ nav("warmup"); },
+          title:"What are you <em>building?</em>",
+          list: SECTORS, tags:false,
+          selected: S.cp0.sector || (S.answers.cp0 && S.answers.cp0.sector),
+          cta:"That’s us",
+          onDone: function(k){
+            S.cp0.sector = k; save();
+            nav("cp0c");
+          }
+        });
+        break;
+      }
+
+      case "cp0c": {
+        chipStep({
+          kicker:"Warm-up", cp:"CP0 · 3 of 3",
+          back:function(){ nav("cp0b"); },
+          title:"Have you raised <em>outside money</em> before?",
+          list: RAISED, tags:false,
+          selected: S.answers.cp0 && S.answers.cp0.raised,
+          cta:"Lock it in",
+          onDone: function(k){
+            saveAnswer("cp0", {
+              raise: S.cp0.raise || (S.answers.cp0 && S.answers.cp0.raise) || null,
+              sector: S.cp0.sector || (S.answers.cp0 && S.answers.cp0.sector) || null,
+              raised: k,
+              name: S.lead.name, company: S.lead.company
+            });
             nav("cp1a");
           }
         });
@@ -1069,8 +1145,8 @@
 
       case "cp1a": {
         chipStep({
-          kicker:"Checkpoint 1", cp:"Your raise",
-          back:function(){ nav("warmup"); },
+          kicker:"Checkpoint 1", cp:"Your raise · 1 of 3",
+          back:function(){ nav("cp0c"); },
           title:"What would you actually <em>sell</em> to funders?",
           list: INSTRUMENTS, tags:true,
           selected: S.cp1.instrument || (S.answers.cp1 && S.answers.cp1.instrument),
@@ -1085,7 +1161,7 @@
 
       case "cp1b": {
         chipStepMulti({
-          kicker:"Checkpoint 1", cp:"Your raise",
+          kicker:"Checkpoint 1", cp:"Your raise · 2 of 3",
           back:function(){ nav("cp1a"); },
           title:"Which rails are you <em>considering?</em>",
           lede:"Pick all that apply — this is a landscape question, not a commitment.",
@@ -1095,7 +1171,27 @@
           pickhint:"Multi-select — tap every rail on your shortlist.",
           onDone: function(sel){
             S.cp1.rails = sel; save();
-            saveAnswer("cp1", { instrument:S.cp1.instrument, rails:sel });
+            nav("cp1c");
+          }
+        });
+        break;
+      }
+
+      case "cp1c": {
+        chipStep({
+          kicker:"Checkpoint 1", cp:"Your raise · 3 of 3",
+          back:function(){ nav("cp1b"); },
+          title:"When do you need the money <em>in the bank?</em>",
+          list: TIMELINES, tags:false,
+          selected: S.cp1.timeline || (S.answers.cp1 && S.answers.cp1.timeline),
+          cta:"Lock it in",
+          onDone: function(k){
+            S.cp1.timeline = k; save();
+            saveAnswer("cp1", {
+              instrument: S.cp1.instrument || (S.answers.cp1 && S.answers.cp1.instrument) || null,
+              rails: (S.cp1.rails && S.cp1.rails.length ? S.cp1.rails : (S.answers.cp1 && S.answers.cp1.rails)) || [],
+              timeline: k
+            });
             nav("cp2");
           }
         });
@@ -1118,7 +1214,7 @@
             "</div>";
           bindBack(function(){
             if(i > 0){ S.cp2.i = i - 1; save(); render(); }
-            else nav("cp1b");
+            else nav("cp1c");
           });
           app.querySelectorAll(".yn button").forEach(function(b){
             b.addEventListener("click", function(){
@@ -1157,7 +1253,7 @@
 
       case "cp3": {
         chipStepMulti({
-          kicker:"Checkpoint 3", cp:"Build readiness",
+          kicker:"Checkpoint 3", cp:"Build readiness · 1 of 3",
           back:function(){ nav("cp2"); },
           title:"Where is your stack <em>weakest?</em>",
           lede:"Every token launch stands on these layers. Founders always know the answer.",
@@ -1167,7 +1263,42 @@
           pickhint:"Pick up to 2 — or “partner for all of it”.",
           onDone: function(sel){
             S.cp3.layers = sel; save();
-            saveAnswer("cp3", { layers:sel });
+            nav("cp3b");
+          }
+        });
+        break;
+      }
+
+      case "cp3b": {
+        chipStep({
+          kicker:"Checkpoint 3", cp:"Build readiness · 2 of 3",
+          back:function(){ nav("cp3"); },
+          title:"How would you <em>stand the stack up?</em>",
+          list: APPROACHES, tags:false,
+          selected: S.cp3.approach || (S.answers.cp3 && S.answers.cp3.approach),
+          cta:"That’s the plan",
+          onDone: function(k){
+            S.cp3.approach = k; save();
+            nav("cp3c");
+          }
+        });
+        break;
+      }
+
+      case "cp3c": {
+        chipStep({
+          kicker:"Checkpoint 3", cp:"Build readiness · 3 of 3",
+          back:function(){ nav("cp3b"); },
+          title:"Do you have legal counsel who’s done <em>digital-asset</em> work?",
+          list: COUNSEL, tags:false,
+          selected: S.answers.cp3 && S.answers.cp3.counsel,
+          cta:"Lock it in",
+          onDone: function(k){
+            saveAnswer("cp3", {
+              layers: (S.cp3.layers && S.cp3.layers.length ? S.cp3.layers : (S.answers.cp3 && S.answers.cp3.layers)) || [],
+              approach: S.cp3.approach || (S.answers.cp3 && S.answers.cp3.approach) || null,
+              counsel: k
+            });
             nav("cp4");
           }
         });
@@ -1194,7 +1325,7 @@
             "</div>";
           bindBack(function(){
             if(si > 0){ S.cp4.i = si - 1; save(); render(); }
-            else nav("cp3");
+            else nav("cp3c");
           });
           app.querySelectorAll(".rate button").forEach(function(b){
             b.addEventListener("click", function(){
@@ -1262,6 +1393,7 @@
               "</div>" +
               '<div class="rc-rec">' + recommendation() + "</div>" +
               '<div class="rc-foot"><span>pitchIN — the private fundraising platform</span><span class="talk">Talk to us: <span class="u">pitchin.my</span></span></div>' +
+              '<a class="rc-foot" href="https://humancard.me/profile/nicholas" target="_blank" rel="noopener" style="text-decoration:none"><span>Grab Nicholas’s contact</span><span class="talk">→ <span class="u">humancard.me/profile/nicholas</span></span></a>' +
             "</div></div>" +
             '<div class="savehint" id="saveHint">Couldn’t render the image on this phone — just screenshot this card. It’s yours.</div>' +
             '<div class="actions">' +

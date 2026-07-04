@@ -66,6 +66,22 @@
   }
   header .live .dot.stale{ background:#E18437; }
   @keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:.25} }
+  header .qachip{
+    font-family:var(--sans);
+    font-size:10.5px; font-weight:600; letter-spacing:0.18em;
+    text-transform:uppercase;
+    background:transparent; color:var(--fainter);
+    border:1px solid var(--hairline);
+    padding:7px 14px;
+    cursor:pointer;
+    transition:all .2s;
+    white-space:nowrap;
+  }
+  header .qachip:hover{ border-color:var(--faint); color:var(--faint); }
+  header .qachip.hot{
+    background:var(--red); border-color:var(--red); color:#fff;
+    box-shadow:0 0 0 2px rgba(228,85,91,.35);
+  }
   header .line{ height:1px; background:var(--hairline); margin-top:14px; }
 
   /* ---------- gate control strip ---------- */
@@ -176,6 +192,28 @@
     font-family:var(--serif); font-style:italic; font-size:13px;
     color:var(--fainter);
   }
+  .pager{ display:none; align-items:center; gap:10px; }
+  body.focus .panel.focused .pager.multi{ display:flex; }
+  .pager button{
+    font-family:var(--sans);
+    font-size:13px; font-weight:600; line-height:1;
+    background:transparent; color:var(--faint);
+    border:1px solid var(--hairline);
+    padding:5px 13px;
+    cursor:pointer;
+    transition:all .15s;
+  }
+  .pager button:hover{ border-color:var(--faint); color:var(--paper); }
+  .pager .pgtxt{
+    font-family:var(--serif); font-style:italic;
+    font-size:14px; color:var(--faint);
+    white-space:nowrap;
+  }
+  .morehint{
+    margin-top:8px; text-align:right; flex:none;
+    font-family:var(--serif); font-style:italic;
+    font-size:11.5px; color:var(--fainter);
+  }
   .panel h2{
     font-family:var(--serif); font-optical-sizing:auto;
     font-size:18px; font-weight:520; letter-spacing:-0.01em;
@@ -260,19 +298,15 @@
     display:flex; height:100%;
     padding:34px 60px 30px;
   }
-  body.focus .panel.focused h2{ font-size:42px; margin-bottom:24px; }
+  body.focus .panel.focused h2{ font-size:clamp(26px, 4.8vh, 42px); margin-bottom:clamp(10px, 2.4vh, 24px); }
   body.focus .panel.focused .pk{ font-size:12px; }
-  body.focus .panel.focused .bars{ gap:12px; }
-  body.focus .panel.focused .bars.split{ gap:60px; }
+  body.focus .panel.focused .bars{ gap:clamp(6px, 1.3vh, 12px); }
   body.focus .panel.focused .gsub{ font-size:12px; margin:10px 0 4px; }
-  body.focus .panel.focused .ggroup{ gap:12px; }
-  body.focus .panel.focused .bar,
-  body.focus .panel.focused .bars.split .bar{ grid-template-columns:minmax(0,320px) 1fr 90px; gap:22px; }
-  body.focus .panel.focused .bar .blab,
-  body.focus .panel.focused .bars.split .bar .blab{ font-size:20px; }
-  body.focus .panel.focused .bar .btrack{ height:30px; }
-  body.focus .panel.focused .bar .bnum,
-  body.focus .panel.focused .bars.split .bar .bnum{ font-size:44px; }
+  body.focus .panel.focused .ggroup{ gap:clamp(6px, 1.3vh, 12px); }
+  body.focus .panel.focused .bar{ grid-template-columns:minmax(0,320px) 1fr 90px; gap:22px; }
+  body.focus .panel.focused .bar .blab{ font-size:clamp(14px, 2.4vh, 20px); }
+  body.focus .panel.focused .bar .btrack{ height:clamp(15px, 2.9vh, 30px); }
+  body.focus .panel.focused .bar .bnum{ font-size:clamp(22px, 4.2vh, 44px); }
   body.focus .panel.focused .empty{ font-size:24px; }
   body.focus .panel.focused .qitem{ padding:14px 20px; }
   body.focus .panel.focused .qitem .qwho{ font-size:13px; }
@@ -293,6 +327,7 @@
       <div class="wordmark"><img src="pitchin_logo_white.svg" alt="pitchIN"></div>
       <h1>Raise Route — <em>Live Room Map</em></h1>
       <div class="live"><div class="dot" id="liveDot"></div><span id="liveLbl">Waiting…</span></div>
+      <button class="qachip" id="qaChip" title="Open the Q&amp;A feed (Q)">Q&amp;A · <span id="qaWait">0</span> waiting</button>
     </div>
     <div class="line"></div>
   </header>
@@ -309,7 +344,7 @@
 
   <footer>
     <span>Ready to Raise? — Fundraising &amp; STO Readiness in Malaysia · Token-X Accelerator</span>
-    <span class="keys">Press <b>0–4</b> to focus a checkpoint · <b>Q</b> for Q&amp;A · <b>Esc</b> for the grid</span>
+    <span class="keys">Press <b>0–4</b> to focus a checkpoint · <b>←/→</b> to flip pages · <b>Q</b> for Q&amp;A · <b>Esc</b> for the grid</span>
   </footer>
 </div>
 
@@ -333,6 +368,21 @@
       ["gt10m","> RM10M"],
       ["not-raising","Not raising right now"]
     ],
+    sector: [
+      ["tech","Tech / software"],
+      ["consumer","Consumer — F&amp;B, retail, brands"],
+      ["services","Services / B2B"],
+      ["assets","Asset-heavy — property, energy…"],
+      ["web3","Web3-native"],
+      ["other","Something else","grey"]
+    ],
+    raised: [
+      ["no","Not yet — first raise"],
+      ["ff-angels","Friends, family or angels"],
+      ["vc","VC / institutional"],
+      ["crowd","Crowdfunding — ECF/P2P/token"],
+      ["grants","Grants only","grey"]
+    ],
     inst: [
       ["equity","Equity — a share"],
       ["debt","Debt — repay with interest"],
@@ -349,6 +399,12 @@
       ["offshore","Labuan / offshore"],
       ["none","None yet","grey"]
     ],
+    timeline: [
+      ["3m","Within 3 months"],
+      ["12m","3–12 months"],
+      ["later","12+ months out"],
+      ["none","No timeline — exploring","grey"]
+    ],
     cp2: [
       ["fundraising","Fundraising — security","red"],
       ["asset","Asset-linked — wrapper first","grey"],
@@ -362,6 +418,17 @@
       ["custody","Custody — incl. self-custody"],
       ["partner","Partner for all of it","grey"]
     ],
+    approach: [
+      ["inhouse","Build it in-house"],
+      ["rent","Partner — rent licensed rails"],
+      ["ownlicence","Get our own licence(s)"],
+      ["unsure","Don't know yet","grey"]
+    ],
+    counsel: [
+      ["yes","Yes — engaged","green"],
+      ["know","Know someone — not engaged"],
+      ["no","No — I'd need a referral","red"]
+    ],
     cp4: [
       ["launch","Launch-worthy (7–10)","green"],
       ["borderline","Borderline (4–6)","grey"],
@@ -369,27 +436,41 @@
     ]
   };
 
-  /* panels 0–4 = checkpoints; panel 5 = Q&A */
+  /* panels 0–4 = checkpoints; panel 5 = Q&A.
+     Each checkpoint = pages[] — one tally per page in focus mode;
+     the grid shows page 0 + a "+N more on focus" hint. */
   var PANELS = [
-    { pk:"Warm-up · CP0", h:"Raising in the next <em>12 months</em>",
-      groups:[ { src:"cp0" } ] },
-    { pk:"Checkpoint 1", h:"Your raise — <em>instrument &amp; rails</em>", split:true,
-      groups:[ { label:"Instrument", src:"inst" }, { label:"Rails considering · multi", src:"rails" } ] },
-    { pk:"Checkpoint 2", h:"The perimeter <em>verdict</em>",
-      groups:[ { src:"cp2" } ] },
-    { pk:"Checkpoint 3", h:"Weakest <em>layers</em> · up to 2",
-      groups:[ { src:"cp3" } ] },
-    { pk:"Checkpoint 4", h:"Launching a token — <em>worth it?</em>",
-      groups:[ { src:"cp4" } ] }
+    { pk:"Warm-up · CP0", h:"Raising in the next <em>12 months</em>", pages:[
+        { h:"Raising in the next <em>12 months</em>", src:"cp0" },
+        { h:"Your <em>sector</em>", src:"sector" },
+        { h:"Raised capital <em>before?</em>", src:"raised" } ] },
+    { pk:"Checkpoint 1", h:"Your raise — <em>instrument &amp; rails</em>", pages:[
+        { h:"Your <em>instrument</em>", src:"inst" },
+        { h:"Rails you're <em>considering</em> · multi", src:"rails" },
+        { h:"Your <em>timeline</em>", src:"timeline" } ] },
+    { pk:"Checkpoint 2", h:"The perimeter <em>verdict</em>", pages:[
+        { h:"The perimeter <em>verdict</em>", src:"cp2" } ] },
+    { pk:"Checkpoint 3", h:"Weakest <em>layers</em> · up to 2", pages:[
+        { h:"Weakest <em>layers</em> · up to 2", src:"cp3" },
+        { h:"Build it or <em>rent it?</em>", src:"approach" },
+        { h:"Securities <em>counsel?</em>", src:"counsel" } ] },
+    { pk:"Checkpoint 4", h:"Launching a token — <em>worth it?</em>", pages:[
+        { h:"Launching a token — <em>worth it?</em>", src:"cp4" } ] }
   ];
 
   /* ---------- static scaffolding ---------- */
   var grid = document.getElementById("grid");
   grid.innerHTML = PANELS.map(function(p, i){
     return '<div class="panel" id="panel-' + i + '">' +
-      '<div class="phead"><div class="pk">' + p.pk + '</div><div class="key">' + i + '</div></div>' +
-      "<h2>" + p.h + "</h2>" +
-      '<div class="bars' + (p.split ? " split" : "") + '" id="bars-' + i + '"></div>' +
+      '<div class="phead"><div class="pk">' + p.pk + "</div>" +
+        '<div class="pager' + (p.pages.length > 1 ? " multi" : "") + '" id="pager-' + i + '">' +
+          '<button data-dir="-1" title="Previous page (←)">‹</button>' +
+          '<span class="pgtxt" id="pgtxt-' + i + '"></span>' +
+          '<button data-dir="1" title="Next page (→)">›</button>' +
+        "</div>" +
+        '<div class="key">' + i + "</div></div>" +
+      '<h2 id="ph-' + i + '">' + p.h + "</h2>" +
+      '<div class="bars" id="bars-' + i + '"></div>' +
     "</div>";
   }).join("") +
   '<div class="panel qa" id="panel-5">' +
@@ -476,22 +557,35 @@
     }).join("");
   }
 
+  function hasAny(agg, src){
+    var counts = agg.c[src];
+    for(var k in counts){ if(counts[k] > 0) return true; }
+    return false;
+  }
+
+  var lastAgg = null;      // cached tallies so page flips re-render instantly
+  var focused = null;      // focused panel index (0–5) or null = grid
+  var page = 0;            // current page of the focused checkpoint
+
   function renderPanels(agg){
+    lastAgg = agg;
     PANELS.forEach(function(p, i){
       var box = document.getElementById("bars-" + i);
-      var any = false;
-      p.groups.forEach(function(g){
-        var counts = agg.c[g.src];
-        for(var k in counts){ if(counts[k] > 0){ any = true; break; } }
-      });
-      if(!any){
+      var head = document.getElementById("ph-" + i);
+      var isFocus = focused === i;
+      var pg = isFocus ? p.pages[Math.min(page, p.pages.length - 1)] : p.pages[0];
+      head.innerHTML = isFocus ? pg.h : p.h;   // grid keeps the checkpoint title
+      var pgtxt = document.getElementById("pgtxt-" + i);
+      if(pgtxt) pgtxt.textContent = "page " + (isFocus ? (Math.min(page, p.pages.length - 1) + 1) : 1) + " of " + p.pages.length;
+      var anyAtAll = p.pages.some(function(g){ return hasAny(agg, g.src); });
+      if(!anyAtAll){
         box.innerHTML = '<div class="empty">Waiting for the room…</div>';
         return;
       }
-      box.innerHTML = p.groups.map(function(g){
-        var inner = (g.label ? '<div class="gsub">' + g.label + "</div>" : "") + barsHTML(g.src, OPTS[g.src], agg);
-        return p.split ? '<div class="ggroup">' + inner + "</div>" : inner;
-      }).join("");
+      var hint = (!isFocus && p.pages.length > 1)
+        ? '<div class="morehint">+' + (p.pages.length - 1) + " more on focus — press " + i + "</div>"
+        : "";
+      box.innerHTML = barsHTML(pg.src, OPTS[pg.src], agg) + hint;
       requestAnimationFrame(function(){
         box.querySelectorAll(".bfill").forEach(function(f){
           f.style.width = f.getAttribute("data-w") + "%";
@@ -503,21 +597,30 @@
   /* ---------- aggregation ---------- */
   function aggregate(rows){
     var agg = { registered:0, completed:0,
-      c:{ cp0:{}, inst:{}, rails:{}, cp2:{}, cp3:{}, cp4:{} } };
+      c:{ cp0:{}, sector:{}, raised:{}, inst:{}, rails:{}, timeline:{}, cp2:{}, cp3:{}, approach:{}, counsel:{}, cp4:{} } };
     function bump(src, key){
-      if(key == null) return;
+      if(key == null) return;  // old-shape rows missing a new field just skip that tally
       agg.c[src][key] = (agg.c[src][key] || 0) + 1;
     }
     (rows || []).forEach(function(r){
       var a = r.answer || {};
       switch(r.checkpoint){
-        case "cp0": agg.registered++; bump("cp0", a.raise); break;
+        case "cp0":
+          agg.registered++;
+          bump("cp0", a.raise);
+          bump("sector", a.sector);
+          bump("raised", a.raised);
+          break;
         case "cp1":
           bump("inst", a.instrument);
           (a.rails || []).forEach(function(k){ bump("rails", k); });
+          bump("timeline", a.timeline);
           break;
         case "cp2": bump("cp2", a.verdict); break;
-        case "cp3": (a.layers || []).forEach(function(k){ bump("cp3", k); });
+        case "cp3":
+          (a.layers || []).forEach(function(k){ bump("cp3", k); });
+          bump("approach", a.approach);
+          bump("counsel", a.counsel);
           break;
         case "cp4": bump("cp4", a.verdict); break;
         case "cp5": agg.completed++; break;
@@ -530,7 +633,10 @@
   var questions = [];
   function renderQA(){
     var box = document.getElementById("qlist");
-    document.getElementById("qcount").textContent = questions.filter(function(q){ return !q.answered; }).length;
+    var waiting = questions.filter(function(q){ return !q.answered; }).length;
+    document.getElementById("qcount").textContent = waiting;
+    document.getElementById("qaWait").textContent = waiting;
+    document.getElementById("qaChip").classList.toggle("hot", waiting > 0);
     if(!questions.length){
       box.innerHTML = '<div class="empty">No questions yet — the floor is quiet.</div>';
       return;
@@ -597,23 +703,53 @@
   poll();
   setInterval(poll, 4000);
 
-  /* ---------- keyboard: focus a panel ---------- */
+  /* ---------- focus mode + pagination ---------- */
   function focusPanel(i){
+    focused = i; page = 0;
     document.body.classList.add("focus");
     for(var j=0;j<=5;j++){
       document.getElementById("panel-" + j).classList.toggle("focused", j === i);
     }
+    if(lastAgg) renderPanels(lastAgg);
   }
+  function unfocus(){
+    focused = null; page = 0;
+    document.body.classList.remove("focus");
+    for(var j=0;j<=5;j++){
+      document.getElementById("panel-" + j).classList.remove("focused");
+    }
+    if(lastAgg) renderPanels(lastAgg);
+  }
+  function flipPage(dir){
+    if(focused === null || focused > 4) return;
+    var n = PANELS[focused].pages.length;
+    if(n < 2) return;
+    page = ((page + dir) % n + n) % n;  // wraps both ways
+    if(lastAgg) renderPanels(lastAgg);
+  }
+  PANELS.forEach(function(p, i){
+    document.getElementById("pager-" + i).querySelectorAll("button").forEach(function(b){
+      b.addEventListener("click", function(ev){
+        ev.stopPropagation();
+        flipPage(parseInt(b.getAttribute("data-dir"), 10));
+      });
+    });
+    document.getElementById("panel-" + i).addEventListener("click", function(){
+      if(focused !== i) focusPanel(i);
+    });
+  });
+  document.getElementById("qaChip").addEventListener("click", function(){ focusPanel(5); });
   document.addEventListener("keydown", function(e){
     if(e.key >= "0" && e.key <= "4"){
       focusPanel(parseInt(e.key, 10));
     } else if(e.key === "q" || e.key === "Q"){
       focusPanel(5);
+    } else if(e.key === "ArrowRight"){
+      flipPage(1);
+    } else if(e.key === "ArrowLeft"){
+      flipPage(-1);
     } else if(e.key === "Escape"){
-      document.body.classList.remove("focus");
-      for(var j=0;j<=5;j++){
-        document.getElementById("panel-" + j).classList.remove("focused");
-      }
+      unfocus();
     }
   });
 
