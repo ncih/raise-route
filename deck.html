@@ -3319,7 +3319,8 @@ window.deck = deck;   // exposed for scripted verification
   "use strict";
   var SUPA_URL = "https://hhqlzcvwalwuxrrolevv.supabase.co";
   var SUPA_KEY = "sb_publishable_oNq7GfsgbZKELDhQbaRz_g_ctOO0v0p";
-  var REST = SUPA_URL + "/rest/v1/questions";
+  var EVENT = "raise-route-readiness";            // shared presentation platform
+  var REST = SUPA_URL + "/rest/v1/pres_questions";
   var HEADERS = { apikey: SUPA_KEY, Authorization: "Bearer " + SUPA_KEY };
 
   var fab = document.getElementById("qaFab");
@@ -3388,7 +3389,7 @@ window.deck = deck;   // exposed for scripted verification
   }
 
   function poll(){
-    fetch(REST + "?select=id,created_at,name,company,text,answered&answered=eq.false&order=created_at.asc", {
+    fetch(REST + "?select=id,created_at,name,company,text,answered&answered=eq.false&event=eq." + encodeURIComponent(EVENT) + "&order=created_at.asc", {
       headers: HEADERS
     }).then(function(res){
       if (!res.ok) throw new Error("get " + res.status);

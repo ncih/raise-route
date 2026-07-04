@@ -353,6 +353,9 @@
   "use strict";
   var SUPA_URL = "https://hhqlzcvwalwuxrrolevv.supabase.co";
   var SUPA_KEY = "sb_publishable_oNq7GfsgbZKELDhQbaRz_g_ctOO0v0p";
+  /* folded into the shared presentation platform — this deck's event + shared tables */
+  var EVENT = "raise-route-readiness";
+  var T = { leads:"pres_leads", answers:"pres_answers", questions:"pres_questions", state:"pres_state" };
   var sb = null;
   try { sb = window.supabase.createClient(SUPA_URL, SUPA_KEY, { auth:{ persistSession:false, autoRefreshToken:false } }); }
   catch(e){ console.warn("supabase unavailable", e); }
@@ -505,7 +508,7 @@
   }
   function setGate(n){
     if(!sb) return;
-    sb.from("session_state").update({ open_checkpoint:n }).eq("id", 1).then(function(res){
+    sb.from(T.state).upsert({ event:EVENT, open_checkpoint:n }, { onConflict:"event" }).then(function(res){
       if(res.error){ console.warn("gate update failed", res.error); return; }
       gate = n; renderGate();
     }, function(err){ console.warn("gate update error", err); });
@@ -655,7 +658,7 @@
         if(!q) return;
         var next = !q.answered;
         q.answered = next; renderQA(); // optimistic
-        if(sb) sb.from("questions").update({ answered:next }).eq("id", q.id).then(function(res){
+        if(sb) sb.from(T.questions).update({ answered:next }).eq("id", q.id).then(function(res){
           if(res.error){ console.warn("mark answered failed", res.error); q.answered = !next; renderQA(); }
         }, function(){ q.answered = !next; renderQA(); });
       });
@@ -670,7 +673,7 @@
   function poll(){
     if(!sb) return;
     // answers → tallies
-    sb.from("answers").select("device_id,checkpoint,answer").then(function(res){
+    sb.from(T.answers).select("device_id,checkpoint,answer").eq("event", EVENT).then(function(res){
       if(res.error){ console.warn("poll failed", res.error); markStale(); return; }
       lastGood = Date.now();
       liveDot.classList.remove("stale");
@@ -680,11 +683,12 @@
       renderPanels(agg);
     }, function(err){ console.warn("poll error", err); markStale(); });
     // gate → control strip
-    sb.from("session_state").select("open_checkpoint").eq("id", 1).single().then(function(res){
+    sb.from(T.state).select("open_checkpoint").eq("event", EVENT).maybeSingle().then(function(res){
       if(!res.error && res.data){ gate = res.data.open_checkpoint; renderGate(); }
     }, function(){});
     // questions → Q&A feed (newest first)
-    sb.from("questions").select("id,created_at,name,company,text,answered")
+    sb.from(T.questions).select("id,created_at,name,company,text,answered")
+      .eq("event", EVENT)
       .order("created_at", { ascending:false })
       .then(function(res){
         if(res.error){ console.warn("questions poll failed", res.error); return; }
