@@ -748,6 +748,21 @@ body.mode-read .wm,
 body.mode-read .logo-full,
 body.mode-read .colophon .folio{ display:none !important; }
 
+[data-read-only]{ display:none; }
+body.mode-read [data-live-only]{ display:none !important; }
+body.mode-read [data-read-only]{ display:revert; }
+body.mode-read [data-read-hide]{ display:none !important; }
+
+.exit-badge-read{ display:none; }
+body.mode-read .exit-badge-read{
+  display:block; position:absolute; top:26px; right:120px; z-index:7;
+  font-family:var(--mono); font-size:15px; font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase; text-decoration:none; color:var(--ink); background:var(--paper);
+  border:2px solid var(--ink); border-radius:4px; padding:8px 14px; opacity:.72;
+  transition:opacity .2s ease-out;
+}
+body.mode-read .exit-badge-read:hover{ opacity:1; }
+
 /* ===== mode=read : retheme to the nicholaschong.xyz personal system ===== */
 body.mode-read{
   --red:        #1528C4;
@@ -904,7 +919,7 @@ body.mode-read .title-h em{ font-style:normal; color:var(--red); font-weight:800
       <div class="fork" style="padding:20px 4px;"><div class="no">3</div><div class="q">Can you build the layers?<small>Asset · identity · settlement · custody</small></div><div class="seg">Segment 04</div></div>
       <div class="fork" style="padding:20px 4px;"><div class="no">4</div><div class="q">Is launching a token worth it?<small>The honest scorecard</small></div><div class="seg">Segment 05</div></div>
     </div>
-    <p class="footnote reveal r4">Your phone answers each fork as we go — and builds your <b>Raise Route</b> card by the end.</p>
+    <p class="footnote reveal r4" data-read-hide>Your phone answers each fork as we go — and builds your <b>Raise Route</b> card by the end.</p>
   </div>
   <div class="colophon">
     <div class="line"></div>
@@ -954,8 +969,9 @@ body.mode-read .title-h em{ font-style:normal; color:var(--red); font-weight:800
         <div class="dot"></div>
         <div class="label">Checkpoint 0 <span>&nbsp;·&nbsp; On your phone</span></div>
       </div>
-      <h2 class="reveal r2">Register — and tell us: what are you raising in the next <em>12 months</em>?</h2>
-      <p class="lede reveal r3" style="margin-top:28px;">One tap on your phone — sizes your raise, and opens your Raise Route card.</p>
+      <h2 class="reveal r2" data-live-only>Register — and tell us: what are you raising in the next <em>12 months</em>?</h2>
+      <h2 class="reveal r2" data-read-only>What are you raising in the next <em>12 months</em>?</h2>
+      <p class="lede reveal r3" style="margin-top:28px;" data-read-hide>One tap on your phone — sizes your raise, and opens your Raise Route card.</p>
     </div>
     <div class="qr-panel reveal r4">
       <div class="qr-frame">
@@ -967,7 +983,7 @@ body.mode-read .title-h em{ font-style:normal; color:var(--red); font-weight:800
       <div class="hint">One tap — no app, no sign-up.<br>Name · company · email.</div>
       <div class="url">ncih.github.io/raise-route</div>
     </div>
-    <p class="payoff reveal r5">Your answers across five checkpoints build your <b>Raise Route</b> — a personal card at the end.</p>
+    <p class="payoff reveal r5" data-read-hide>Your answers across five checkpoints build your <b>Raise Route</b> — a personal card at the end.</p>
   </div>
   <div class="colophon">
     <div class="line"></div>
@@ -1289,7 +1305,7 @@ body.mode-read .title-h em{ font-style:normal; color:var(--red); font-weight:800
         <div class="hint">ncih.github.io/raise-route<br>Fork 1 of your Raise Route.</div>
       </div>
     </div>
-    <p class="payoff reveal r5">Part two on your phone: <b>tick every rail you’re considering</b> — ECF · TCF · debt · VC · grants · Labuan/offshore. Answer with today’s instinct; the next segment pressure-tests it.</p>
+    <p class="payoff reveal r5" data-read-hide>Part two on your phone: <b>tick every rail you’re considering</b> — ECF · TCF · debt · VC · grants · Labuan/offshore. Answer with today’s instinct; the next segment pressure-tests it.</p>
   </div>
   <div class="colophon">
     <div class="line"></div>
@@ -1740,7 +1756,7 @@ body.mode-read .title-h em{ font-style:normal; color:var(--red); font-weight:800
         </div>
       </div>
     </div>
-    <p class="footnote reveal r4">This map is the segment in one picture — <b>your phone runs the same test</b> at the perimeter checkpoint.</p>
+    <p class="footnote reveal r4" data-read-hide>This map is the segment in one picture — <b>your phone runs the same test</b> at the perimeter checkpoint.</p>
   </div>
   <div class="colophon">
     <div class="line"></div>
@@ -2322,7 +2338,7 @@ body.mode-read .title-h em{ font-style:normal; color:var(--red); font-weight:800
         <div class="label">Checkpoint 2 <span>&nbsp;·&nbsp; On your phone · The perimeter test</span></div>
       </div>
       <h2 class="reveal r2">Run <em>your</em> token through the perimeter test.</h2>
-      <p class="lede reveal r3" style="margin-top:28px;">Four honest questions on your phone — build vs. already-works, pooling, asset link — and it returns your verdict.</p>
+      <p class="lede reveal r3" style="margin-top:28px;" data-read-hide>Four honest questions on your phone — build vs. already-works, pooling, asset link — and it returns your verdict.</p>
     </div>
     <div class="qr-chip reveal r4">
       <img class="qr-img" alt="QR code — raise-route companion app" src="data:image/png;base64,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">
@@ -3135,18 +3151,24 @@ body.mode-read .title-h em{ font-style:normal; color:var(--red); font-weight:800
     <div class="line"></div>
   </div>
   <div class="stage" style="display:grid; grid-template-columns:1fr 400px; column-gap:100px; align-items:center;">
-    <div>
+    <div data-live-only>
       <div class="logo-full reveal r1" role="img" aria-label="pitchIN logo" style="margin-bottom:40px;"></div>
       <h2 class="reveal r2" style="font-family:var(--serif); font-optical-sizing:auto; font-size:96px; font-weight:540; letter-spacing:-0.02em; line-height:1.06; color:var(--navy);">Whichever route lit up — <em style="font-style:italic; font-weight:440; color:var(--red);">talk</em> to us.</h2>
       <p class="lede reveal r3" style="margin-top:34px;">pitchIN is the private fundraising platform — equity, token, debt, and the liquidity after. Bring your Raise Route card to the conversation.</p>
       <p class="reveal r4" style="margin-top:44px; font-size:21px; color:var(--ink);"><b style="color:var(--navy);">Nicholas Chong</b><span style="color:#c5c1b9; margin:0 14px;">·</span>VP of Commercial &amp; Product, pitchIN<span style="color:#c5c1b9; margin:0 14px;">·</span><span style="font-family:var(--mono); font-size:17px; color:var(--teal);">pitchin.my</span><span style="color:#c5c1b9; margin:0 14px;">·</span><span style="font-family:var(--mono); font-size:17px; color:var(--teal);">humancard.me/profile/nicholas</span></p>
     </div>
-    <div class="qr-chip reveal r5" style="justify-self:end;">
+    <div class="qr-chip reveal r5" style="justify-self:end;" data-live-only>
       <img class="qr-img" alt="QR code — raise-route companion app" src="data:image/png;base64,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">
       <div class="txt">
         <div class="scan">Your Raise Route</div>
         <div class="hint">ncih.github.io/raise-route<br>Card + slides + my contact card.</div>
       </div>
+    </div>
+    <div data-read-only>
+      <h2 style="font-family:var(--serif); font-size:96px; font-weight:800; letter-spacing:-0.02em; line-height:1.06; color:var(--ink);">Whichever route lit up — <em>start there</em>.</h2>
+      <p class="lede" style="margin-top:34px;">That's the walk-through. Take your route, and build the piece it pointed at.</p>
+      <p style="margin-top:44px; font-size:21px; color:var(--ink);"><b>Nicholas Chong</b><span style="color:#c5c1b9; margin:0 14px;">·</span>formerly Securities Commission Malaysia<span style="color:#c5c1b9; margin:0 14px;">·</span><a href="https://www.nicholaschong.xyz" style="font-family:var(--mono); font-size:17px; color:var(--red); text-decoration:none;">nicholaschong.xyz</a></p>
+      <p style="margin-top:20px; font-family:var(--mono); font-size:14px; letter-spacing:.04em; color:var(--body);">Originally run as a founder workshop at pitchIN.</p>
     </div>
   </div>
   <div class="colophon">
@@ -3293,6 +3315,17 @@ if (MODE_READ) {
   f.rel = 'stylesheet';
   f.href = 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Geist:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap';
   document.head.appendChild(f);
+}
+if (MODE_READ) {
+  var stage = document.getElementById('deckStage');
+  if (stage) {
+    var b = document.createElement('a');
+    b.className = 'exit-badge-read';
+    b.href = 'https://www.nicholaschong.xyz';
+    b.target = '_blank'; b.rel = 'noopener';
+    b.textContent = 'nicholaschong.xyz →';
+    stage.appendChild(b);
+  }
 }
 const editor = {
   isActive: false,
