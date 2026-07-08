@@ -3231,6 +3231,15 @@ class SlidePresentation {
   constructor() {
     this.slides = Array.from(document.querySelectorAll('.slide'))
       .filter(function(s){ return !(MODE_READ && s.hasAttribute('data-read-drop')); });
+    // read mode: renumber the ghost watermark to the (filtered) read position;
+    // dividers keep their hardcoded segment number (a chapter marker, not a slide no.)
+    if (MODE_READ) {
+      this.slides.forEach(function(s, i){
+        if (s.classList.contains('divider')) return;
+        var g = s.querySelector('.ghost');
+        if (g) g.textContent = String(i + 1).padStart(2, '0');
+      });
+    }
     this.stage = document.getElementById('deckStage');
     this.progress = document.getElementById('progress');
     this.counter = document.getElementById('counter');
