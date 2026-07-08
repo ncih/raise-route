@@ -737,6 +737,11 @@ p.lede b{ font-weight:600; color:var(--navy); }
   letter-spacing:.12em; text-transform:uppercase; padding:8px 18px; display:none; }
 .edit-banner.on{ display:block; }
 body.editing .slide.active{ outline:none; }
+
+/* mode=read — published self-guided view: hide join/QR/checkpoint prompts + live Q&A */
+body.mode-read .qr-panel,
+body.mode-read .qa-fab,
+body.mode-read .qa-overlay{ display:none !important; }
 </style>
 </head>
 <body>
@@ -3247,6 +3252,10 @@ const EDIT_KEY = 'ready-to-raise-deck-edits-v1';
 /* View-only on the public GitHub Pages host: E-edit inert + no localStorage override.
    Fully editable locally (localhost / 127.0.0.1 / file:// → hostname empty or local). */
 const EDIT_LOCKED = /github\.io$/i.test(location.hostname);
+/* ?mode=read → clean self-guided read-through (published resource): no join/QR/checkpoint
+   prompts, no live-Q&A affordances, no Supabase writes. Default (no param) is untouched. */
+const MODE_READ = new URLSearchParams(location.search).get('mode') === 'read';
+if (MODE_READ) document.body.classList.add('mode-read');
 const editor = {
   isActive: false,
   regions() { return document.querySelectorAll('.slide .stage'); },
@@ -3329,6 +3338,7 @@ window.deck = deck;   // exposed for scripted verification
   var listEl = document.getElementById("qaList");
   var closeBtn = document.getElementById("qaClose");
   if (!fab || !overlay || !listEl) return;
+  if (document.body.classList.contains("mode-read")) return;   // read mode: no room Q&A reads/writes
 
   var questions = [];
   var open = false;
