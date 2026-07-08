@@ -742,6 +742,32 @@ body.editing .slide.active{ outline:none; }
 body.mode-read .qr-panel,
 body.mode-read .qa-fab,
 body.mode-read .qa-overlay{ display:none !important; }
+
+/* ===== mode=read : retheme to the nicholaschong.xyz personal system ===== */
+body.mode-read{
+  --red:        #1528C4;
+  --red-dark:   #1528C4;
+  --red-tint:   rgba(21,40,196,.08);
+  --red-faint:  rgba(21,40,196,.05);
+  --navy:       #0A0A0A;
+  --green:      #0A0A0A;
+  --green-2:    #0A0A0A;
+  --orange:     #605C52;
+  --teal:       #1528C4;
+  --paper:      #FAF8F2;
+  --ink:        #0A0A0A;
+  --body:       #605C52;
+  --hairline:   rgba(10,10,10,.13);
+  --stage-bg:   #EFEDE4;
+  --serif: "Bricolage Grotesque", "Arial Black", sans-serif;
+  --sans:  "Geist", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono:  "Space Mono", ui-monospace, monospace;
+}
+/* Bricolage has no true italic — emphasis becomes blue + heavy, not oblique */
+body.mode-read h1 em,
+body.mode-read h2 em,
+body.mode-read .head em,
+body.mode-read .title-h em{ font-style:normal; color:var(--red); font-weight:800; }
 </style>
 </head>
 <body>
@@ -3256,6 +3282,12 @@ const EDIT_LOCKED = /github\.io$/i.test(location.hostname);
    prompts, no live-Q&A affordances, no Supabase writes. Default (no param) is untouched. */
 const MODE_READ = new URLSearchParams(location.search).get('mode') === 'read';
 if (MODE_READ) document.body.classList.add('mode-read');
+if (MODE_READ) {
+  var f = document.createElement('link');
+  f.rel = 'stylesheet';
+  f.href = 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Geist:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap';
+  document.head.appendChild(f);
+}
 const editor = {
   isActive: false,
   regions() { return document.querySelectorAll('.slide .stage'); },
