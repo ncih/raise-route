@@ -913,7 +913,7 @@ body.mode-read .title-h em{ font-style:normal; color:var(--red); font-weight:800
 </section>
 
 
-<section class="slide" id="s5">
+<section class="slide" id="s5" data-read-drop>
   <div class="ghost">05</div>
   <div class="masthead">
     <div class="row">
@@ -3025,7 +3025,7 @@ body.mode-read .title-h em{ font-style:normal; color:var(--red); font-weight:800
 
 
 
-<section class="slide" id="s67">
+<section class="slide" id="s67" data-read-drop>
   <div class="ghost">67</div>
   <div class="masthead">
     <div class="row">
@@ -3156,7 +3156,7 @@ body.mode-read .title-h em{ font-style:normal; color:var(--red); font-weight:800
 </section>
 
 
-<section class="slide statement" id="s71">
+<section class="slide statement" id="s71" data-read-drop>
   <div class="ghost">71</div>
   <div class="masthead">
     <div class="row">
@@ -3207,7 +3207,8 @@ body.mode-read .title-h em{ font-style:normal; color:var(--red); font-weight:800
    =========================================== */
 class SlidePresentation {
   constructor() {
-    this.slides = Array.from(document.querySelectorAll('.slide'));
+    this.slides = Array.from(document.querySelectorAll('.slide'))
+      .filter(function(s){ return !(MODE_READ && s.hasAttribute('data-read-drop')); });
     this.stage = document.getElementById('deckStage');
     this.progress = document.getElementById('progress');
     this.counter = document.getElementById('counter');
