@@ -740,8 +740,13 @@ body.editing .slide.active{ outline:none; }
 
 /* mode=read — published self-guided view: hide join/QR/checkpoint prompts + live Q&A */
 body.mode-read .qr-panel,
+body.mode-read .qr-chip,
 body.mode-read .qa-fab,
-body.mode-read .qa-overlay{ display:none !important; }
+body.mode-read .qa-overlay,
+body.mode-read .checkpoint-band,
+body.mode-read .wm,
+body.mode-read .logo-full,
+body.mode-read .colophon .folio{ display:none !important; }
 
 /* ===== mode=read : retheme to the nicholaschong.xyz personal system ===== */
 body.mode-read{
